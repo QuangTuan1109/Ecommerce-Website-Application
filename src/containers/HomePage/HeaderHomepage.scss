@@ -1,0 +1,113 @@
+.home-header-container {
+    height: 320px;
+    border: 1px solid red;
+    width: 100%;
+
+    .home-header-content-sec1 {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 30px;
+        background: white;
+
+        .left-content-sec1 {
+
+            select {
+                margin-top: 10px;
+                font-size: 20px;
+                border: none;
+            }
+        }
+
+        .right-content-sec1 {
+            display: flex;
+            flex-direction: row;
+
+            .header-link {
+                margin-right: 10px;
+                font-size: 20px;
+                text-decoration: none;
+                color: black;
+            }
+
+            .vertical-line {
+                margin-top: -10px;
+                margin-right: 20px;
+                border-left: 3px solid black;
+                height: 50px;
+            }
+
+            img {
+                margin-left: 20px;
+                margin-top: -10px;
+                width: 50px;
+                border: 2px solid black;
+                border-radius: 50%;
+            }
+        }
+    }
+
+    .home-header-content-sec2 {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 30px;
+        background: pink;
+
+        .left-content-sec2 {
+            display: flex;
+            flex-direction: row;
+
+            img {
+                background-color: orange;
+                width: 100px;
+                border: 2px solid black;
+                border-radius: 50%;
+                margin-right: 100px;
+            }
+
+            .search-control {
+                margin-top: 20px;
+                border-radius: 10px;
+                height: 50px;
+                width: 400px;
+            }
+
+            .btn-search {
+                margin-left: -40px;
+                margin-top: 20px;
+                height: 50px;
+                width: 100px;
+                background-color: aquamarine;
+                border-radius: 10px;
+                font-weight: bold;
+            }
+        }
+
+        .right-content-sec2 {
+            
+            .cart {
+                margin-top: 20px;
+                border: 2px solid black;
+                padding: 10px 30px;
+                border-radius: 10px;
+
+                .cart-link {
+                    font-size: 20px;
+                    text-decoration: none;
+                    color: black;
+                }
+
+                i {
+                    font-size: 20px;
+                    margin-left: 10px;
+                }
+            }
+        }
+    }
+
+    .home-header-content-sec3 {
+        padding: 30px;
+        background: purple;
+    }
+}
