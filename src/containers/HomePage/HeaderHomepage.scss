@@ -1,6 +1,5 @@
 .home-header-container {
-    height: 320px;
-    border: 1px solid red;
+    height: 330px;
     width: 100%;
 
     .home-header-content-sec1 {
@@ -8,14 +7,16 @@
         flex-direction: row;
         justify-content: space-between;
         padding: 30px;
-        background: white;
+        background: #A7FAE6;
 
         .left-content-sec1 {
 
             select {
-                margin-top: 10px;
-                font-size: 20px;
+                background: transparent;
+                margin-top: 25px;
+                font-size: 17px;
                 border: none;
+                outline: none;
             }
         }
 
@@ -24,23 +25,23 @@
             flex-direction: row;
 
             .header-link {
+                margin-top: 25px;
                 margin-right: 10px;
-                font-size: 20px;
+                font-size: 17px;
                 text-decoration: none;
                 color: black;
             }
 
             .vertical-line {
-                margin-top: -10px;
                 margin-right: 20px;
+                margin-top: 10px;
                 border-left: 3px solid black;
                 height: 50px;
             }
 
             img {
-                margin-left: 20px;
-                margin-top: -10px;
-                width: 50px;
+                margin-top: 15px;
+                width: 45px;
                 border: 2px solid black;
                 border-radius: 50%;
             }
@@ -52,7 +53,7 @@
         flex-direction: row;
         justify-content: space-between;
         padding: 30px;
-        background: pink;
+        background: #A5C2C3;
 
         .left-content-sec2 {
             display: flex;
@@ -93,7 +94,7 @@
                 border-radius: 10px;
 
                 .cart-link {
-                    font-size: 20px;
+                    font-size: 17px;
                     text-decoration: none;
                     color: black;
                 }
@@ -107,7 +108,15 @@
     }
 
     .home-header-content-sec3 {
-        padding: 30px;
-        background: purple;
+        font-size: 17px;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        background: #24797E;
+
+        b {
+            color: white;
+            margin-right: 50px;
+        }
     }
 }

@@ -61,7 +61,30 @@ class HeaderHomepage extends Component {
                         </div>
                     </div>
                     <div className='home-header-content-sec3'>
-                    
+                        <div className='child-content'>
+                            <div><b>New Arrivals</b></div>
+                        </div>
+                        <div className='child-content'>
+                            <div><b>Brands</b></div>
+                        </div>
+                        <div className='child-content'>
+                            <div><b>Women</b></div>
+                        </div>
+                        <div className='child-content'>
+                            <div><b>Men</b></div>
+                        </div>
+                        <div className='child-content'>
+                            <div><b>Girls</b></div>
+                        </div>
+                        <div className='child-content'>
+                            <div><b>Boys</b></div>
+                        </div>
+                        <div className='child-content'>
+                            <div><b>Kids</b></div>
+                        </div>
+                        <div className='child-content'>
+                            <div><b>Sale</b></div>
+                        </div>
                     </div>
                 </div>
             </div>

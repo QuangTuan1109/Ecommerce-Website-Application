@@ -1,0 +1,63 @@
+.section-introduction-slider {
+    height:350px;
+    border: 1px solid red;
+    background: #A5C2C3;
+
+    .introduction-content-slider {
+        margin: 0 50px;
+
+        .introduction-customize {
+            .bg-image {
+                margin-top: 20px;
+                width: 435px;
+                height: 300px;
+                background: url('../../../assets/introduction/promotions 2.gif');
+                background-position: center center;
+                background-repeat: no-repeat;
+                background-size: cover;
+                background-color: #eee;
+            }
+        }
+
+        .slick-prev {
+            left: -10px !important;
+            z-index: 1000 !important;
+            height: 48px !important;
+            width: 44px !important;
+            background: #fff !important;
+            border: 2px solid #d7d7d7 !important;
+        
+            &:hover {
+                background: #eceaea !important;
+            }
+        }
+        
+        .slick-prev::before, .slick-next::before {
+            font-family: 'Font Awesome' !important;
+            color: black !important;
+            //content: '\f060' !important
+        }
+        
+        .slick-next {
+            right: -10px !important;
+            z-index: 1000 !important;
+            height: 48px !important;
+            width: 44px !important;
+            background: #fff !important;
+            border: 2px solid #d7d7d7 !important;
+        
+            &:hover {
+                background: #eceaea !important;
+            }
+        }
+        
+        
+    }
+
+    h3 {
+        border: 1px solid black;
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+}
