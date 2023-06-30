@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './Introduction.scss'
-import img2 from '../../../assets/introduction/promotions 2.gif'
 
 import Slider from 'react-slick'
 import "slick-carousel/slick/slick.css"
