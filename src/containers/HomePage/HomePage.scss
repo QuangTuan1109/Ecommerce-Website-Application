@@ -1,0 +1,82 @@
+.homepage-container {
+    background: #A5C2C3;
+
+    .slick-prev {
+        left: -10px !important;
+        z-index: 1000 !important;
+        height: 48px !important;
+        width: 30px !important;
+        background: #000 !important;
+        border: 2px solid #000 !important;
+        opacity: 0.4;
+    
+        &:hover {
+            background: #2c2c2c !important;
+        }
+    }
+    
+    .slick-prev::before, .slick-next::before {
+        font-family: 'Font Awesome' !important;
+        color: white !important;
+    }
+    
+    .slick-next {
+        right: -2px !important;
+        z-index: 1000 !important;
+        height: 48px !important;
+        width: 30px !important;
+        background: #000 !important;
+        border: 2px solid #000 !important;
+        opacity: 0.4;
+    
+        &:hover {
+            background: #2c2c2c !important;
+        }
+    }
+
+    // .section-container {
+    //     margin: 0 100px;
+    //     display: flex;
+    //     flex-direction: column;
+
+    //     .section-header {
+    //         height: 60px;
+    //         margin-bottom: 30px;
+    //         padding-top: 30px;
+
+    //         .title-content-section {
+    //             font-size: 22px;
+    //             font-weight: 600;
+    //         }
+
+    //     }
+
+    //     .section-body{
+    //         .section-customize {
+    //             .bg-image {
+    //                 transition: 1s ease;
+    //                 margin-top: 20px;
+    //                 width: 435px;
+    //                 height: 300px;
+    //                 background: url('../../../assets/introduction/promotions 2.gif');
+    //                 background-position: center center;
+    //                 background-repeat: no-repeat;
+    //                 background-size: cover;
+    //                 background-color: #eee;
+    
+    //                 &:hover {
+    //                     -webkit-transform: scale(0.9);
+    //                     -ms-transform: scale(0.9);
+    //                     transform: scale(0.9);
+    //                     transition: 1s ease;
+    //                 }
+    //             }
+    //         }
+    
+    //         .title-promotions {
+    //             font-size: 17px;
+    //             text-align: center;
+    //         }
+    //     }
+    //      }
+}

@@ -1,0 +1,88 @@
+.section-categories-slider {
+    margin: 50px;
+    height: 260px;
+    background: #24797E;
+
+    .section-container {
+        margin: 0 50px;
+        display: flex;
+        flex-direction: column;
+    
+        .section-title {
+            height: 60px;
+            margin-bottom: 10px;
+            padding-top: 10px;
+    
+            .title-content-section {
+                color: white;
+                font-size: 30px;
+                font-weight: 500;
+            }
+    
+        }
+    
+        .section-body{
+            .section-customize {
+                .bg-image {
+                    margin-right: 30px;
+                    margin-top: 10px;
+                    width: 60px;
+                    height: 60px;
+                    border: 2px solid transparent;
+                    border-radius: 50%;
+                    background: url('../../../assets/images/t-shirt.png');
+                    background-position: center center;
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    background-color: #eee;
+                }
+            }
+    
+            .title-promotions {
+                margin-left: -15px;
+                font-size: 15px;
+                text-align: center;
+            }
+
+            .slick-prev {
+                left: -60px !important;
+                top: 60px !important;
+                z-index: 1000 !important;
+                height: 48px !important;
+                width: 30px !important;
+                background: #000 !important;
+                border: 2px solid #000 !important;
+                opacity: 0.4;
+            
+                &:hover {
+                    background: #2c2c2c !important;
+                }
+            }
+            
+            .slick-prev::before, .slick-next::before {
+                font-family: 'Font Awesome' !important;
+                color: white !important;
+            }
+            
+            .slick-next {
+                right: -60px !important;
+                top: 60px !important;
+                z-index: 1000 !important;
+                height: 48px !important;
+                width: 30px !important;
+                background: #000 !important;
+                border: 2px solid #000 !important;
+                opacity: 0.4;
+            
+                &:hover {
+                    background: #2c2c2c !important;
+                }
+            }
+
+            .slick-slide {
+                padding-right: 10px;
+                margin-right: 16px;
+            }
+        }
+         }
+}

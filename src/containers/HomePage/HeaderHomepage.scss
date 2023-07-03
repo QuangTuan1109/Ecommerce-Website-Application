@@ -1,5 +1,5 @@
 .home-header-container {
-    height: 330px;
+    height: 320px;
     width: 100%;
 
     .home-header-content-sec1 {
@@ -13,7 +13,7 @@
 
             select {
                 background: transparent;
-                margin-top: 25px;
+                margin-top: 10px;
                 font-size: 17px;
                 border: none;
                 outline: none;
@@ -25,7 +25,7 @@
             flex-direction: row;
 
             .header-link {
-                margin-top: 25px;
+                margin-top: 10px;
                 margin-right: 10px;
                 font-size: 17px;
                 text-decoration: none;
@@ -34,13 +34,11 @@
 
             .vertical-line {
                 margin-right: 20px;
-                margin-top: 10px;
                 border-left: 3px solid black;
                 height: 50px;
             }
 
             img {
-                margin-top: 15px;
                 width: 45px;
                 border: 2px solid black;
                 border-radius: 50%;
