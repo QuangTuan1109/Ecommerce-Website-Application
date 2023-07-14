@@ -1,38 +1,38 @@
 .homepage-container {
     background: #A5C2C3;
 
-    .slick-prev {
-        left: -10px !important;
-        z-index: 1000 !important;
-        height: 48px !important;
-        width: 30px !important;
-        background: #000 !important;
-        border: 2px solid #000 !important;
-        opacity: 0.4;
+    // .slick-prev {
+    //     left: -10px !important;
+    //     z-index: 1000 !important;
+    //     height: 48px !important;
+    //     width: 30px !important;
+    //     background: #000 !important;
+    //     border: 2px solid #000 !important;
+    //     opacity: 0.4;
     
-        &:hover {
-            background: #2c2c2c !important;
-        }
-    }
+    //     &:hover {
+    //         background: #2c2c2c !important;
+    //     }
+    // }
     
-    .slick-prev::before, .slick-next::before {
-        font-family: 'Font Awesome' !important;
-        color: white !important;
-    }
+    // .slick-prev::before, .slick-next::before {
+    //     font-family: 'Font Awesome' !important;
+    //     color: white !important;
+    // }
     
-    .slick-next {
-        right: -2px !important;
-        z-index: 1000 !important;
-        height: 48px !important;
-        width: 30px !important;
-        background: #000 !important;
-        border: 2px solid #000 !important;
-        opacity: 0.4;
+    // .slick-next {
+    //     right: -2px !important;
+    //     z-index: 1000 !important;
+    //     height: 48px !important;
+    //     width: 30px !important;
+    //     background: #000 !important;
+    //     border: 2px solid #000 !important;
+    //     opacity: 0.4;
     
-        &:hover {
-            background: #2c2c2c !important;
-        }
-    }
+    //     &:hover {
+    //         background: #2c2c2c !important;
+    //     }
+    // }
 
     // .section-container {
     //     margin: 0 100px;

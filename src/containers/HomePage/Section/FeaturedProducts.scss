@@ -1,0 +1,64 @@
+.section-featuredProducts {
+    padding: 40px;
+
+    .grid-section-container {
+        display: grid;
+        grid-template-columns: auto auto;
+        row-gap: 30px;
+        column-gap: 100px;
+        padding: 10px;
+
+        .grid-section-component {
+            background-color: #5D8490;
+
+            .grid-section-title {
+                display: flex;
+                justify-content: space-between;
+                margin-left: 50px;
+                font-size: 30px;
+                color: white;
+
+                .seemore-link {
+                    color: white;
+                    font-size: 15px;
+                    margin-top: 15px;
+                    margin-right: 10px;
+
+                    &:hover {
+                        color: black;
+                    }
+                }
+            }
+
+            .grid-section-content{
+                display: flex;
+
+                .section-customize {
+                    padding: 15px 30px;
+                    margin-left: 40px;
+
+                    .bg-image {
+                        margin-left: 12px;
+                        width: 90px;
+                        height: 90px;
+                        border: 2px solid transparent;
+                        border-radius: 4px;
+                        background: url('../../../assets/images/t-shirt.png');
+                        background-position: center center;
+                        background-repeat: no-repeat;
+                        background-size: cover;
+                        background-color: #eee;
+                    }
+
+                    .title-promotions {
+                        color: white;
+                        font-size: 15px;
+                        text-align: center;
+                        margin-left: 15px;
+                    }
+                }
+    
+            }
+        }
+    }
+}
