@@ -5,6 +5,7 @@ import HeaderHomepage from './HeaderHomepage'
 import Introduction from './Section/Introduction'
 import Categories from './Section/Categories'
 import FeaturedProducts from './Section/FeaturedProduct'
+import Recommended from './Section/Recommended'
 
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
@@ -26,6 +27,7 @@ class HomePage extends Component {
                 <Introduction settings = {settings} />
                 <Categories settings = {settings}/>
                 <FeaturedProducts />
+                <Recommended />
                 <div style={{height: '300px'}}></div>
             </div>
         );
