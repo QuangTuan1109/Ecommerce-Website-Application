@@ -4,6 +4,7 @@
     background-color: #96B6B8;
 
     .title-recommended {
+        text-align: center;
         font-size: 30px;
         font-weight: 500;
         color: white;
@@ -214,6 +215,32 @@
             &:hover .add-to-cart{
                 opacity: 1;
                 bottom: 8px;
+            }
+        }
+        
+    }
+
+    .button-see-more {
+        padding: 12px 12px 15px;
+        position: relative;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+
+        .button {
+            color: #fff;
+            background-color: #78a206;
+            font-size: 16px;
+            text-decoration: none;
+            text-transform: uppercase;
+            line-height: 40px;
+            width: 540px;
+            height: 40px;
+            border-radius: 50px;
+            position: absolute;
+
+            &:hover {
+                background-color: #2f2f2f;
             }
         }
     }

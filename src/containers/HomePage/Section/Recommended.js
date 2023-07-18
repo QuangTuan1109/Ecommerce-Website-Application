@@ -263,6 +263,9 @@ class Recommended extends Component {
                         </div>
                     </div>
                 </div>
+                <div className='button-see-more'>
+                    <Link to='/' className='button'>See more</Link>
+                </div>
             </div>
         );
     }
