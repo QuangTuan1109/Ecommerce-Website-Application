@@ -1,0 +1,151 @@
+.news-section {
+    margin: 50px;
+    padding: 40px;
+    background-color: #96B6B8;
+
+    .title-news-section {
+        text-align: center;
+        font-size: 30px;
+        font-weight: 500;
+        color: white;
+    }
+
+    .grid-news-section {
+        display: grid;
+        grid-template-columns: auto auto auto auto;
+        column-gap: 70px;
+        row-gap: 20px;
+        padding: 10px;
+        margin-top: 15px;
+        margin-left: 100px;
+
+        .blog-card {
+            margin: 10px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            width: 300px;
+            font-family: "Roboto", sans-serif;
+
+            .blog-card-header {
+
+                .link-image-blog {
+                    display: block;
+
+                    .image-blog-card {
+                        width: 100%;
+                        height: 200px;
+                        background: url('../../../assets/images//product.jpg');
+                        background-position: center center;
+                        background-repeat: no-repeat;
+                        background-size: cover;
+                        background-color: #eee;
+                    }
+                }
+            }
+
+            .blog-card-body {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: flex-start;
+                padding: 20px;
+                min-height: 250px;
+
+                .tag {
+                    background: #cccccc;
+                    border-radius: 50px;
+                    font-size: 12px;
+                    margin: 0;
+                    color: #fff;
+                    padding: 2px 10px;
+                    text-transform: uppercase;
+                    cursor: pointer;
+                }
+
+                .tag-teal {
+                    background-color: #47bcd4;
+                }
+
+                .tag-purple {
+                    background-color: #5e76bf;
+                }
+
+                .tag-pink {
+                    background-color: #cd5b9f;
+                }
+
+                .link-title-blog {
+                    padding: 20px 0;
+                    color: black;
+                    text-decoration: none;
+                    font-size: 17px;
+                    font-weight: 600;
+                }
+
+                p {
+                    font-size: 13px;
+                    margin: 0 0 40px;
+                }
+
+                .author {
+                    display: flex;
+                    margin-top: auto;
+
+                    .link-image-author {
+
+                        .avt-author {
+                            background: url('../../../assets/images//avatar.png');
+                            border-radius: 50%;
+                            width: 40px;
+                            height: 40px;
+                            margin-right: 10px;
+                            background-position: center center;
+                            background-repeat: no-repeat;
+                            background-size: cover;
+                            background-color: #eee;
+                        }
+                    }
+
+                    .news-info {
+
+                        h5 {
+                            color: #78a206;
+                            margin: 0;
+                        }
+
+                        small {
+                            color: #545d7a;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .button-see-more {
+        padding: 12px 12px 15px;
+        position: relative;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+
+        .button {
+            color: #fff;
+            background-color: #78a206;
+            font-size: 16px;
+            text-decoration: none;
+            text-transform: uppercase;
+            line-height: 40px;
+            width: 540px;
+            height: 40px;
+            border-radius: 50px;
+            position: absolute;
+
+            &:hover {
+                background-color: #2f2f2f;
+            }
+        }
+    }
+}
