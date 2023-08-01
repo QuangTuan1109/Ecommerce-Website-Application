@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link  } from "react-router-dom";
 import { connect } from 'react-redux';
 import './Introduction.scss'
 
@@ -13,28 +14,40 @@ class Introduction extends Component {
                     <div className='section-content-slider'>
                     <Slider {...this.props.settings}>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Promotions of the website</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'>
+                                    <Link to='/' className='title-link'>Promotions of the website</Link>
+                                </div>
                             </div>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Promotions of the website</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'>
+                                    <Link to='/' className='title-link'>Promotions of the website</Link>
+                                </div>
                             </div>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Promotions of the website</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'>
+                                    <Link to='/' className='title-link'>Promotions of the website</Link>
+                                </div>
                             </div>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Promotions of the website</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'>
+                                    <Link to='/' className='title-link'>Promotions of the website</Link>
+                                </div>
                             </div>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Promotions of the website</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'>
+                                    <Link to='/' className='title-link'>Promotions of the website</Link>
+                                </div>
                             </div>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Promotions of the website</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'>
+                                    <Link to='/' className='title-link'>Promotions of the website</Link>
+                                </div>
                             </div>
                         </Slider>
                     </div>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link  } from "react-router-dom";
 import './Categories.scss'
 
 import Slider from 'react-slick'
@@ -24,109 +25,102 @@ class Categories extends Component {
                     <div className='section-body'>
                         <Slider {...settings}>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Boys</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'><Link to='/' className='title-link'>Boys</Link></div>
                             </div>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Phone & Accessory</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'><Link to='/' className='title-link'>Boys</Link></div>
                             </div>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Electronic device</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'><Link to='/' className='title-link'>Boys</Link></div>
                             </div>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Computer & Laptop</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'><Link to='/' className='title-link'>Boys</Link></div>
                             </div>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Cameras & Camcorders</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'><Link to='/' className='title-link'>Boys</Link></div>
                             </div>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Watch</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'><Link to='/' className='title-link'>Boys</Link></div>
                             </div>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Men's shoes</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'><Link to='/' className='title-link'>Boys</Link></div>
                             </div>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Household electrical appliances</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'><Link to='/' className='title-link'>Boys</Link></div>
                             </div>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Sport & travel</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'><Link to='/' className='title-link'>Boys</Link></div>
                             </div>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Car & Bike & Motobike</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'><Link to='/' className='title-link'>Boys</Link></div>
                             </div>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Men's backpacks and wallets</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'><Link to='/' className='title-link'>Boys</Link></div>
                             </div>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Toy</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'><Link to='/' className='title-link'>Boys</Link></div>
                             </div>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Take care of the pet</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'><Link to='/' className='title-link'>Boys</Link></div>
                             </div>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Women's fashion</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'><Link to='/' className='title-link'>Boys</Link></div>
                             </div>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Mom&Baby</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'><Link to='/' className='title-link'>Boys</Link></div>
                             </div>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Beauty</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'><Link to='/' className='title-link'>Boys</Link></div>
                             </div>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>House&Life</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'><Link to='/' className='title-link'>Boys</Link></div>
                             </div>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Health</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'><Link to='/' className='title-link'>Boys</Link></div>
                             </div>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Women's shoes</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'><Link to='/' className='title-link'>Boys</Link></div>
                             </div>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Women's purse</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'><Link to='/' className='title-link'>Boys</Link></div>
                             </div>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Women's accessories and jewelry</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'><Link to='/' className='title-link'>Boys</Link></div>
                             </div>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Department store</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'><Link to='/' className='title-link'>Boys</Link></div>
                             </div>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Online bookstore</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'><Link to='/' className='title-link'>Boys</Link></div>
                             </div>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Kid's fashion</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'><Link to='/' className='title-link'>Boys</Link></div>
                             </div>
-                            <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Laundry and home care</div>
-                            </div>
-                            <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Voucher & Service</div>
-                            </div>                           
+                                       
                         </Slider>
                     </div>
                 </div>

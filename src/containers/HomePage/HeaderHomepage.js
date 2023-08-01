@@ -68,6 +68,7 @@ class HeaderHomepage extends Component {
                                 <div className='cart'>
                                     <Link to='/' className='component-link'><i class="fas fa-heart"></i></Link>
                                     <Link to='/' className='component-link'><i class="fas fa-shopping-cart"></i></Link>
+                                    <Link to='/' className='component-link'><i class="fas fa-comment-alt"></i></Link>
                                     <div className='notification-section'>
                                         <div className='notification-icon'>
                                             <i class="fas fa-bell"></i>
@@ -94,6 +95,9 @@ class HeaderHomepage extends Component {
                                                     <Link to='/' className='content-noti'>Lê Quang Tuấn posted a new post: New shirt in 2023</Link>
                                                     <small>2h ago</small>
                                                 </div>
+                                            </div>
+                                            <div className='show-all-button'>
+                                                <Link to='/' className='button'>Show all</Link>
                                             </div>
                                         </div>
                                     </div>
@@ -127,28 +131,28 @@ class HeaderHomepage extends Component {
                     </div>
                     <div className='home-header-content-sec3'>
                         <div className='child-content'>
-                            <div><b>New Arrivals</b></div>
+                            <div><Link to='/' className='content-nav'><b>New Arrivals</b></Link></div>
                         </div>
                         <div className='child-content'>
-                            <div><b>Brands</b></div>
+                            <div><Link to='/' className='content-nav'><b>New Arrivals</b></Link></div>
                         </div>
                         <div className='child-content'>
-                            <div><b>Women</b></div>
+                            <div><Link to='/' className='content-nav'><b>New Arrivals</b></Link></div>
                         </div>
                         <div className='child-content'>
-                            <div><b>Men</b></div>
+                            <div><Link to='/' className='content-nav'><b>New Arrivals</b></Link></div>
                         </div>
                         <div className='child-content'>
-                            <div><b>Girls</b></div>
+                            <div><Link to='/' className='content-nav'><b>New Arrivals</b></Link></div>
                         </div>
                         <div className='child-content'>
-                            <div><b>Boys</b></div>
+                            <div><Link to='/' className='content-nav'><b>New Arrivals</b></Link></div>
                         </div>
                         <div className='child-content'>
-                            <div><b>Kids</b></div>
+                            <div><Link to='/' className='content-nav'><b>New Arrivals</b></Link></div>
                         </div>
                         <div className='child-content'>
-                            <div><b>Sale</b></div>
+                            <div><Link to='/' className='content-nav'><b>New Arrivals</b></Link></div>
                         </div>
                     </div>
                 </div>

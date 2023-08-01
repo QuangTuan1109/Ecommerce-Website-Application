@@ -1,0 +1,143 @@
+.about-us-section {
+    border-top: 2px solid black;
+    padding: 40px;
+    background-color: #96B6B8;
+
+    .section-2 {
+        padding: 50px 0;
+        border-top: 1px solid black;
+        border-bottom: 1px solid black;
+
+        .content-aboutus {
+            display: grid;
+            grid-template-columns: auto auto auto auto;
+            padding: 10px;
+
+            .grid-item {
+                padding: 5px 40px;
+                font-size: 14px;
+
+                .content-link {
+                    text-decoration: none;
+                    color: #000;
+
+                    &:hover {
+                        color: #78a206;
+                    }
+                }
+            }
+        }
+    }
+
+    .section-3 {
+        display: grid;
+        grid-template-columns: auto auto auto auto auto;
+        padding: 10px;
+        padding: 50px 0;
+        border-bottom: 1px solid black;
+
+        .content-aboutus {
+
+            .grid-item {
+                padding: 5px 40px;
+                font-size: 14px;
+
+                .content-link {
+                    text-decoration: none;
+                    color: #000;
+
+                    &:hover {
+                        color: #78a206;
+                    }
+                }
+            }
+        }
+
+        .section-3-1 {
+            margin-right: 20px;
+        }
+
+        .section-3-2 {
+            margin-right: 20px;
+        }
+
+        .section-3-3 {
+            margin-right: 20px;
+
+            .payment-section {
+                img {
+                    padding: 10px;
+                }
+            }
+
+            .delivery-section {
+                margin-top: 40px;
+                img {
+                    padding: 10px;
+                }
+            }
+        }
+
+        .section-3-4 {
+            margin-right: 20px;
+
+            .fab {
+                margin-right: 5px;
+            }
+        }
+
+        .section-3-5 {
+            margin-right: 20px;
+
+            .content-aboutus {
+                display: flex;
+
+                img {
+                    padding: 0 10px;
+                }
+
+                .button-download {
+                    text-align: center;
+                    padding: 30px 0;
+            
+                    .button-link-apple {
+                        padding: 7px;
+                        margin: 2px;
+                        color: #fff;
+                        background-color: #555;
+                        text-decoration: none;
+                        line-height: 40px;
+                        width: 50px;
+                        height: 20px;
+                        border-radius: 50px;
+            
+                        &:hover {
+                            background-color: #2f2f2f;
+                        }
+                    }
+
+                    .button-link-google {
+                        padding: 5px;
+                        margin: 5px;
+                        color: #fff;
+                        background-color: #78a206;
+                        text-decoration: none;
+                        line-height: 40px;
+                        width: 50px;
+                        height: 20px;
+                        border-radius: 50px;
+            
+                        &:hover {
+                            background-color: #2f2f2f;
+                        }
+                    }
+
+                    img {
+                        width: 40px;
+                        height: 23px;
+                    }
+                }
+            }
+        }
+    }
+}

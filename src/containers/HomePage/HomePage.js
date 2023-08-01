@@ -7,6 +7,8 @@ import Categories from './Section/Categories'
 import FeaturedProducts from './Section/FeaturedProduct'
 import Recommended from './Section/Recommended'
 import News from './Section/News'
+import AboutUs from './Section/AboutUs';
+import FooterHomepage from './FooterHomepage';
 
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
@@ -30,7 +32,8 @@ class HomePage extends Component {
                 <FeaturedProducts />
                 <Recommended />
                 <News />
-                <div style={{height: '300px'}}></div>
+                <AboutUs />
+                <FooterHomepage />
             </div>
         );
     }

@@ -29,6 +29,11 @@
         .title-promotions {
             font-size: 17px;
             text-align: center;
+
+            .title-link {
+                text-decoration: none;
+                color: #000;
+            }
         }  
         
         .slick-prev {

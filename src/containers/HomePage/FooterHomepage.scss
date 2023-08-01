@@ -1,0 +1,31 @@
+.home-footer {
+    text-align: center;
+    padding: 8px;
+
+    .policy-section {
+
+        .policy-link {
+            font-size: 17px;
+            padding: 30px;
+            text-decoration: none;
+            color: black;
+
+            &:hover {
+                color: #78a206;
+            }
+        }
+    }
+
+    .logo-image-section {
+        padding: 30px 0 10px 0;
+
+        img {
+            width: 100px;
+            height: 100px;
+        }
+    }
+
+    .address-section {
+        padding: 50px;
+    }
+}

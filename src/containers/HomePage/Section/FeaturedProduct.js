@@ -16,20 +16,20 @@ class FeaturedProducts extends Component {
                         </div>
                         <div className='grid-section-content'>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Boys</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'><Link to='/' className='title-link'>Boys</Link></div>
                             </div>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Boys</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'><Link to='/' className='title-link'>Boys</Link></div>
                             </div>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Boys</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'><Link to='/' className='title-link'>Boys</Link></div>
                             </div>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Boys</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'><Link to='/' className='title-link'>Boys</Link></div>
                             </div>
                         </div>
                     </div>
@@ -40,20 +40,20 @@ class FeaturedProducts extends Component {
                         </div>
                         <div className='grid-section-content'>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Boys</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'><Link to='/' className='title-link'>Boys</Link></div>
                             </div>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Boys</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'><Link to='/' className='title-link'>Boys</Link></div>
                             </div>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Boys</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'><Link to='/' className='title-link'>Boys</Link></div>
                             </div>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Boys</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'><Link to='/' className='title-link'>Boys</Link></div>
                             </div>
                         </div>
                     </div>
@@ -64,20 +64,20 @@ class FeaturedProducts extends Component {
                         </div>
                         <div className='grid-section-content'>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Boys</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'><Link to='/' className='title-link'>Boys</Link></div>
                             </div>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Boys</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'><Link to='/' className='title-link'>Boys</Link></div>
                             </div>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Boys</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'><Link to='/' className='title-link'>Boys</Link></div>
                             </div>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Boys</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'><Link to='/' className='title-link'>Boys</Link></div>
                             </div>
                         </div>
                     </div>
@@ -88,20 +88,20 @@ class FeaturedProducts extends Component {
                         </div>
                         <div className='grid-section-content'>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Boys</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'><Link to='/' className='title-link'>Boys</Link></div>
                             </div>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Boys</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'><Link to='/' className='title-link'>Boys</Link></div>
                             </div>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Boys</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'><Link to='/' className='title-link'>Boys</Link></div>
                             </div>
                             <div className='section-customize'>
-                                <div className='bg-image' />
-                                <div className='title-promotions'>Boys</div>
+                                <Link to='/' className='image-link'><div className='bg-image' /></Link>
+                                <div className='title-promotions'><Link to='/' className='title-link'>Boys</Link></div>
                             </div>
                         </div>
                     </div>
