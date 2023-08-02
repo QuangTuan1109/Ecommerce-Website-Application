@@ -82,6 +82,10 @@
                     text-decoration: none;
                     font-size: 17px;
                     font-weight: 600;
+                    
+                    &:hover {
+                        color: #78a206;
+                    }
                 }
 
                 p {

@@ -33,6 +33,10 @@
             .title-link {
                 text-decoration: none;
                 color: #000;
+                
+                &:hover {
+                    color: #78a206;
+                }
             }
         }  
         

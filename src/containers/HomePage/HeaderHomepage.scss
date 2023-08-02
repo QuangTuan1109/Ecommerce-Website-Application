@@ -61,12 +61,20 @@
                     margin-right: 30px;
                     border: none;
                     outline: none;
+
+                    &:hover {
+                        color: #78a206;
+                    }
                 }
 
                 .link {  
                     color: black;
                     text-decoration: none;
                     margin-right: 30px;
+                    
+                    &:hover {
+                        color: #78a206;
+                    }
                 }
 
                 i {
@@ -122,7 +130,6 @@
                 flex-direction: row;
                 
                 .cart {
-                    //margin-top: 30px;
                     padding: 10px;
 
                     .component-link {
@@ -132,6 +139,10 @@
 
                         .fas {
                             font-size: 30px;
+                            
+                            &:hover {
+                                color: #78a206;
+                            }
                         }
                     }
     
@@ -156,6 +167,10 @@
     
                             .fas {
                                 font-size: 30px;
+                                
+                                &:hover {
+                                    color: #78a206;
+                                }
                             }
     
                         }
@@ -425,6 +440,11 @@
         b {
             color: white;
             margin-right: 50px;
+
+            
+            &:hover {
+                color: #78a206;
+            }
         }
 
         .content-nav {
