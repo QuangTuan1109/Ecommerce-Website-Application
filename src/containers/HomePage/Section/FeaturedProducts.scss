@@ -9,14 +9,15 @@
         padding: 10px;
 
         .grid-section-component {
-            background-color: #5D8490;
+            background-color: #181818;
 
             .grid-section-title {
                 display: flex;
                 justify-content: space-between;
                 margin-left: 50px;
                 font-size: 30px;
-                color: white;
+                font-weight: 500;
+                color: #78a206;
 
                 .seemore-link {
                     color: white;
@@ -25,7 +26,7 @@
                     margin-right: 10px;
 
                     &:hover {
-                        color: black;
+                        color: #78a206;
                     }
                 }
             }
@@ -58,7 +59,7 @@
 
                         .title-link {
                             text-decoration: none;
-                            color: #000;
+                            color: #fff;
                             
                             &:hover {
                                 color: #78a206;

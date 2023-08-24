@@ -1,13 +1,13 @@
 .recommend-section {
     margin: 50px;
     padding: 40px;
-    background-color: #96B6B8;
+    background-color: #181818;
 
     .title-recommended {
         text-align: center;
         font-size: 30px;
         font-weight: 500;
-        color: white;
+        color: #78a206;
     }
 
     .grid-recommended-section {
@@ -22,7 +22,7 @@
             font-family: 'Poppins' sans-serif;
             text-align: center;
             border-radius: 15px;
-            border: 1px solid #2c2c2c;
+            border: 1px solid #fff;
             overflow: hidden;
             transition: all 0.4s ease-out;
             width: 300px;
@@ -156,7 +156,7 @@
 
                     .name {
                         text-decoration: none;
-                        color: #2c2c2c;
+                        color: #808080;
                         transition: all 0.3s ease 0s;
 
                         &:hover {
@@ -173,7 +173,7 @@
                     transition: all 0.4s ease-in-out;
 
                     span {
-                        color: #494545;
+                        color: #808080;
                         font-weight: 500;
                         text-decoration: line-through;
                     }
@@ -228,7 +228,7 @@
         justify-content: center;
 
         .button {
-            color: #fff;
+            color: #000;
             background-color: #78a206;
             font-size: 16px;
             text-decoration: none;

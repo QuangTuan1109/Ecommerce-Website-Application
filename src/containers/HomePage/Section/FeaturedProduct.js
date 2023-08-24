@@ -11,7 +11,7 @@ class FeaturedProducts extends Component {
                 <div className='grid-section-container'>
                     <div className='grid-section-component'>
                         <div className='grid-section-title'>
-                            <span>New Arrivals</span>
+                            <span>New arrivals</span>
                             <Link to='/' className='seemore-link'>See more</Link>
                         </div>
                         <div className='grid-section-content'>
@@ -35,7 +35,7 @@ class FeaturedProducts extends Component {
                     </div>
                     <div className='grid-section-component'>
                         <div className='grid-section-title'>
-                            <span>Flash Sale</span>
+                            <span>Flash sale</span>
                             <Link to='/' className='seemore-link'>See more</Link>
                         </div>
                         <div className='grid-section-content'>
@@ -59,7 +59,7 @@ class FeaturedProducts extends Component {
                     </div>
                     <div className='grid-section-component'>
                         <div className='grid-section-title'>
-                            <span>Best Seller</span>
+                            <span>Best seller</span>
                             <Link to='/' className='seemore-link'>See more</Link>
                         </div>
                         <div className='grid-section-content'>
@@ -83,7 +83,7 @@ class FeaturedProducts extends Component {
                     </div>
                     <div className='grid-section-component'>
                         <div className='grid-section-title'>
-                            <span>Top Trending</span>
+                            <span>Top trending</span>
                             <Link to='/' className='seemore-link'>See more</Link>
                         </div>
                         <div className='grid-section-content'>
