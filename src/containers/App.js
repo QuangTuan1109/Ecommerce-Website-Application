@@ -20,6 +20,7 @@ import { CustomToastCloseButton } from '../components/CustomToast';
 import CustomScrollbars from '../components/CustomScrollbars';
 import HomePage from '../containers/HomePage/HomePage'
 import Products from './Customer/ProductsPage/Products';
+import DetailProduct from './Customer/ProductsPage/DetailProduct';
 
 class App extends Component {
 
@@ -56,6 +57,7 @@ class App extends Component {
                                     <Route path={path.SYSTEM} component={userIsAuthenticated(System)} />
                                     <Route path={path.HOMEPAGE} component={HomePage} />
                                     <Route path={path.PRODUCT_PAGE} component={Products}></Route>
+                                    <Route path={path.DETAIL_PRODUCT_PAGE} component={DetailProduct}></Route>
                                 </Switch>
                             </CustomScrollbars>
                         </div>

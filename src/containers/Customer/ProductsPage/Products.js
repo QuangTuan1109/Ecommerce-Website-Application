@@ -177,7 +177,7 @@ class Products extends Component {
                                     <span className='product-discount-label'>-30%</span>
                                     <ul className='product-link'>
                                         <li><Link to='/' data-tip='Add to wishlist' className='detail-component'><i class="fas fa-heart"></i></Link></li>
-                                        <li><Link to='/' data-tip='View store' className='detail-component'><i class="fa fa-random"></i></Link></li>
+                                        <li><Link to='/product/id' data-tip='View store' className='detail-component'><i class="fa fa-random"></i></Link></li>
                                         <li><Link to='/' data-tip='View detail' className='detail-component'><i class="fa fa-search"></i></Link></li>
                                     </ul>
                                 </div>
