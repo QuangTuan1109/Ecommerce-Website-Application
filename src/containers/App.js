@@ -21,6 +21,7 @@ import CustomScrollbars from '../components/CustomScrollbars';
 import HomePage from '../containers/HomePage/HomePage'
 import Products from './Customer/ProductsPage/Products';
 import DetailProduct from './Customer/ProductsPage/DetailProduct';
+import News from './Customer/NewsPage/News'
 
 class App extends Component {
 
@@ -58,6 +59,7 @@ class App extends Component {
                                     <Route path={path.HOMEPAGE} component={HomePage} />
                                     <Route path={path.PRODUCT_PAGE} component={Products}></Route>
                                     <Route path={path.DETAIL_PRODUCT_PAGE} component={DetailProduct}></Route>
+                                    <Route path={path.NEWS} component={News}></Route>
                                 </Switch>
                             </CustomScrollbars>
                         </div>

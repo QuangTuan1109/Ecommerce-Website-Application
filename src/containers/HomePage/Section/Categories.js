@@ -3,10 +3,12 @@ import { connect } from 'react-redux';
 import { Link  } from "react-router-dom";
 import './Categories.scss'
 
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+
 import Slider from 'react-slick'
 
 class Categories extends Component {
-
     render() {
         let settings = {
             dots: false,

@@ -1,35 +1,50 @@
-.section-categories-slider {
+.section-categories-slider-top-search {
     margin: 50px;
-    height: 260px;
+    height: 370px;
     background: #181818;
 
     .section-container {
         margin: 0 50px;
         display: flex;
         flex-direction: column;
-    
+
         .section-title {
             height: 60px;
             margin-bottom: 10px;
             padding-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            font-weight: 500;
     
             .title-content-section {
                 color: #78a206;
                 font-size: 30px;
-                font-weight: 500;
+            }
+
+            .seemore-link {
+                color: white;
+                font-size: 15px;
+                margin-top: 15px;
+                margin-right: 20px;
+
+                &:hover {
+                    color: #78a206;
+                }
             }
     
         }
-    
+
         .section-body{
             .section-customize {
-                .bg-image {
-                    margin-right: 30px;
-                    margin-top: 10px;
-                    width: 60px;
-                    height: 60px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin-bottom: 20px;
+                
+                .bg-image-top-search {
+                    width: 250px;
+                    height: 250px;
                     border: 2px solid transparent;
-                    border-radius: 50%;
                     background: url('../../../assets/images/t-shirt.png');
                     background-position: center center;
                     background-repeat: no-repeat;
@@ -37,13 +52,14 @@
                     background-color: #eee;
                 }
             }
-    
-            .title-promotions {
+        
+            .title-promotions-top-search {
                 color: white;
-                margin-left: -15px;
-                font-size: 15px;
+                font-size: 20px;
                 text-align: center;
-
+                width: 250px;
+                background-color: rgba(0, 0, 0, 0.5);
+    
                 .title-link {
                     text-decoration: none;
                     color: #fff;
@@ -56,7 +72,7 @@
 
             .slick-prev {
                 left: -60px !important;
-                top: 60px !important;
+                top: 120px !important;
                 z-index: 1000 !important;
                 height: 48px !important;
                 width: 30px !important;
@@ -76,7 +92,7 @@
             
             .slick-next {
                 right: -60px !important;
-                top: 60px !important;
+                top: 120px !important;
                 z-index: 1000 !important;
                 height: 48px !important;
                 width: 30px !important;
@@ -90,13 +106,8 @@
                 }
             }
 
-            .slick-track {
-                height: 140px;
-
-                .slick-slide {
-                    padding-right: 10px;
-                    margin-right: 16px;
-                }
+            .slick-list {
+                margin-left: 50px;
             }
         }
     }

@@ -6,6 +6,7 @@ import Introduction from './Section/Introduction'
 import Categories from './Section/Categories'
 import FeaturedProducts from './Section/FeaturedProduct'
 import Recommended from './Section/Recommended'
+import TopSearch from './Section/TopSearch'
 import News from './Section/News'
 import AboutUs from './Section/AboutUs';
 import FooterHomepage from './FooterHomepage';
@@ -22,6 +23,8 @@ class HomePage extends Component {
             speed: 500,
             slidesToShow: 4,
             slidesToScroll:2,
+            autoplay: true, // Tự động lướt
+            autoplaySpeed: 2000, 
         };
 
         return (
@@ -31,6 +34,7 @@ class HomePage extends Component {
                 <Categories settings = {settings}/>
                 <FeaturedProducts />
                 <Recommended />
+                <TopSearch />
                 <News />
                 <AboutUs />
                 <FooterHomepage />
