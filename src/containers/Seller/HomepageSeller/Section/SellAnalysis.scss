@@ -1,0 +1,140 @@
+.sell-analysis {
+  margin-top: 10px;
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    
+  .header {
+    display: flex;
+    flex-direction: column;
+
+    .main-title {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .sub-title, .current-date {
+      font-size: 16px;
+      color: #666;
+    }
+
+    .current-date {
+      font-size: 18px; /* Font size lớn hơn */
+      font-weight: bold; /* In đậm */
+      color: #f00; /* Màu đỏ */
+      /* Các kiểu hiển thị khác (nếu cần) */
+    }
+  }
+
+  .content {
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+
+    .chart {
+      flex: 1;
+      padding-right: 20px;
+
+      .rv-xy-plot {
+        height: 300px;
+        width: 100%;
+      }
+
+      .custom-x-axis {
+        text {
+          font-size: 12px;
+          fill: #666;
+        }
+      
+        line {
+          stroke: #ccc;
+        }
+      
+        line.tick line {
+          stroke: #ccc;
+        }
+      
+        line.tick text {
+          fill: #666;
+          font-size: 10px;
+        }
+      }
+    }
+
+    .legend {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+
+      div {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        
+        &:before {
+          content: "";
+          display: inline-block;
+          width: 10px;
+          height: 10px;
+          margin-right: 5px;
+        }
+      }
+
+      div:nth-child(1):before {
+        background-color: #1f77b4; /* Màu xanh dương đậm */
+      }
+
+      div:nth-child(2):before {
+        background-color: #d62728; /* Màu đỏ */
+      }
+    }
+
+    .chart-controls {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    
+      .chart-button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        margin: 0 10px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    
+        &:hover {
+          background-color: #0056b3;
+        }
+      }
+    }
+    
+
+    .data {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+
+      .data-item {
+        margin-bottom: 20px;
+
+        .value {
+          font-size: 24px;
+          font-weight: bold;
+          color: #333;
+        }
+
+        .description {
+          font-size: 16px;
+          color: #666;
+
+          span {
+            font-weight: bold;
+          }
+        }
+      }
+    }
+  }
+}

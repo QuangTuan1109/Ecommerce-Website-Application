@@ -1,0 +1,146 @@
+.marketing-section {
+    font-family: Arial, sans-serif;
+    margin-top: 10px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+
+    .main-title {
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .sub-title {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+
+    .tab-header {
+        display: flex;
+        margin-bottom: 20px;
+
+        .tab {
+            cursor: pointer;
+            padding: 10px 20px;
+            border: 1px solid transparent;
+            border-radius: 5px;
+            margin-right: 10px;
+
+            &.active {
+                border-color: #ccc;
+                background-color: #f0f0f0;
+            }
+        }
+    }
+
+    .calendar {
+        display: flex;
+        justify-content: space-between;
+
+        .calendar-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            font-size: 18px;
+        
+            button {
+              background-color: transparent;
+              border: none;
+              cursor: pointer;
+              font-size: 18px;
+              margin: 0 10px;
+            }
+          }
+
+        .left-pane {
+            flex: 1;
+
+            .date-list {
+                display: flex;
+                flex-wrap: wrap;
+
+                .date {
+                    cursor: pointer;
+                    width: calc(100% / 7);
+                    padding: 5px;
+                    text-align: center;
+                    border: 1px solid transparent;
+                    border-radius: 5px;
+                    margin-bottom: 5px;
+
+                    &.selected {
+                        background-color: #007bff;
+                        color: #fff;
+                    }
+                }
+            }
+        }
+
+        .right-pane {
+            flex: 2;
+            padding-left: 20px;
+            overflow-y: auto; // Thêm thuộc tính cuộn vào đây
+        
+            .highlighted-date {
+                font-weight: bold;
+                margin-bottom: 10px;
+            }
+        
+            .discount-programs {
+                max-height: 200px;
+                padding-right: 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                padding: 5px;
+        
+                .discount-program {
+                    margin-bottom: 10px;
+                    padding: 10px;
+                    border: 1px solid #eee;
+                    border-radius: 5px;
+        
+                    .program-info {
+                        h4 {
+                            margin: 0;
+                        }
+        
+                        p {
+                            margin: 5px 0;
+                        }
+                    }
+        
+                    .button-container {
+                        display: flex;
+                        justify-content: flex-end;
+                        margin-top: 10px;
+        
+                        button {
+                            padding: 5px 10px;
+                            border: none;
+                            background-color: #007bff;
+                            color: #fff;
+                            border-radius: 5px;
+                            cursor: pointer;
+        
+                            &:hover {
+                                background-color: #0056b3;
+                            }
+                        }
+                    }
+                }
+        
+                .program-list {
+                    margin-bottom: 20px;
+                }
+        
+                .date-label {
+                    font-weight: bold;
+                    margin-bottom: 5px;
+                }
+            }
+        }
+        
+    }
+}

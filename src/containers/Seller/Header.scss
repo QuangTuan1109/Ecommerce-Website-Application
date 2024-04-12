@@ -1,0 +1,209 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #eee;
+    font-size: 15px;
+  
+    .left {
+      display: flex;
+      align-items: center;
+    }
+  
+    .right {
+      display: flex;
+      align-items: center;
+  
+      .icon {
+        position: relative;
+        margin-right: 50px;
+  
+        &:last-child {
+          margin-right: 0;
+        }
+  
+        i {
+          font-size: 24px;
+          cursor: pointer;
+        }
+  
+        .notification-box,
+        .features-box,
+        .seller-info-box {
+          position: absolute;
+          top: 40px;
+          right: 0;
+          width: 200px;
+          height: 120px;
+          background-color: #fff;
+          border: 1px solid #ccc;
+          padding: 10px;
+          display: none;
+          z-index: 100;
+        }
+  
+        &:hover {
+          .notification-box,
+          .features-box,
+          .seller-info-box {
+            display: block;
+            width: 200px;
+            height: 180px;
+          }
+        }
+      }
+  
+      .avatar {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+  
+        .avatar-img {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background-color: #ccc;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-right: 10px;
+        }
+  
+        .seller-name {
+          margin-right: 10px;
+        }
+  
+        .seller-info-box {
+          display: none;
+          position: absolute;
+          top: 57px;
+          right: 0;
+          width: 200px;
+          height: 120px;
+          background-color: #fff;
+          border: 1px solid #ccc;
+          padding: 10px;
+          z-index: 100;
+  
+          .avatar-img-in-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #ccc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 40%;
+          }
+  
+          .name {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+          }
+        }
+  
+        &:hover {
+          .seller-info-box {
+            display: block;
+            width: 240px;
+            height: 200px;
+          }
+        }
+      }
+
+      .seller-details {
+        // Các thuộc tính khác không thay đổi
+      
+        ul {
+          list-style: none;
+          padding: 0;
+          
+          li {
+            margin-bottom: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            
+            &:last-child {
+              margin-bottom: 0;
+            }
+      
+            .icon-item {
+              font-size: 18px; // Kích thước của icon
+              margin-right: 5px; // Khoảng cách giữa icon và văn bản
+              
+              // Màu cho các icon
+              &.fa-store {
+                color: #ff0000; // Màu đỏ cho icon
+              }
+              
+              &.fa-cog {
+                color: #00ff00; // Màu xanh lá cây cho icon
+              }
+              
+              &.fa-language {
+                color: #0000ff; // Màu xanh dương cho icon
+              }
+              
+              &.fa-sign-out-alt {
+                color: #ffff00; // Màu vàng cho icon
+              }
+            }
+          }
+        }
+      }
+      
+  
+      .features-box {
+        ul {
+          list-style: none;
+          padding: 0;
+  
+          li {
+            margin-bottom: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+  
+            &:last-child {
+              margin-bottom: 0;
+            }
+          }
+        }
+  
+        // Icon màu nền khác nhau
+        .icon-item {
+          margin-right: 5px;
+  
+          &.fa-shopping-cart {
+            color: #ff0000; // Màu đỏ
+          }
+  
+          &.fa-box-open {
+            color: #00ff00;
+          }
+  
+          &.fa-bullhorn {
+            color: #0000ff;
+          }
+  
+          &.fa-money-bill {
+            color: #ffff00;
+          }
+  
+          &.fa-chart-bar {
+            color: #ff00ff;
+          }
+  
+          &.fa-cog {
+            color: #00ffff;
+          }
+        }
+      }
+    }
+  }
+  

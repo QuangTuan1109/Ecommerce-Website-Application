@@ -23,7 +23,7 @@ class HomePage extends Component {
             speed: 500,
             slidesToShow: 4,
             slidesToScroll:2,
-            autoplay: true, // Tự động lướt
+            autoplay: true,
             autoplaySpeed: 2000, 
         };
 

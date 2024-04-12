@@ -1,0 +1,48 @@
+.container {
+    font-family: Arial, sans-serif;
+  
+    h2 {
+      margin-bottom: 20px;
+    }
+  
+    .product-information {
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: row;
+  
+      .information-label {
+        font-weight: bold;
+        margin-right: 10px;
+        width: 120px;
+      }
+  
+      .information-input {
+        margin-right: 5px;
+      }
+  
+      .information-name {
+        margin-right: 15px;
+      }
+  
+      .attribute-column {
+        display: flex;
+        align-items: center;
+  
+        select {
+          margin-right: 10px;
+          width: 200px;
+          border: 1px solid #ccc;
+          border-radius: 3px;
+          font-size: 14px;
+        }
+      }
+  
+      input.sku-input {
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        font-size: 14px;
+        width: 200px;
+      }
+    }
+  }
+  

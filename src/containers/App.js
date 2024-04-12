@@ -22,6 +22,8 @@ import HomePage from '../containers/HomePage/HomePage'
 import Products from './Customer/ProductsPage/Products';
 import DetailProduct from './Customer/ProductsPage/DetailProduct';
 import News from './Customer/NewsPage/News'
+import Homepage from './Seller/HomepageSeller/Homepage'
+import CreateProduct from './Seller/ProductPageSeller/CreateProduct/CreateProduct'
 
 class App extends Component {
 
@@ -60,6 +62,8 @@ class App extends Component {
                                     <Route path={path.PRODUCT_PAGE} component={Products}></Route>
                                     <Route path={path.DETAIL_PRODUCT_PAGE} component={DetailProduct}></Route>
                                     <Route path={path.NEWS} component={News}></Route>
+                                    <Route path={path.HOMEPAGESELLER} component={Homepage}></Route>
+                                    <Route path={path.CREATEPRODUCT} component={CreateProduct}></Route>
                                 </Switch>
                             </CustomScrollbars>
                         </div>

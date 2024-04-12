@@ -1,0 +1,78 @@
+.navbar {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .navbar-nav {
+        list-style: none;
+        padding: 0;
+        width: 100%;
+
+        .nav-item {
+            .nav-item-header {
+                display: flex;
+                align-items: center;
+                padding: 10px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+                border-left: 3px solid transparent;
+
+                &:hover {
+                    background-color: #555;
+                    border-left-color: #fff; /* Thêm border màu trắng cho mục đang hover */
+                }
+
+                .nav-icon {
+                    margin-right: 10px;
+                }
+            }
+
+            .sub-nav {
+                list-style: none;
+                padding: 0;
+                margin-left: 20px; // Khoảng cách để mục con lệch sang phải
+
+                .sub-nav-item {
+                    padding: 10px;
+
+                    .nav-item-link {
+                        text-decoration: none;
+                        color: #fff;
+                    }
+
+                    .nav-icon {
+                        margin-right: 10px;
+                    }
+                }
+            }
+        }
+
+        .nav-item.open {
+            .sub-nav {
+                display: block;
+            }
+        }
+    }
+
+    @media (min-width: 768px) {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+
+        .navbar-logo {
+            margin-bottom: 0;
+        }
+
+        .navbar-nav {
+            flex-direction: column;
+
+            .nav-item {
+                padding: 10px 20px;
+                border-left: none; /* Loại bỏ border trái khi ở màn hình lớn */
+            }
+        }
+    }
+}
