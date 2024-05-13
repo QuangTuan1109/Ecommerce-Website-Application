@@ -1,10 +1,8 @@
 import React, { Component, useState } from 'react';
 import { Link  } from "react-router-dom";
 import { connect } from 'react-redux';
+import axios from '../../axios';
 import './Header.scss'
-import avt from '../../assets/images/avatar.png'
-import logo from '../../assets/images/logo-website.png'
-import user from '../../assets/icon/Sample_User_Icon.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart, faBoxOpen, faBullhorn, faMoneyBill, faChartBar, faCog, faStore, faLanguage, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
@@ -13,7 +11,8 @@ class Header extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: 'Vietnamese'
+            value: 'Vietnamese',
+            User: null
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -23,24 +22,39 @@ class Header extends Component {
         this.setState({value: event.target.value});
     }
 
+    async fetchUser() {
+        try {
+            const fetchUserAPI = await axios.get('http://localhost:5000/api/v1/user', {
+                headers: {
+                    'Authorization': `${localStorage.getItem('accessToken')}`
+                }
+            })
+
+            this.setState({ User: fetchUserAPI })
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+    componentDidMount() {
+        this.fetchUser();
+    }
+
     render() {
+        const { User } = this.state
+
         return (
            <header className="header">
                 <div className="left">
-                    {/* Logo */}
                     <div className="logo">Logo</div>
                 </div>
-                <div className="right">
-                    {/* Icon thông báo */}
+                {User && (
+                    <div className="right">
                     <div className="icon notification">
                     <i className="fas fa-bell"></i>
-                    {/* Box thông báo */}
                     <div className="notification-box">Thông báo 1<br />Thông báo 2</div>
                     </div>
-                    {/* Icon tính năng khác */}
                     <div className="icon features">
                     <i className="fas fa-list"></i>
-                    {/* Box tính năng */}
                     <div className="features-box">
                         <ul>
                             <li><FontAwesomeIcon icon={faShoppingCart} className="icon-item" /> Đơn hàng</li>
@@ -53,17 +67,13 @@ class Header extends Component {
 
                     </div>
                     </div>
-                    {/* Avatar và tên người bán */}
                     <div className="avatar">
-                    {/* Avatar */}
                     <div className="avatar-img">A</div>
-                    {/* Tên người bán */}
-                    <div className="seller-name">Lê Quang Tuấn</div>
-                    {/* Box thông tin người bán */}
+                    <div className="seller-name">{User.user.SellerID.Fullname}</div>
                     <div className="seller-info-box">
                         <div className="avatar-img-in-box">A</div>
                         <div className="seller-details">
-                        <div className="name">Lê Quang Tuấn</div>
+                        <div className="name">{User.user.SellerID.Fullname}</div>
                         <ul>
                             <li><FontAwesomeIcon icon={faStore} className="icon-item" /> Hồ sơ shop</li>
                             <li><FontAwesomeIcon icon={faCog} className="icon-item" /> Thiết lập shop</li>
@@ -74,6 +84,7 @@ class Header extends Component {
                     </div>
                     </div>
                 </div>
+                )}
             </header>
         )
     }

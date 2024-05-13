@@ -1,37 +1,32 @@
-.homepage-container {
+.homepage-seller-container {
     height: 100vh;
-    overflow: hidden; // Ngăn chặn trang web cuộn
 
     .body-container {
-        display: flex;
-        height: 100%; // Sử dụng chiều cao 100% của homepage-container
-        overflow-y: auto; // Cho phép cuộn nếu cần
+        display: grid;
+        grid-template-columns: minmax(200px, 16%) minmax(400px, 60%) minmax(200px, 24%);
+        grid-template-rows: min-content; /* Thiết lập chiều cao tự động phù hợp với nội dung */
+        overflow-y: auto;
+        max-height: 100vh;
 
         .left-sidebar {
-            width: 16%;
-            min-width: 200px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
             background-color: #f0f0f0;
             overflow-y: auto;
+            z-index: 1; 
         }
 
         .main-content {
-            width: 60%;
             min-width: 400px;
             background-color: #fff;
             padding: 10px;
             position: relative;
-
-            .marketing-channel-container {
-                overflow-y: auto;
-                height: calc(100% - 20px - 40px); // 20px cho padding và 40px cho phần title và tab-header
-            }
+            margin-bottom: 60px;
         }
 
         .right-sidebar {
-            width: 24%;
             min-width: 200px;
-            background-color: #f0f0f0;
-            overflow-y: auto;
         }
     }
 }

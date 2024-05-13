@@ -13,7 +13,7 @@ class Homepage extends Component {
     render() {
 
         return (
-            <div className='homepage-container'>
+            <div className='homepage-seller-container'>
                 <Header />
                 <div className="body-container">
                     <div className="left-sidebar">
@@ -22,9 +22,7 @@ class Homepage extends Component {
                     <div className="main-content">
                         <TaskSection />
                         <SellAnalysis />
-                        <div className="marketing-channel-container">
-                            <MarketingChannel />
-                        </div>
+                        <MarketingChannel />
                     </div>
                     <div className="right-sidebar">
                         {/* Phần bên phải */}

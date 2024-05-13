@@ -1,5 +1,6 @@
 .create-product-container {
     height: 100vh;
+    overflow-y: hidden;
 
     h2 {
         margin-bottom: 10px;
@@ -9,7 +10,6 @@
         display: flex;
         max-height: fit-content;
         height: 100%;
-        overflow-y: auto;
 
         .left-content {
             position: sticky;
@@ -17,7 +17,6 @@
             width: 25%;
             min-width: 200px;
             background-color: #f0f0f0;
-            overflow-y: auto;
             height: 100vh;
         }
 
@@ -27,6 +26,7 @@
             background-color: #fff;
             padding: 10px;
             position: relative;
+            overflow-y: auto;
 
             .section {
                 margin-bottom: 20px;
@@ -39,7 +39,7 @@
             }
 
             .buttons-container {
-                margin-top: 20px;
+                margin: 50px 0;
                 display: flex;
                 justify-content: flex-end;
             }

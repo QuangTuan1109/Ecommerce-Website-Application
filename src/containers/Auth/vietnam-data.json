@@ -1,0 +1,261 @@
+{
+    "provinces": [
+      {
+        "name": "An Giang",
+        "cities": ["Long Xuyên", "Châu Đốc", "Tân Châu", "An Phú", "Châu Phú", "Phú Tân"]
+      },
+      {
+        "name": "Bà Rịa - Vũng Tàu",
+        "cities": ["Vũng Tàu", "Bà Rịa", "Phú Mỹ", "Châu Đức", "Xuyên Mộc", "Long Điền", "Đất Đỏ", "Côn Đảo"]
+      },
+      {
+        "name": "Bắc Giang",
+        "cities": ["Bắc Giang", "Lạng Giang", "Hiệp Hòa", "Lục Nam", "Lục Ngạn", "Sơn Động", "Yên Dũng", "Tân Yên", "Việt Yên", "Yên Thế"]
+      },
+      {
+        "name": "Bắc Kạn",
+        "cities": ["Bắc Kạn", "Pác Nặm", "Ba Bể", "Ngân Sơn", "Chợ Đồn", "Chợ Mới", "Na Rì", "Nguyên Bình"]
+      },
+      {
+        "name": "Bạc Liêu",
+        "cities": ["Bạc Liêu", "Hồng Dân", "Phước Long", "Vĩnh Lợi", "Giá Rai", "Đông Hải", "Hoà Bình"]
+      },
+      {
+        "name": "Bắc Ninh",
+        "cities": ["Bắc Ninh", "Từ Sơn", "Quế Võ", "Yên Phong", "Gia Bình", "Lương Tài", "Lập Thạch", "Thuận Thành", "Tiên Du"]
+      },
+      {
+        "name": "Bến Tre",
+        "cities": ["Bến Tre", "Châu Thành", "Chợ Lách", "Mỏ Cày", "Giồng Trôm", "Bình Đại", "Ba Tri", "Thạnh Phú"]
+      },
+      {
+        "name": "Bình Định",
+        "cities": ["Quy Nhơn", "An Nhơn", "Tuy Phước", "Vân Canh", "Hoài Ân", "Phù Mỹ", "Tây Sơn", "Hoài Nhơn", "An Lão", "Vĩnh Thạnh"]
+      },
+      {
+        "name": "Bình Dương",
+        "cities": ["Thủ Dầu Một", "Dĩ An", "Thuận An", "Bến Cát", "Tân Uyên", "Dầu Tiếng", "Phú Giáo"]
+      },
+      {
+        "name": "Bình Phước",
+        "cities": ["Đồng Xoài", "Bình Long", "Phước Long", "Bù Đốp", "Bù Đăng", "Chơn Thành", "Lộc Ninh", "Đồng Phú"]
+      },
+      {
+        "name": "Bình Thuận",
+        "cities": ["Phan Thiết", "La Gi", "Tuy Phong", "Bắc Bình", "Hàm Thuận Bắc", "Hàm Thuận Nam", "Hàm Tân", "Phú Quý"]
+      },
+      {
+        "name": "Cà Mau",
+        "cities": ["Cà Mau", "U Minh", "Thới Bình", "Trần Văn Thời", "Cái Nước", "Đầm Dơi", "Năm Căn", "Phú Tân"]
+      },
+      {
+        "name": "Cao Bằng",
+        "cities": ["Cao Bằng", "Bảo Lâm", "Bảo Lạc", "Hạ Lang", "Hà Quảng", "Trùng Khánh", "Nguyên Bình", "Hoà An", "Quảng Uyên", "Thạch An"]
+      },
+      {
+        "name": "Đắk Lắk",
+        "cities": ["Buôn Ma Thuột", "Buôn Hồ", "Ea H'leo", "Ea Súp", "Buôn Đôn", "Cư M'gar", "Krông Búk", "Krông Năng", "Ea Kar", "M'Đrắk", "Krông Bông", "Krông Pắc", "Lắk", "Cư Kuin", "Đắk Mil"]
+      },
+      {
+        "name": "Đắk Nông",
+        "cities": ["Gia Nghĩa", "Đăk Glong", "Cư Jút", "Đắk Mil", "Krông Nô", "Đắk Song", "Đắk R'Lấp", "Tu Mơ Rông"]
+      },
+      {
+        "name": "Điện Biên",
+        "cities": ["Điện Biên Phủ", "Mường Lay", "Mường Nhé", "Mường Chà", "Tủa Chùa", "Tuần Giáo", "Điện Biên", "Điện Biên Đông", "Mường Ảng"]
+      },
+      {
+        "name": "Đồng Nai",
+        "cities": ["Biên Hòa", "Long Khánh", "Tân Phú", "Vĩnh Cửu", "Định Quán", "Thống Nhất", "Long Thành", "Nhơn Trạch", "Cẩm Mỹ", "Long Hồ", "Xuân Lộc"]
+      },
+      {
+        "name": "Đồng Tháp",
+        "cities": ["Cao Lãnh", "Sa Đéc", "Hồng Ngự", "Hồng Ngự", "Tam Nông", "Tháp Mười", "Lai Vung", "Thanh Bình", "Châu Thành", "Lấp Vò", "Tam Nông", "Tháp Mười"]
+      },
+      {
+        "name": "Gia Lai",
+        "cities": ["Pleiku", "An Khê", "Ayun Pa", "K'Bang", "Đăk Đoa", "Chư Păh", "Ia Grai", "Kông Chro", "Krông Pa", "Mang Yang", "Đức Cơ", "Chư Prông", "Chư Sê", "Đăk Pơ", "Ia Pa"]
+      },
+      {
+        "name": "Hà Giang",
+        "cities": ["Hà Giang", "Bắc Mê", "Bắc Quang", "Đồng Văn", "Hoàng Su Phì", "Mèo Vạc", "Quản Bạ", "Quang Bình", "Vị Xuyên", "Xín Mần", "Yên Minh"]
+      },
+      {
+        "name": "Hà Nam",
+        "cities": ["Phủ Lý", "Duy Tiên", "Kim Bảng", "Lý Nhân", "Thanh Liêm", "Bình Lục"]
+      },
+      {
+        "name": "Hà Tĩnh",
+        "cities": ["Hà Tĩnh", "Hồng Lĩnh", "Hương Khê", "Hương Sơn", "Kỳ Anh", "Lộc Hà", "Nghi Xuân", "Cẩm Xuyên", "Can Lộc", "Đức Thọ", "Thạch Hà", "Vũ Quang", "Nghi Xuân", "Thị xã Hồng Lĩnh"]
+      },
+      {
+        "name": "Hải Dương",
+        "cities": ["Hải Dương", "Chí Linh", "Nam Sách", "Ninh Giang", "Thanh Hà", "Thanh Miện", "Gia Lộc", "Tứ Kỳ", "Kiến Thuỵ", "Kim Thành", "Cẩm Giàng", "Bình Giang", "Gia Lộc"]
+      },
+      {
+        "name": "Hậu Giang",
+        "cities": ["Vị Thanh", "Vị Thủy", "Long Mỹ", "Phụng Hiệp", "Châu Thành", "Châu Thành A", "Long Mỹ"]
+      },
+      {
+        "name": "Hòa Bình",
+        "cities": ["Hòa Bình", "Cao Phong", "Đà Bắc", "Kim Bôi", "Kỳ Sơn", "Lạc Sơn", "Lạc Thủy", "Lương Sơn", "Mai Châu", "Tân Lạc", "Yên Thủy"]
+      },
+      {
+        "name": "Hưng Yên",
+        "cities": ["Hưng Yên", "Ân Thi", "Khoái Châu", "Kim Động", "Mỹ Hào", "Phù Cừ", "Tiên Lữ", "Văn Giang", "Văn Lâm", "Yên Mỹ"]
+      },
+      {
+        "name": "Khánh Hòa",
+        "cities": ["Nha Trang", "Cam Ranh", "Ninh Hòa", "Vạn Ninh", "Điện Khánh", "Khánh Vĩnh", "Cam Lâm", "Cam Ranh"]
+      },
+      {
+        "name": "Kiên Giang",
+        "cities": ["Rạch Giá", "Hà Tiên", "Kiên Lương", "Hòn Đất", "Tân Hiệp", "Châu Thành", "Giồng Riềng", "Gò Quao", "An Biên", "An Minh", "Vĩnh Thuận", "Phú Quốc", "Kiên Hải", "U Minh Thượng", "Giang Thành", "Kiên Hải"]
+      },
+      {
+        "name": "Kon Tum",
+        "cities": ["Kon Tum", "Kon Plông", "Đắk Glei", "Đắk Tô", "Ngọc Hồi", "Sa Thầy", "Tu Mơ Rông", "Ia H'Drai"]
+      },
+      {
+        "name": "Lai Châu",
+        "cities": ["Lai Châu", "Tam Đường", "Mường Tè", "Sìn Hồ", "Phong Thổ", "Than Uyên", "Tân Uyên"]
+      },
+      {
+        "name": "Lâm Đồng",
+        "cities": ["Đà Lạt", "Bảo Lộc", "Đam Rông", "Di Linh", "Đơn Dương", "Đức Trọng", "Lạc Dương", "Lâm Hà", "Bảo Lâm", "Đạ Huoai", "Đạ Tẻh", "Cát Tiên"]
+      },
+      {
+        "name": "Lạng Sơn",
+        "cities": ["Lạng Sơn", "Bắc Sơn", "Bình Gia", "Cao Lộc", "Chi Lăng", "Đình Lập", "Hữu Lũng", "Lộc Bình", "Tràng Định", "Văn Lãng", "Văn Quan"]
+      },
+      {
+        "name": "Lào Cai",
+        "cities": ["Lào Cai", "Bắc Hà", "Bảo Thắng", "Bảo Yên", "Bát Xát", "Mường Khương", "Sa Pa", "Văn Bàn", "Si Ma Cai"]
+      },
+      {
+        "name": "Long An",
+        "cities": ["Tân An", "Tân Hưng", "Vĩnh Hưng", "Mộc Hóa", "Tân Thạnh", "Thạnh Hóa", "Đức Huệ", "Đức Hòa", "Bến Lức", "Thủ Thừa", "Châu Thành", "Tân Trụ", "Cần Đước", "Cần Giuộc", "Tân Hưng"]
+      },
+      {
+        "name": "Nam Định",
+        "cities": ["Nam Định", "Giao Thủy", "Hải Hậu", "Mỹ Lộc", "Nam Trực", "Nghĩa Hưng", "Trực Ninh", "Vụ Bản", "Xuân Trường", "Ý Yên"]
+      },
+      {
+        "name": "Nghệ An",
+        "cities": ["Vinh", "Cửa Lò", "Thái Hoà", "Hoàng Mai", "Quế Phong", "Quỳ Châu", "Quỳ Hợp", "Nghĩa Đàn", "Quỳnh Lưu", "Tương Dương", "Kỳ Sơn", "Diễn Châu", "Anh Sơn", "Yên Thành", "Con Cuông", "Tân Kỳ", "Nghĩa Danh", "Thái Thụy", "Nam Đàn", "Hưng Nguyên", "Thái Hòa"]
+      },
+      {
+        "name": "Ninh Bình",
+        "cities": ["Ninh Bình", "Tam Điệp", "Nho Quan", "Gia Viễn", "Hoa Lư", "Yên Khánh", "Kim Sơn", "Yên Mô"]
+      },
+      {
+        "name": "Ninh Thuận",
+        "cities": ["Phan Rang-Tháp Chàm", "Bác Ái", "Ninh Hải", "Ninh Phước", "Ninh Sơn", "Thuận Bắc", "Thuận Nam"]
+      },
+      {
+        "name": "Phú Thọ",
+        "cities": ["Việt Trì", "Phú Thọ", "Cẩm Khê", "Đoan Hùng", "Hạ Hoà", "Lâm Thao", "Phù Ninh", "Tam Nông", "Tân Sơn", "Thanh Ba", "Thạch Thành", "Yên Lập"]
+      },
+      {
+        "name": "Phú Yên",
+        "cities": ["Tuy Hòa", "Sông Cầu", "Đồng Xuân", "Sơn Hòa", "Tuy An", "Sông Hinh", "Đông Hòa", "Tây Hòa", "Phú Hòa"]
+      },
+      {
+        "name": "Quảng Bình",
+        "cities": ["Đồng Hới", "Ba Đồn", "Bố Trạch", "Lệ Thủy", "Minh Hóa", "Quảng Ninh", "Quảng Trạch", "Tuyên Hóa"]
+      },
+      {
+        "name": "Quảng Nam",
+        "cities": ["Hội An", "Tam Kỳ", "An Nhơn", "Bắc Trà My", "Đại Lộc", "Điện Bàn", "Đông Giang", "Duy Xuyên", "Hiệp Đức", "Nam Giang", "Nam Trà My", "Nông Sơn", "Núi Thành", "Phú Ninh", "Phước Sơn", "Quế Sơn", "Tây Giang", "Thăng Bình", "Tiên Phước"]
+      },
+      {
+        "name": "Quảng Ngãi",
+        "cities": ["Quảng Ngãi", "Bình Sơn", "Sơn Hà", "Sơn Tây", "Trà Bồng", "Tư Nghĩa", "Nghĩa Hành", "Minh Long", "Mộ Đức", "Đức Phổ", "Ba Tơ", "Lý Sơn", "Đức Phổ"]
+      },
+      {
+        "name": "Quảng Ninh",
+        "cities": ["Hạ Long", "Móng Cái", "Cẩm Phả", "Uông Bí", "Đông Triều", "Quảng Yên", "Ba Chẽ", "Bình Liêu", "Cô Tô", "Đầm Hà", "Hải Hà", "Tiên Yên", "Vân Đồn"]
+      },
+      {
+        "name": "Quảng Trị",
+        "cities": ["Đông Hà", "Quảng Trị", "Hải Lăng", "Gio Linh", "Cồn Cỏ", "Vĩnh Linh", "Cam Lộ", "Triệu Phong"]
+      },
+      {
+        "name": "Sóc Trăng",
+        "cities": ["Sóc Trăng", "Châu Thành", "Cù Lao Dung", "Kế Sách", "Long Phú", "Mỹ Tú", "Mỹ Xuyên", "Ngã Năm", "Thạnh Trị", "Trần Đề", "Vĩnh Châu"]
+      },
+      {
+        "name": "Sơn La",
+        "cities": ["Sơn La", "Bắc Yên", "Mai Sơn", "Mộc Châu", "Mường La", "Phù Yên", "Quỳnh Nhai", "Sông Mã", "Thuận Châu", "Vân Hồ", "Yên Châu"]
+      },
+      {
+        "name": "Tây Ninh",
+        "cities": ["Tây Ninh", "Tân Biên", "Tân Châu", "Dương Minh Châu", "Châu Thành", "Hoà Thành", "Bến Cầu", "Gò Dầu", "Trảng Bàng"]
+      },
+      {
+        "name": "Thái Bình",
+        "cities": ["Thái Bình", "Quỳnh Phụ", "Hưng Hà", "Đông Hưng", "Vũ Thư", "Kiến Xương", "Thái Thụy", "Tiền Hải"]
+      },
+      {
+        "name": "Thái Nguyên",
+        "cities": ["Thái Nguyên", "Sông Công", "Định Hóa", "Đồng Hỷ", "Phổ Yên", "Phú Bình", "Võ Nhai"]
+      },
+      {
+        "name": "Thanh Hóa",
+        "cities": ["Thanh Hóa", "Bỉm Sơn", "Sầm Sơn", "Quan Hóa", "Quan Sơn", "Nông Cống", "Ngọc Lặc", "Như Thanh", "Như Xuân", "Nga Sơn", "Thiệu Hóa", "Thọ Xuân", "Thường Xuân", "Tĩnh Gia", "Triệu Sơn", "Vĩnh Lộc", "Yên Định"]
+      },
+      {
+        "name": "Thừa Thiên - Huế",
+        "cities": ["Huế", "Hương Thủy", "Hương Trà", "A Lưới", "Nam Đông", "Phong Điền", "Phú Lộc", "Phú Vang", "Quảng Điền"]
+      },
+      {
+        "name": "Tiền Giang",
+        "cities": ["Mỹ Tho", "Gò Công", "Cai Lậy", "Cái Bè", "Châu Thành", "Chợ Gạo", "Gò Công Tây", "Gò Công Đông", "Tân Phước", "Tân Phú Đông", "Tân Hưng", "Tân Thạnh"]
+      },
+      {
+        "name": "Trà Vinh",
+        "cities": ["Trà Vinh", "Càng Long", "Cầu Kè", "Châu Thành", "Duyên Hải", "Tiểu Cần", "Cầu Ngang", "Trà Cú", "Duyên Hải"]
+      },
+      {
+        "name": "Tuyên Quang",
+        "cities": ["Tuyên Quang", "Hàm Yên", "Lâm Bình", "Na Hang", "Chiêm Hóa", "Yên Sơn", "Sơn Dương"]
+      },
+      {
+        "name": "Vĩnh Long",
+        "cities": ["Vĩnh Long", "Bình Minh", "Bình Tân", "Long Hồ", "Mang Thít", "Tam Bình", "Trà Ôn", "Vũng Liêm"]
+      },
+      {
+        "name": "Vĩnh Phúc",
+        "cities": ["Vĩnh Yên", "Phúc Yên", "Lập Thạch", "Tam Dương", "Tam Đảo", "Bình Xuyên", "Yên Lạc", "Vĩnh Tường"]
+      },
+      {
+        "name": "Yên Bái",
+        "cities": ["Yên Bái", "Nghĩa Lộ", "Lục Yên", "Mù Cang Chải", "Trạm Tấu", "Trấn Yên", "Văn Chấn", "Văn Yên", "Yên Bình"]
+      },
+      {
+        "name": "Hà Nội",
+        "cities": ["Quận Ba Đình", "Quận Hoàn Kiếm", "Quận Hai Bà Trưng", "Quận Đống Đa", "Quận Tây Hồ", "Quận Cầu Giấy", "Quận Thanh Xuân", "Quận Hoàng Mai", "Quận Long Biên", "Quận Nam Từ Liêm", "Quận Bắc Từ Liêm", "Huyện Sóc Sơn", "Huyện Đông Anh", "Huyện Gia Lâm", "Huyện Thanh Trì", "Huyện Ba Vì", "Huyện Phúc Thọ", "Huyện Thạch Thất", "Huyện Quốc Oai", "Huyện Chương Mỹ", "Huyện Đan Phượng", "Huyện Hoài Đức", "Huyện Thanh Oai", "Huyện Mỹ Đức", "Huyện Ứng Hòa", "Huyện Thường Tín", "Huyện Phú Xuyên", "Huyện Mê Linh"]
+    },
+    {
+        "name": "Thành phố Hồ Chí Minh",
+        "cities": ["Quận 1", "Quận 2", "Quận 3", "Quận 4", "Quận 5", "Quận 6", "Quận 7", "Quận 8", "Quận 9", "Quận 10", "Quận 11", "Quận 12", "Quận Bình Tân", "Quận Bình Thạnh", "Quận Gò Vấp", "Quận Phú Nhuận", "Quận Tân Bình", "Quận Tân Phú", "Quận Thủ Đức", "Quận Bình Chánh", "Huyện Cần Giờ", "Huyện Củ Chi", "Huyện Hóc Môn", "Huyện Bình Chánh", "Huyện Nhà Bè"]
+    },
+    {
+        "name": "Đà Nẵng",
+        "cities": ["Quận Hải Châu", "Quận Thanh Khê", "Quận Sơn Trà", "Quận Ngũ Hành Sơn", "Quận Liên Chiểu", "Quận Cẩm Lệ", "Huyện Hòa Vang"]
+    },
+    {
+        "name": "Hải Phòng",
+        "cities": ["Quận Hồng Bàng", "Quận Ngô Quyền", "Quận Lê Chân", "Quận Hải An", "Quận Kiến An", "Quận Đồ Sơn", "Huyện An Dương", "Huyện An Lão", "Huyện Kiến Thụy", "Huyện Thủy Nguyên", "Huyện Tiên Lãng", "Huyện Vĩnh Bảo", "Huyện Cát Hải", "Huyện Bạch Long Vĩ"]
+    },
+    {
+        "name": "Cần Thơ",
+        "cities": ["Quận Ninh Kiều", "Quận Bình Thủy", "Quận Cái Răng", "Quận Ô Môn", "Quận Thốt Nốt", "Huyện Vĩnh Thạnh", "Huyện Cờ Đỏ", "Huyện Phong Điền", "Huyện Thới Lai", "Huyện O Môn"]
+    },
+    {
+        "name": "Huế",
+        "cities": ["Quận Phú Vang", "Quận Hương Thủy", "Quận Hương Trà", "Huyện Phong Điền", "Huyện Quảng Điền", "Huyện Phú Lộc", "Huyện Nam Đông", "Huyện A Lưới"]
+    }
+    ]
+  }
+  

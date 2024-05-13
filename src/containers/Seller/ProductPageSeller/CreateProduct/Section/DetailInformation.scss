@@ -26,6 +26,16 @@
                 font-weight: bold;
             }
 
+            .CustomInput {
+                width: 100%;
+                height: 38px;
+                padding: 0 10px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                font-size: 14px;
+                outline: none;
+              }
+
             select {
                 width: 100%;
                 padding: 8px;

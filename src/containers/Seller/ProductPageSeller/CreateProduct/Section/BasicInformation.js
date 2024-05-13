@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Dropzone from 'react-dropzone';
 import { faCamera, faEdit, faTrash, faPen } from '@fortawesome/free-solid-svg-icons';
 import axios from '../../../../../axios';
+import { updateCategory } from '../../../../../store/actions';
 
 
 /**
@@ -20,42 +21,41 @@ class BasicInformation extends Component {
         super(props);
         // Initialize component state
         this.state = {
-            // State for storing image data
             images: [],
-            // State for toggling edit mode for images
             editMode: false,
             loading: true,
             activeImageIndex: null,
-            // State for storing video data
             video: null,
-            // State for storing product name
             productName: '',
-            // State for error message related to product name
             error: '',
-            // State for toggling category selection popup
             showCategoryPopup: false,
-            // State for storing selected category
             selectedCategory: '',
-            // State for storing all categories
             categories: [],
-            // State for storing product description
+            category: null,
             description: '',
-            // State for error message related to product description
             errDescription: '',
-            // State for storing categories at level
             categoriesLevel2: [],
             categoriesLevel3: [],
             categoriesLevel4: [],
-            // State for storing selected category by level
             selectedCategoriesLevel1: null,
             selectedCategoriesLevel2: null,
             selectedCategoriesLevel3: null,
             selectedCategoriesLevel4: null,
-            // State for disabling/enabling the confirm button
             disableConfirmButton: true,
-            // State for storing final selected categories
             selectedCategories: null,
         };
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState !== this.state) {
+            this.props.onBasicDataChange({
+                Image: this.state.images,
+                Video: this.state.video,
+                Name: this.state.productName,
+                Category: this.state.category,
+                Description: this.state.description
+            });
+        }
     }
 
     /**
@@ -154,7 +154,7 @@ class BasicInformation extends Component {
      */
     handleChangeProductName = (e) => {
         const { value } = e.target;
-        const error = value.length < 10 ? 'Tên sản phẩm phải có ít nhất 10 ký tự.' : '';
+        const error = value.length < 10 ? 'Product names must have at least 10 characters.' : '';
         this.setState({ productName: value, error });
     }
 
@@ -172,7 +172,7 @@ class BasicInformation extends Component {
      * @param {Object} category - The selected category object.
      */
     handleChangeCategory = (category) => {
-        this.setState({ category, showCategoryPopup: false });
+        this.setState({ selectedCategory: category, showCategoryPopup: false });
     }
 
     /**
@@ -205,11 +205,28 @@ class BasicInformation extends Component {
         try {
             // Clear lower level categories when a higher level category is clicked
             if (level === 1) {
-                this.setState({ categoriesLevel2: [], categoriesLevel3: [], categoriesLevel4: [] });
+                this.setState({ 
+                    categoriesLevel2: [],
+                    categoriesLevel3: [],
+                    categoriesLevel4: [],
+                    selectedCategoryLevel1: category, 
+                    selectedCategoryLevel2: null, 
+                    selectedCategoryLevel3: null, 
+                    selectedCategoryLevel4: null  });
             } else if (level === 2) {
-                this.setState({ categoriesLevel3: [], categoriesLevel4: [] });
+                this.setState({ 
+                    categoriesLevel3: [], 
+                    categoriesLevel4: [], 
+                    selectedCategoryLevel2: category, 
+                    selectedCategoryLevel3: null, 
+                    selectedCategoryLevel4: null  
+                });
             } else if (level === 3) {
-                this.setState({ categoriesLevel4: [] });
+                this.setState({
+                    categoriesLevel4: [], 
+                    selectedCategoryLevel3: category, 
+                    selectedCategoryLevel4: null 
+                });
             }
 
             // Fetch subcategories of the clicked category
@@ -298,7 +315,6 @@ class BasicInformation extends Component {
      */
     handleConfirm = () => {
         const selectedCategories = this.state.selectedCategoryLevel4 || this.state.selectedCategoryLevel3 || this.state.selectedCategoryLevel2 || this.state.selectedCategoryLevel1;
-
         let selectedLevelsString = '';
 
         // Check and append the selected levels to the string
@@ -310,6 +326,7 @@ class BasicInformation extends Component {
         // Update the category state and close the category selection popup
         this.setState({ category: selectedLevelsString, showCategoryPopup: false, selectedCategories });
         this.props.onCategorySelect(selectedCategories);
+        this.props.updateCategory(selectedLevelsString);
     }
 
     /**
@@ -318,7 +335,7 @@ class BasicInformation extends Component {
      */
     handleDescriptionChange = (e) => {
         const { value } = e.target;
-        const errDescription = value.length < 1000 ? 'Mô tả sản phẩm phải có ít nhất 1000 ký tự.' : '';
+        const errDescription = value.length < 1000 ? 'Product descriptions must be at least 1000 characters.' : '';
         this.setState({ description: value, errDescription });
     };
 
@@ -330,16 +347,17 @@ class BasicInformation extends Component {
         const { images, editMode, activeImageIndex, video, error, productName, showCategoryPopup,
             category, description, errDescription, categories, categoriesLevel2, categoriesLevel3, categoriesLevel4 } = this.state;
 
+            console.log(category)
         return (
             <div className='container'>
                 {/* Basic Information Header */}
-                <h2>Thông tin cơ bản</h2>
+                <h2>Basic Information</h2>
                 {/* Image Section */}
                 <div className="image-section">
-                    <h3><span className="required-star">*</span> Hình ảnh sản phẩm</h3>
+                    <h3><span className="required-star">*</span> Product Images </h3>
                     <label htmlFor="image-upload" className="image-upload">
                         <FontAwesomeIcon icon={faCamera} />
-                        <span>Thêm hình ảnh</span>
+                        <span> Add Image </span>
                         <input type="file" id="image-upload" accept="image/*" onChange={this.handleAddImage} />
                     </label>
                     <p>{`${images.length}/9`}</p>
@@ -355,8 +373,10 @@ class BasicInformation extends Component {
                                 <img src={image} alt={`Product ${index + 1}`} />
                                 {(activeImageIndex === index && !editMode) && (
                                     <div className="image-overlay">
-                                        <FontAwesomeIcon icon={faEdit} onClick={this.handleEditImage} />
-                                        <FontAwesomeIcon icon={faTrash} onClick={this.handleDeleteImage} />
+                                        <FontAwesomeIcon icon={faEdit} onClick={this.handleEditImage}
+                                        style={{ fontSize: '20px', margin: '10px 25px 5px 30px', cursor: 'pointer' }} />
+                                        <FontAwesomeIcon icon={faTrash} onClick={this.handleDeleteImage} 
+                                        style={{ fontSize: '20px', margin: '10px 25px 5px 30px', cursor: 'pointer' }}/>
                                     </div>
                                 )}
                                 {(activeImageIndex === index && editMode) && (
@@ -372,7 +392,7 @@ class BasicInformation extends Component {
                 {/* Video Section */}
                 <div className="video-section">
                     {/* Video header */}
-                    <h3><span className="required-star">*</span> <span>Video sản phẩm</span></h3>
+                    <h3><span className="required-star">*</span> <span> Product Video </span></h3>
                     {/* Display uploaded video or upload video dropzone */}
                     {video ? (
                         <div className="uploaded-video">
@@ -382,8 +402,8 @@ class BasicInformation extends Component {
                             </video>
                             {/* Display delete and edit buttons */}
                             <div className="video-actions">
-                                <button onClick={this.handleDeleteVideo}><FontAwesomeIcon icon={faTrash} /> Xóa Video</button>
-                                <button onClick={this.handleEditVideo}><FontAwesomeIcon icon={faEdit} /> Sửa Video</button>
+                                <button onClick={this.handleDeleteVideo}><FontAwesomeIcon icon={faTrash} /> Delete Videos </button>
+                                <button onClick={this.handleEditVideo}><FontAwesomeIcon icon={faEdit} /> Edit Videos </button>
                             </div>
                         </div>
                     ) : (
@@ -392,29 +412,29 @@ class BasicInformation extends Component {
                                 <div {...getRootProps()} className="video-upload">
                                     <input {...getInputProps()} />
                                     <FontAwesomeIcon icon={faCamera} />
-                                    <span>Kéo thả video vào đây hoặc click để chọn video</span>
+                                    <span>Drag and drop videos here or click to select videos</span>
                                 </div>
                             )}
                         </Dropzone>
                     )}
                     {/* Video notes */}
                     <div className="video-notes">
-                        <p>Vui lòng tải lên một video giới thiệu ngắn về sản phẩm của bạn.</p>
-                        <p>Video sẽ giúp khách hàng hiểu rõ hơn về sản phẩm của bạn.</p>
-                        <p>Lưu ý: Chỉ được phép tải lên 1 video.</p>
+                        <p>Please upload a short introduction video about your product.</p>
+                         <p>Video will help customers better understand your product.</p>
+                         <p>Note: Only 1 video is allowed.</p>
                     </div>
                 </div>
                 {/* Product Name Section */}
                 <div className="product-name-section">
                     {/* Product name header */}
-                    <h3><span className="required-star">*</span> Tên sản phẩm</h3>
+                    <h3><span className="required-star">*</span> Product name </h3>
                     <div className="input-wrapper">
                         {/* Product name input field */}
                         <input
                             type="text"
-                            value={productName}
+                            value={productName || ''}
                             onChange={this.handleChangeProductName}
-                            placeholder="Nhập tên sản phẩm"
+                            placeholder="Brand Name + Product Type + Key Features (Materials, Colors, Size, Model)"
                             maxLength={120}
                         />
                         <p>{productName.length}/120</p>
@@ -425,13 +445,13 @@ class BasicInformation extends Component {
                 {/* Category Section */}
                 <div className="category-section">
                     {/* Category header */}
-                    <h3><span className="required-star">*</span> Ngành hàng</h3>
+                    <h3><span className="required-star">*</span> Category </h3>
                     <div className="input-wrapper">
                         {/* Category input field */}
                         <input
                             type="text"
-                            value={category}
-                            placeholder="Chọn ngành hàng"
+                            value={category ? category : ''}
+                            placeholder="Please set category"
                             onFocus={this.toggleCategoryPopup}
                             readOnly
                         />
@@ -445,14 +465,14 @@ class BasicInformation extends Component {
                     <div className="category-popup">
                         {/* Popup header */}
                         <div className="popup-header">
-                            <h3>Ngành Hàng</h3>
+                            <h3>Category</h3>
                             <span className="close-icon" onClick={this.toggleCategoryPopup}>×</span>
                         </div>
                         {/* Popup content */}
                         <div className="popup-content">
                             {/* Search container */}
                             <div className="search-container">
-                                <input type="text" placeholder="Vui lòng nhập ít nhất 1 ký tự" onChange={this.handleSearch} />
+                                <input type="text" placeholder="Please enter at least 1 character" onChange={this.handleSearch} />
                                 <span className="search-icon">🔍</span>
                             </div>
                             {/* Category sections */}
@@ -499,18 +519,18 @@ class BasicInformation extends Component {
                         <div className="popup-footer">
                             <div className="selected-category">
                                 {/* Display selected categories */}
-                                Ngành hàng đã chọn:
+                                The currently selected:
                                 <span>
-                                    {this.state.selectedCategoryLevel1 && <span>{this.state.selectedCategoryLevel1.Name} </span>}
-                                    {this.state.selectedCategoryLevel2 && <span> {'>'}{this.state.selectedCategoryLevel2.Name} </span>}
-                                    {this.state.selectedCategoryLevel3 && <span> {'>'}{this.state.selectedCategoryLevel3.Name} </span>}
-                                    {this.state.selectedCategoryLevel4 && <span> {'>'}{this.state.selectedCategoryLevel4.Name}</span>}
+                                    {this.state.selectedCategoryLevel1 && <span> {this.state.selectedCategoryLevel1.Name}</span>}
+                                    {this.state.selectedCategoryLevel2 && <span> {'>'} {this.state.selectedCategoryLevel2.Name}</span>}
+                                    {this.state.selectedCategoryLevel3 && <span> {'>'} {this.state.selectedCategoryLevel3.Name}</span>}
+                                    {this.state.selectedCategoryLevel4 && <span> {'>'} {this.state.selectedCategoryLevel4.Name}</span>}
                                 </span>
                             </div>
                             <div className="action-buttons">
                                 {/* Cancel and confirm buttons */}
-                                <button onClick={this.handleCancel} >Hủy</button>
-                                <button onClick={this.handleConfirm} disabled={this.state.disableConfirmButton}>Xác nhận</button>
+                                <button onClick={this.handleCancel} >Cancel</button>
+                                <button onClick={this.handleConfirm} disabled={this.state.disableConfirmButton}>Confirm</button>
                             </div>
                         </div>
                     </div>
@@ -518,7 +538,7 @@ class BasicInformation extends Component {
                 {/* Description Section */}
                 <div className="description-section">
                     {/* Description header */}
-                    <h3><span className="required-star">*</span> Mô tả sản phẩm</h3>
+                    <h3><span className="required-star">*</span> Product Description </h3>
                     <div className="input-wrapper">
                         {/* Description input field */}
                         <textarea
@@ -544,7 +564,11 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-    return {};
+    return {
+        updateCategory: (category) => {
+            dispatch(updateCategory(category))
+        }
+    };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(BasicInformation);

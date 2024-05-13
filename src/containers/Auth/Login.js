@@ -3,7 +3,9 @@ import { connect } from 'react-redux';
 import { push } from "connected-react-router";
 import * as actions from "../../store/actions";
 import './Login.scss';
-import { FormattedMessage } from 'react-intl';
+import axios from '../../axios'
+import { customerLoginSuccess } from '../../store/actions';
+
 
 import logo from '../../assets/images/logo-website.png'
 
@@ -12,26 +14,39 @@ class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: '',
-            password: '',
-            isShowPassword: false,
+            Email: '',
+            Password: '',
+            isShowPassword: false
         }
     }
 
+    handleLogin = async () => {
+        try {
+            const response = await axios.post('http://localhost:5000/api/v1/signin', {
+                Email: this.state.Email,
+                Password: this.state.Password
+            });
+            
+            if (response.success) {
+                localStorage.setItem('accessToken', response.token);
+                this.props.customerLoginSuccess()
+            }
+        } catch (error) {
+            console.error('Error during login:', error);
+        }
+    }
+    
+
     handelOnchangeUsername = (event) => {
         this.setState({
-            username: event.target.value
+            Email: event.target.value
         })
     }
 
     handelOnchangePassword = (event) => {
         this.setState({
-            password: event.target.value
+            Password: event.target.value
         })
-    }
-
-    handelOnClickButton = () => {
-        alert('Oke')
     }
 
     handelShowHidePassword = () => {
@@ -53,7 +68,7 @@ class Login extends Component {
                             <input type='text' 
                              className='form-control' 
                              placeholder='Enter your username'
-                             value={this.state.username}
+                             value={this.state.Email}
                              onChange={(event) => this.handelOnchangeUsername(event)}
                              />
                         </div>
@@ -70,7 +85,7 @@ class Login extends Component {
                             </div>
                         </div>
                         <div className='col-12'>
-                            <button className='btn-login' onClick={() => this.handelOnClickButton()}>Login</button>
+                            <button className='btn-login' onClick={this.handleLogin}>Login</button>
                         </div>
                         <div className='col-12'>
                             <span className='forgot-password'>Forgot your password?</span>
@@ -109,8 +124,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         navigate: (path) => dispatch(push(path)),
-        adminLoginSuccess: (adminInfo) => dispatch(actions.adminLoginSuccess(adminInfo)),
-        adminLoginFail: () => dispatch(actions.adminLoginFail()),
+        customerLoginSuccess: () => dispatch(customerLoginSuccess()), 
+        customerLoginFail: () => dispatch(actions.customerLoginFail()),
     };
 };
 

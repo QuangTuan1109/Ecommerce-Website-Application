@@ -25,7 +25,6 @@ export const isSuccessStatusCode = (s) => {
 
 instance.interceptors.response.use(
     (response) => {
-        // Thrown error for request with OK status code
         const {
             data
         } = response;
@@ -52,7 +51,11 @@ instance.interceptors.response.use(
         }
 
         if (response.status === 404) {
-            return Promise.resolve(null); // Trả về giá trị null nếu status là 404
+            return Promise.resolve(null);
+        }
+
+        if (response.status === 403) {
+            return Promise.reject(error);
         }
 
 

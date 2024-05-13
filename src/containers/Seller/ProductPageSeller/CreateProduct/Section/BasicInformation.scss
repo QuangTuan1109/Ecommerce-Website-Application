@@ -19,6 +19,7 @@
             margin-right: 20px;
             font-size: 15px;
             font-weight: bold;
+            width: 140px;
     
             .required-star {
                 color: red;
@@ -56,8 +57,8 @@
         }
     
         p {
-            margin-left: -70px;
-            margin-top: 35px;
+            margin-left: -75px;
+            margin-top: 41px;
             font-size: 1rem;
             color: #666;
         }
@@ -67,6 +68,7 @@
             align-items: center;
             margin-top: 10px;
             margin-left: 60px;
+            width: 80%;
 
             .image-item {
                 width: 150px; 
@@ -79,6 +81,9 @@
 
                 &:hover {
                     .image-overlay {
+                        background-color: #ccc;
+                        width: 100%;
+                        height: 35px;
                         opacity: 1;
                     }
                 }
@@ -93,8 +98,7 @@
                 .image-overlay,
                 .edit-options {
                     position: absolute;
-                    top: 5px;
-                    right: 5px;
+                    top: 76%;
                     display: flex;
                     opacity: 0;
                     transition: opacity 0.3s ease;
@@ -103,7 +107,7 @@
                         background-color: transparent;
                         border: none;
                         cursor: pointer;
-                        margin-left: 5px;
+                        margin: 0 10px;
 
                         &:hover {
                             color: red;
@@ -112,6 +116,10 @@
                 }
 
                 .image-overlay {
+                    .fa-icon {
+                        font-size: 100px;
+                        color: red;
+                    }
                     button {
                         color: blue;
                     }
@@ -258,9 +266,9 @@
         height: 270px;
     
         .category-section {
-            width: calc(25% - 10px); /* Điều chỉnh kích thước của category-section */
+            width: calc(25% - 10px);
             position: relative;
-            transition: width 0.3s ease; /* Thêm transition cho hiệu ứng mở rộng */
+            transition: width 0.3s ease;
     
             &:not(:first-child) {
                 margin-left: 20px;
@@ -280,37 +288,37 @@
                 .category-item {
                     margin-right: 16px;
                     margin-bottom: 8px;
-                    cursor: pointer; /* Thêm CSS để biến con trỏ thành con trỏ tay khi di chuột qua category-item */
+                    cursor: pointer;
                     position: relative;
     
                     &:after {
                         content: '';
                         position: absolute;
                         top: 50%;
-                        right: -20px; /* Khoảng cách của mũi tên với category-item */
+                        right: -20px;
                         width: 0;
                         height: 0;
                         border-top: 5px solid transparent;
                         border-bottom: 5px solid transparent;
-                        border-left: 5px solid black; /* Màu sắc của mũi tên */
+                        border-left: 5px solid black;
                         transform: translateY(-50%);
-                        transition: right 0.3s ease; /* Thêm transition cho hiệu ứng mũi tên */
-                        opacity: 0; /* Ẩn mũi tên khi chưa được mở rộng */
+                        transition: right 0.3s ease;
+                        opacity: 0;
                     }
                 }
     
                 .expanded & .category-item {
-                    margin-right: 0; /* Xóa margin-right khi section được mở rộng */
+                    margin-right: 0;
                 }
     
                 .category-item.active:after {
-                    right: 5px; /* Điều chỉnh vị trí của mũi tên khi category-item được chọn */
-                    opacity: 1; /* Hiển thị mũi tên khi category-item được chọn */
+                    right: 5px;
+                    opacity: 1;
                 }
             }
     
             &:hover {
-                width: calc(50% - 10px); /* Mở rộng category-section khi di chuột qua */
+                width: calc(50% - 10px);
             }
     
             &::before {
@@ -385,14 +393,14 @@
     .category-popup {
         position: absolute;
         top: 200px;
-        left: 10px;
+        left: 40px;
         z-index: 1;
         background-color: #fff;
         border: 1px solid #ccc;
         border-radius: 5px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         padding: 10px;
-        width: 70%;
+        width: 90%;
         height: 50%;
 
         .popup-header {
@@ -471,20 +479,20 @@
                                 content: '';
                                 position: absolute;
                                 top: 50%;
-                                right: -10px; /* Điều chỉnh khoảng cách của mũi tên với category-item */
+                                right: -10px; 
                                 transform: translateY(-50%);
                                 width: 0;
                                 height: 0;
                                 border-top: 5px solid transparent;
                                 border-bottom: 5px solid transparent;
-                                border-left: 5px solid black; /* Màu sắc của mũi tên */
+                                border-left: 5px solid black;
                                 opacity: 0;
                                 transition: opacity 0.3s ease;
                                 opacity: 1;
                             }
 
                             &.selected {
-                                color: red; // Màu chữ khi được chọn
+                                color: red;
                             }
                         }
                         

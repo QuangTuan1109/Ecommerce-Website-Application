@@ -116,8 +116,6 @@
       }
 
       .seller-details {
-        // Các thuộc tính khác không thay đổi
-      
         ul {
           list-style: none;
           padding: 0;
@@ -133,24 +131,23 @@
             }
       
             .icon-item {
-              font-size: 18px; // Kích thước của icon
-              margin-right: 5px; // Khoảng cách giữa icon và văn bản
+              font-size: 18px;
+              margin-right: 5px;
               
-              // Màu cho các icon
               &.fa-store {
-                color: #ff0000; // Màu đỏ cho icon
+                color: #ff0000;
               }
               
               &.fa-cog {
-                color: #00ff00; // Màu xanh lá cây cho icon
+                color: #00ff00;
               }
               
               &.fa-language {
-                color: #0000ff; // Màu xanh dương cho icon
+                color: #0000ff;
               }
               
               &.fa-sign-out-alt {
-                color: #ffff00; // Màu vàng cho icon
+                color: #ffff00;
               }
             }
           }
@@ -175,12 +172,11 @@
           }
         }
   
-        // Icon màu nền khác nhau
         .icon-item {
           margin-right: 5px;
   
           &.fa-shopping-cart {
-            color: #ff0000; // Màu đỏ
+            color: #ff0000;
           }
   
           &.fa-box-open {
@@ -206,4 +202,3 @@
       }
     }
   }
-  

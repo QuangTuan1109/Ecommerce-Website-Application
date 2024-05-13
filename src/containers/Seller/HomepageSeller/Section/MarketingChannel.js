@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './MarketingChannel.scss';
+import Calender from '../../../../assets/images/calendar.jpg'
 
 class MarketingChannel extends Component {
     constructor(props) {
@@ -10,9 +11,11 @@ class MarketingChannel extends Component {
             today: new Date(),
             selectedDate: null,
             discountPrograms: [
-                { name: 'Chương Trình Giảm Giá 1', voucher: 'ABC123', date: '2024-03-15', registrationDeadline: '2024-03-14' },
-                { name: 'Chương Trình Giảm Giá 2', voucher: 'DEF456', date: '2024-03-15', registrationDeadline: '2024-03-18' },
-                { name: 'Chương Trình Giảm Giá 3', voucher: 'GHI789', date: '2024-03-25', registrationDeadline: '2024-03-23' },
+                { name: 'Chương Trình Giảm Giá 1', voucher: 'ABC123', date: '2024-04-16', registrationDeadline: '2024-03-14' },
+                { name: 'Chương Trình Giảm Giá 2', voucher: 'DEF456', date: '2024-04-17', registrationDeadline: '2024-03-18' },
+                { name: 'Chương Trình Giảm Giá 3', voucher: 'GHI789', date: '2024-04-17', registrationDeadline: '2024-04-16' },
+                { name: 'Chương Trình Giảm Giá 2', voucher: 'DEF456', date: '2024-04-17', registrationDeadline: '2024-03-18' },
+                { name: 'Chương Trình Giảm Giá 3', voucher: 'GHI789', date: '2024-04-17', registrationDeadline: '2024-04-16' },
             ],
             highlightedDate: null,
             visibleDays: 7,
@@ -27,56 +30,28 @@ class MarketingChannel extends Component {
 
     componentDidMount() {
         this.updateCalendar();
-        const selectedDate = this.selectToday();
+        let selectedDate = this.selectToday();
+        if (!selectedDate) {
+            selectedDate = this.formatDate(new Date());
+        }
         this.setState({ selectedDate }, () => {
-            // window.addEventListener('scroll', this.handleScroll);
-            
-            const { today } = this.state;
-            const formattedToday = this.formatDate(today);
-            
-            setTimeout(() => {
-                const dateContainers = document.querySelectorAll('.date-label');
-                if (dateContainers) {
-                    dateContainers.forEach(container => {
-                        const dateText = container.textContent.trim();
-                        if (dateText === formattedToday) {
-                            container.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        }
-                    });
-                }
-            }, 100);
+            this.updateSelectedPrograms();
         });
     }
-    
-    
-    componentDidUpdate(prevProps, prevState) {
-        const { selectedDate, today, selectedTab, scrollPosition } = this.state;
-        if (selectedDate !== prevState.selectedDate && selectedTab === 'Lịch' && selectedDate !== null) {
-            const selectedContent = document.querySelector(`[date="${selectedDate}"]`);
-            if (selectedContent) {
-                selectedContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        }
-        if (!selectedDate && prevState.selectedDate !== today) {
-            const todayContent = this.selectedDateRef.current;
-            if (todayContent) {
-                todayContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        }
-        if (prevState.selectedTab !== selectedTab && selectedTab !== 'Lịch') {
-            this.setState({ scrollPosition: window.scrollY });
-        }
-        if (prevState.selectedTab !== selectedTab && selectedTab === 'Lịch') {
-            window.scrollTo(0, scrollPosition);
-        }
-    }
-    
+
+
+    updateSelectedPrograms = () => {
+        const { selectedDate, programsByDate } = this.state;
+        const selectedPrograms = programsByDate[selectedDate] || []; // Lấy chương trình giảm giá của ngày được chọn
+        this.setState({ selectedPrograms });
+        console.log(selectedPrograms)
+    };
 
     selectToday = () => {
         const { today, currentMonth, currentYear } = this.state;
         const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
         const formattedToday = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-        
+
         if (today.getDate() <= daysInMonth) {
             return formattedToday;
         }
@@ -87,12 +62,12 @@ class MarketingChannel extends Component {
         const { currentMonth, currentYear, discountPrograms, selectedDate } = this.state;
         const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
         const programsByDate = {};
-    
+
         for (let i = 1; i <= daysInMonth; i++) {
             const date = new Date(currentYear, currentMonth, i).toLocaleDateString('en-CA');
             programsByDate[date] = discountPrograms.filter(program => program.date === date);
         }
-    
+
         if (selectedDate) {
             const dd = String(selectedDate).padStart(2, '0');
             const mm = String(currentMonth + 1).padStart(2, '0');
@@ -105,7 +80,7 @@ class MarketingChannel extends Component {
         } else {
             this.highlightToday();
         }
-    
+
         this.setState({
             daysInMonth,
             programsByDate
@@ -127,7 +102,7 @@ class MarketingChannel extends Component {
             currentYear: prevState.currentMonth === 0 ? prevState.currentYear - 1 : prevState.currentYear
         }), this.updateCalendar);
     };
-    
+
     goToNextMonth = () => {
         this.setState(prevState => ({
             currentMonth: prevState.currentMonth === 11 ? 0 : prevState.currentMonth + 1,
@@ -149,7 +124,7 @@ class MarketingChannel extends Component {
         const day = String(date.getDate()).padStart(2, '0');
         return `${year}-${month}-${day}`;
     };
-    
+
     handleDateClick = date => {
         const { currentYear, currentMonth } = this.state;
         const formattedDate = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(date).padStart(2, '0')}`;
@@ -165,29 +140,20 @@ class MarketingChannel extends Component {
 
         this.setState({ selectedDate: formattedDate, highlightedDate: formattedDate });
     };
-    
-    handleScroll = () => {
-        const { selectedTab } = this.state;
-        if (selectedTab === 'Lịch') {
-            const { scrollTop, clientHeight, scrollHeight } = document.querySelector('.right-pane');
-            if (scrollTop + clientHeight >= scrollHeight) {
-                this.setState(prevState => ({
-                    visibleDays: prevState.visibleDays + prevState.daysPerScroll
-                }));
-            }
-        }
-    };
-    
 
     renderCalendar = () => {
-        const { today, selectedDate, discountPrograms, visibleDays, currentMonth, currentYear, daysInMonth, programsByDate, highlightedDate } = this.state;
-    
+        const { today, selectedDate, discountPrograms, currentMonth, currentYear, daysInMonth, programsByDate, highlightedDate } = this.state;
+        const programsForSelectedDate = programsByDate[selectedDate] || [];
+
         return (
             <div className="calendar">
+                <div className="calendar-header-container">
                 <div className="calendar-header">
                     <button onClick={this.goToPreviousMonth}>&lt;</button>
                     <div>{`${currentMonth + 1}/${currentYear}`}</div>
                     <button onClick={this.goToNextMonth}>&gt;</button>
+                </div>
+                <img className="calendar-image" src={Calender} alt="Calendar" />
                 </div>
                 <div className="left-pane">
                     <div className="date-list">
@@ -209,12 +175,10 @@ class MarketingChannel extends Component {
                 </div>
                 <div className="right-pane">
                     <div className="discount-programs">
-                        {Object.entries(programsByDate).map(([date, programs], index) => (
-                            <div key={date} className="program-list">
-                                {index > 0 && <hr />}
-                                <div className="date-label">{date}</div>
-                                {programs.map((program, programIndex) => (
-                                    <div key={programIndex} className="discount-program" date={date}>
+                        {programsForSelectedDate.length > 0 ? (
+                            <div className="program-list">
+                                {programsForSelectedDate.map((program, index) => (
+                                    <div key={index} className="discount-program">
                                         <div className="program-info">
                                             <h4>{program.name}</h4>
                                             <p>Mã voucher: {program.voucher}</p>
@@ -231,16 +195,21 @@ class MarketingChannel extends Component {
                                     </div>
                                 ))}
                             </div>
-                        ))}
+                        ) : (
+                            <div className="no-program">
+                                Không có chương trình nào trong ngày {selectedDate}
+                            </div>
+                        )}
                     </div>
                 </div>
+
             </div>
         );
-    };    
+    };
 
     render() {
         const { selectedTab, discountPrograms } = this.state;
-    
+
         return (
             <div className="marketing-section">
                 <div className="main-title">Kênh Marketing</div>
@@ -297,5 +266,3 @@ class MarketingChannel extends Component {
     }
 }
 export default MarketingChannel;
-    
-                       

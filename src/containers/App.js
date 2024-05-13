@@ -13,8 +13,8 @@ import { path } from '../utils'
 import Home from '../routes/Home';
 //import Login from '../routes/Login';
 import Login from './Auth/Login';
+import RegisterUser from './Auth/RegisterUser'
 import Header from './Header/Header';
-import System from '../routes/System';
 
 import { CustomToastCloseButton } from '../components/CustomToast';
 import CustomScrollbars from '../components/CustomScrollbars';
@@ -53,19 +53,17 @@ class App extends Component {
                         {this.props.isLoggedIn && <Header />}
 
                         <div className="content-container">
-                            <CustomScrollbars style={{height: '100vh', width: '100%'}}>
                                 <Switch>
                                     <Route path={path.HOME} exact component={(Home)} />
                                     <Route path={path.LOGIN} component={userIsNotAuthenticated(Login)} />
-                                    <Route path={path.SYSTEM} component={userIsAuthenticated(System)} />
+                                    <Route path={path.REGISTERUSER} component={userIsNotAuthenticated(RegisterUser)} />
                                     <Route path={path.HOMEPAGE} component={HomePage} />
                                     <Route path={path.PRODUCT_PAGE} component={Products}></Route>
-                                    <Route path={path.DETAIL_PRODUCT_PAGE} component={DetailProduct}></Route>
-                                    <Route path={path.NEWS} component={News}></Route>
-                                    <Route path={path.HOMEPAGESELLER} component={Homepage}></Route>
-                                    <Route path={path.CREATEPRODUCT} component={CreateProduct}></Route>
+                                    <Route path={path.DETAIL_PRODUCT_PAGE} component={userIsAuthenticated(DetailProduct)}></Route>
+                                    <Route path={path.NEWS} component={userIsAuthenticated(News)}></Route>
+                                    <Route path={path.HOMEPAGESELLER} component={userIsAuthenticated(Homepage)}></Route>
+                                    <Route path={path.CREATEPRODUCT} component={userIsAuthenticated(CreateProduct)}></Route>
                                 </Switch>
-                            </CustomScrollbars>
                         </div>
 
                         <ToastContainer

@@ -1,67 +1,168 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './Delivery.scss';
+import axios from '../../../../../axios'
 
+/**
+ * Component for managing delivery of a product.
+ * Allows users to set weight, length, width, height and delivery fee.
+ */
 class Delivery extends Component {
+    /**
+     * Constructor for initializing component state and binding functions.
+     * @param {Object} props - Component props.
+     */
     constructor(props) {
         super(props);
         this.state = {
-            toggleButton: false,
-            weight: '', // State để lưu trữ cân nặng
-            shippingFee: null // State để lưu trữ phí vận chuyển, sẽ là null khi chưa nhập cân nặng
+            weight: '',
+            width: '',
+            length: '',
+            height: '',
+            shippingFees: null,
+            deliveryMethods: [],
+            exceedLimit: false,
+            selectedMethods: [],
+            methodToggles: {}
         };
         this.handleKeyPress = this.handleKeyPress.bind(this);
     }
 
-    // Hàm xử lý thay đổi toggle button
-    handleToggle = () => {
-        this.setState(prevState => ({
-            toggleButton: !prevState.toggleButton
-        }));
+    /**
+     * Updates delivery data when state changes.
+     * @param {Object} prevProps - Previous props.
+     * @param {Object} prevState - Previous state.
+     */
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState !== this.state) {
+            this.props.onDeliveryDataChange({
+                Weight: this.state.weight,
+                Width: this.state.width,
+                Length: this.state.length,
+                Height: this.state.height,
+                deliveryFee: this.state.selectedMethods
+            });
+        }
     }
 
-    // Hàm xử lý thay đổi trường nhập cân nặng
+    /**
+     * Fetches delivery methods from the server upon component mount.
+     */
+    componentDidMount() {
+        axios.get('http://localhost:5000/api/v1/products/get-all-delivery')
+            .then(response => {
+                this.setState({ deliveryMethods: response });
+            })
+            .catch(error => {
+                console.error('Error fetching delivery methods:', error);
+            });
+    }
+
+    /**
+     * Toggles selection of delivery method and updates selected methods.
+     * @param {Object} method - Selected delivery method.
+     */
+    handleSelectMethod = (method) => {
+        const { selectedMethods, methodToggles, shippingFees } = this.state;
+        const isMethodSelected = methodToggles[method.deliveryMethod];
+        let updatedSelectedMethods = [...selectedMethods];
+        const newSelectedMethod = {
+            name: method.deliveryMethod,
+            fee: shippingFees[selectedMethods.length]
+        };
+
+        if (isMethodSelected) {
+            updatedSelectedMethods = updatedSelectedMethods.filter(selectedMethod => selectedMethod.name !== method.deliveryMethod);
+        } else {
+            updatedSelectedMethods.push(newSelectedMethod);
+        }
+
+        const updatedMethodToggles = { ...methodToggles };
+        updatedMethodToggles[method.deliveryMethod] = !isMethodSelected;
+
+        this.setState({ selectedMethods: updatedSelectedMethods, methodToggles: updatedMethodToggles });
+    }
+
+    /**
+     * Handles change in weight and recalculates shipping fee.
+     * @param {Object} e - Event object.
+     */
     handleWeightChange = (e) => {
         const { value } = e.target;
         this.setState({ weight: value }, () => {
-            // Tính toán phí vận chuyển khi thay đổi cân nặng
             this.calculateShippingFee();
         });
     }
 
-    // Hàm tính toán phí vận chuyển dựa trên cân nặng
+    /**
+     * Calculates shipping fee based on weight, dimensions, and delivery methods.
+     */
     calculateShippingFee = () => {
-        const { weight } = this.state;
-        // Điều kiện tính toán phí vận chuyển ở đây
-        // Trong ví dụ này, giả sử phí vận chuyển là 1000 đồng cho mỗi kg
-        const shippingFee = weight ? parseInt(weight) * 1000 : null;
-        this.setState({ shippingFee });
+        const { weight, width, length, height, deliveryMethods } = this.state;
+        let calculatedWeight = Math.ceil(weight / 1000);
+        const shippingFees = [];
+        let exceedLimits = {};
+
+        deliveryMethods.forEach(method => {
+            const { weightLimit, sizeLimit, deliveryFees } = method;
+            let methodShippingFee = null;
+            let exceedLimit = false
+
+            if (calculatedWeight > weightLimit || width > sizeLimit.width || length > sizeLimit.length || height > sizeLimit.height) {
+                exceedLimit = true;
+            } else {
+                exceedLimit = false
+            }
+
+            if (width && length && height &&
+                width <= sizeLimit.width && length <= sizeLimit.length && height <= sizeLimit.height) {
+                const dimensionalWeight = (width * length * height) / 6000;
+                calculatedWeight = Math.max(dimensionalWeight, calculatedWeight);
+            }
+
+            if (Math.ceil(calculatedWeight) && Math.ceil(calculatedWeight) <= weightLimit) {
+
+                for (let limit in deliveryFees) {
+                    if (Math.ceil(calculatedWeight) === parseFloat(limit)) {
+                        methodShippingFee = deliveryFees[limit];
+                        break;
+                    }
+                }
+            }
+            shippingFees.push(methodShippingFee);
+            exceedLimits[method.deliveryMethod] = exceedLimit;
+
+        });
+        this.setState({ shippingFees, exceedLimits });
     }
 
+    /**
+     * Handles key press event to allow only numerical input for weight and dimensions.
+     * @param {Object} e - Event object.
+     */
     handleKeyPress = (e) => {
         const charCode = e.which ? e.which : e.keyCode;
-        // Kiểm tra xem ký tự nhập vào có phải là số không
         if (charCode > 31 && (charCode < 48 || charCode > 57)) {
             e.preventDefault();
         }
     };
 
     render() {
-        const { toggleButton, weight, shippingFee } = this.state;
+        const { weight, shippingFees, deliveryMethods } = this.state;
 
         return (
             <div className='container'>
-                <h2>Vận chuyển</h2>
+                <h2>Shipping</h2>
                 <div className="delivery-container">
                     <div className="content-section">
                         <div className="label-container">
-                            <label className="label-name">Cân nặng(sau khi đóng gói)</label>
+                            <label className="label-name">Weight</label>
                         </div>
                         <div className="content-container">
                             <input
                                 type="number"
                                 className="price-input"
-                                placeholder="Nhập cân nặng"
+                                placeholder="Input Weight"
                                 value={weight}
                                 onChange={this.handleWeightChange}
                                 min={1}
@@ -72,121 +173,84 @@ class Delivery extends Component {
                     </div>
                     <div className="content-section">
                         <div className="label-container">
-                            <label className="label-name">Kích thước đóng gói(Phí vận chuyển thực tế sẽ thay đổi nếu bạn nhập sai kích thước)</label>
+                            <label className="label-name">Parcel Size</label>
                         </div>
                         <div className="content-container">
                             <input
                                 type="number"
                                 className="price-input"
-                                placeholder="Rộng"
+                                placeholder="Width"
                                 min={1}
+                                onChange={(e) => {
+                                    this.setState({ width: e.target.value }, this.calculateShippingFee);
+                                }}
                                 onKeyPress={this.handleKeyPress}
                             />
                             <span className="multiply-icon">X</span>
                             <input
                                 type="number"
                                 className="price-input"
-                                placeholder="Dài"
+                                placeholder="Length"
                                 min={1}
+                                onChange={(e) => {
+                                    this.setState({ length: e.target.value }, this.calculateShippingFee);
+                                }}
                                 onKeyPress={this.handleKeyPress}
                             />
                             <span className="multiply-icon">X</span>
                             <input
                                 type="number"
                                 className="price-input"
-                                placeholder="Cao"
+                                placeholder="Height"
                                 min={1}
+                                onChange={(e) => {
+                                    this.setState({ height: e.target.value }, this.calculateShippingFee);
+                                }}
                                 onKeyPress={this.handleKeyPress}
                             />
                         </div>
                     </div>
                     <div className="content-section">
                         <div className="label-container">
-                            <label className="label-name">Phí vận chuyển</label>
+                            <label className="label-name">Shipping Fee</label>
                         </div>
                         <div className="content-container">
                             <div className="delivery-table">
-                                <div className="delivery-content">
-                                    <div className="label-delivery-name">
-                                        <label className='name'>Hàng Cồng Kềnh</label>
-                                    </div>
-                                    <div className="content-delivery">
-                                        <label className='name'>Hàng Cồng Kềnh</label>
-                                        {weight ? (
-                                            <>
-                                                <label className='name'>{shippingFee !== null ? `Phí vận chuyển: ${shippingFee} đ` : 'Hãy nhập cân nặng'}</label>
-                                            </>
-                                        ) : (
-                                            <label className='name'>Hãy nhập cân nặng</label>
-                                        )}
-                                        {/* Toggle button */}
-                                        <button onClick={this.handleToggle} disabled={!weight}>
-                                            {toggleButton ? (
-                                                <>
-                                                    <i className="fas fa-check-circle"></i> Đã áp dụng
-                                                </>
+                                {shippingFees && deliveryMethods.map((method, index) => (
+                                    <div className="delivery-content" key={index}>
+                                        <div className="label-delivery-name">
+                                            <label className='name'>{method.deliveryMethod}</label>
+                                        </div>
+                                        <div className="content-delivery">
+                                            <div className='delivery-info'>
+                                                <label className='name-method'>{method.deliveryMethod}</label>
+                                            </div>
+                                            {weight ? (
+                                                <div className='delivery-info'>
+                                                    <label className='name-price' style={{ color: this.state.exceedLimits[method.deliveryMethod] ? 'red' : 'inherit' }}>
+                                                        {shippingFees[index] !== null && this.state.exceedLimits[method.deliveryMethod] === false ? `Shipping Fee: ${shippingFees[index]} đ` : 'Weight value is invalid'}
+                                                    </label>
+                                                </div>
                                             ) : (
-                                                <>
-                                                    <i className="fas fa-times-circle"></i> Chưa áp dụng
-                                                </>
+                                                <div className='delivery-info'>
+                                                    <label className='name-price' >Weight Required</label>
+                                                </div>
                                             )}
-                                        </button>
+                                            {/* Toggle button */}
+                                            <button onClick={() => this.handleSelectMethod(method)} disabled={!weight || this.state.exceedLimits[method.deliveryMethod]}>
+                                                {this.state.methodToggles[method.deliveryMethod] ? (
+                                                    <>
+                                                        <i className="fas fa-check-circle"></i> Applied
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <i className="fas fa-times-circle"></i> Not Yet Applied
+                                                    </>
+                                                )}
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="delivery-content">
-                                    <div className="label-delivery-name">
-                                        <label className='name'>Giao Hàng Nhanh</label>
-                                    </div>
-                                    <div className="content-delivery">
-                                        <label className='name'>Giao Hàng Nhanh</label>
-                                        {weight ? (
-                                            <>
-                                                <label className='name'>{shippingFee !== null ? `Phí vận chuyển: ${shippingFee} đ` : 'Hãy nhập cân nặng'}</label>
-                                            </>
-                                        ) : (
-                                            <label className='name'>Hãy nhập cân nặng</label>
-                                        )}
-                                        {/* Toggle button */}
-                                        <button onClick={this.handleToggle} disabled={!weight}>
-                                            {toggleButton ? (
-                                                <>
-                                                    <i className="fas fa-check-circle"></i> Đã áp dụng
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <i className="fas fa-times-circle"></i> Chưa áp dụng
-                                                </>
-                                            )}
-                                        </button>
-                                    </div>
-                                </div>
-                                <div className="delivery-content">
-                                    <div className="label-delivery-name">
-                                        <label className='name'>Giao Hàng Tiết Kiệm</label>
-                                    </div>
-                                    <div className="content-delivery">
-                                        <label className='name'>Giao Hàng Tiết Kiệm</label>
-                                        {weight ? (
-                                            <>
-                                                <label className='name'>{shippingFee !== null ? `Phí vận chuyển: ${shippingFee} đ` : 'Hãy nhập cân nặng'}</label>
-                                            </>
-                                        ) : (
-                                            <label className='name'>Hãy nhập cân nặng</label>
-                                        )}
-                                        {/* Toggle button */}
-                                        <button onClick={this.handleToggle} disabled={!weight}>
-                                            {toggleButton ? (
-                                                <>
-                                                    <i className="fas fa-check-circle"></i> Đã áp dụng
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <i className="fas fa-times-circle"></i> Chưa áp dụng
-                                                </>
-                                            )}
-                                        </button>
-                                    </div>
-                                </div>
+                                ))}
                             </div>
                         </div>
                     </div>

@@ -38,37 +38,45 @@
         display: flex;
         justify-content: space-between;
 
-        .calendar-header {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 10px;
-            font-size: 18px;
         
-            button {
-              background-color: transparent;
-              border: none;
-              cursor: pointer;
-              font-size: 18px;
-              margin: 0 10px;
-            }
-          }
+        .calendar-header-container {
+            padding: 30px 10px;
+           .calendar-header {
+               display: flex;
+               align-items: center;
+               justify-content: center;
+               margin-bottom: 10px;
+               font-size: 18px;
+           
+               button {
+                   background-color: transparent;
+                   border: none;
+                   cursor: pointer;
+                   font-size: 18px;
+                   margin: 0 10px;
+               }
+           }
+        .calendar-image {
+            width: 200px;
+            height: 140px;
+            border-radius: 60px;
+        }
 
+       }
         .left-pane {
             flex: 1;
 
             .date-list {
-                display: flex;
-                flex-wrap: wrap;
+                display: grid;
+                grid-template-columns: repeat(7, 1fr);
+                gap: 5px;
 
                 .date {
                     cursor: pointer;
-                    width: calc(100% / 7);
-                    padding: 5px;
+                    padding: 10px;
                     text-align: center;
-                    border: 1px solid transparent;
                     border-radius: 5px;
-                    margin-bottom: 5px;
+                    border: 1px solid transparent;
 
                     &.selected {
                         background-color: #007bff;
@@ -81,8 +89,8 @@
         .right-pane {
             flex: 2;
             padding-left: 20px;
-            overflow-y: auto; // Thêm thuộc tính cuộn vào đây
-        
+            overflow-y: auto;
+
             .highlighted-date {
                 font-weight: bold;
                 margin-bottom: 10px;
@@ -91,31 +99,30 @@
             .discount-programs {
                 max-height: 200px;
                 padding-right: 10px;
-                border: 1px solid #ccc;
                 border-radius: 5px;
                 padding: 5px;
-        
+
                 .discount-program {
                     margin-bottom: 10px;
                     padding: 10px;
                     border: 1px solid #eee;
                     border-radius: 5px;
-        
+
                     .program-info {
                         h4 {
                             margin: 0;
                         }
-        
+
                         p {
                             margin: 5px 0;
                         }
                     }
-        
+
                     .button-container {
                         display: flex;
                         justify-content: flex-end;
                         margin-top: 10px;
-        
+
                         button {
                             padding: 5px 10px;
                             border: none;
@@ -123,24 +130,23 @@
                             color: #fff;
                             border-radius: 5px;
                             cursor: pointer;
-        
+
                             &:hover {
                                 background-color: #0056b3;
                             }
                         }
                     }
                 }
-        
+
                 .program-list {
                     margin-bottom: 20px;
                 }
-        
+
                 .date-label {
                     font-weight: bold;
                     margin-bottom: 5px;
                 }
             }
         }
-        
     }
 }

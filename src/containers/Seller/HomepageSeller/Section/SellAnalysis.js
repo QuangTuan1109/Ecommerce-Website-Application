@@ -286,19 +286,19 @@ class SellAnalysis extends Component {
                     <div className="data">
                         <div className="data-item">
                             <div className="value">1,234</div>
-                            <div className="description">Lượt truy cập <span>so với hôm qua</span></div>
+                            <div className="description">Lượt truy cập <span>so với hôm qua</span> 0.00%</div>
                         </div>
                         <div className="data-item">
                             <div className="value">567</div>
-                            <div className="description">Lượt xem <span>so với hôm qua</span></div>
+                            <div className="description">Lượt xem <span>so với hôm qua</span> 0.00%</div>
                         </div>
                         <div className="data-item">
                             <div className="value">890</div>
-                            <div className="description">Đơn hàng <span>so với hôm qua</span></div>
+                            <div className="description">Đơn hàng <span>so với hôm qua</span> 0.00%</div>
                         </div>
                         <div className="data-item">
                             <div className="value">10%</div>
-                            <div className="description">Tỷ lệ chuyển đổi <span>so với hôm qua</span></div>
+                            <div className="description">Tỷ lệ chuyển đổi <span>so với hôm qua</span> 0.00%</div>
                         </div>
                     </div>
                 </div>

@@ -18,76 +18,36 @@
                 font-size: 30px;
                 font-weight: 500;
             }
-    
         }
     
-        .section-body{
-            .section-customize {
-                .bg-image {
-                    margin-right: 30px;
-                    margin-top: 10px;
-                    width: 60px;
-                    height: 60px;
-                    border: 2px solid transparent;
-                    border-radius: 50%;
-                    background: url('../../../assets/images/t-shirt.png');
-                    background-position: center center;
-                    background-repeat: no-repeat;
-                    background-size: cover;
-                    background-color: #eee;
+        .section-body {
+            .slick-prev,
+            .slick-next {
+                top: 40%;
+                z-index: 1000;
+                height: 36px;
+                width: 24px;
+                background: #000;
+                border: 2px solid #000;
+                opacity: 0.4;
+            
+                &:hover {
+                    background: #2c2c2c;
                 }
-            }
-    
-            .title-promotions {
-                color: white;
-                margin-left: -15px;
-                font-size: 15px;
-                text-align: center;
 
-                .title-link {
-                    text-decoration: none;
-                    color: #fff;
-                    
-                    &:hover {
-                        color: #78a206;
-                    }
+                &::before {
+                    font-family: 'Font Awesome';
+                    color: white;
+                    font-size: 14px;
                 }
             }
 
             .slick-prev {
-                left: -60px !important;
-                top: 60px !important;
-                z-index: 1000 !important;
-                height: 48px !important;
-                width: 30px !important;
-                background: #000 !important;
-                border: 2px solid #000 !important;
-                opacity: 0.4;
-            
-                &:hover {
-                    background: #2c2c2c !important;
-                }
+                left: -48px;
             }
-            
-            .slick-prev::before, .slick-next::before {
-                font-family: 'Font Awesome' !important;
-                color: white !important;
-            }
-            
+
             .slick-next {
-                right: -60px !important;
-                top: 60px !important;
-                z-index: 1000 !important;
-                height: 48px !important;
-                width: 30px !important;
-                background: #000 !important;
-                border: 2px solid #000 !important;
-                opacity: 0.4;
-                visibility: visible;
-            
-                &:hover {
-                    background: #2c2c2c !important;
-                }
+                right: -48px;
             }
 
             .slick-track {
@@ -96,6 +56,37 @@
                 .slick-slide {
                     padding-right: 10px;
                     margin-right: 16px;
+                }
+            }
+
+            .section-customize {
+                padding: 30px;
+                text-align: center;
+                vertical-align: top;
+
+                .bg-image {
+                    width: 60px;
+                    height: 60px;
+                    border-radius: 50%;
+                    background: url('../../../assets/images/t-shirt.png') center center no-repeat;
+                    background-size: cover;
+                    background-color: #eee;
+                    margin-bottom: 10px;
+                }
+
+                .title-promotions {
+                    color: white;
+                    font-size: 14px;
+                    margin-bottom: 10px;
+
+                    .title-link {
+                        text-decoration: none;
+                        color: #fff;
+                        
+                        &:hover {
+                            color: #78a206;
+                        }
+                    }
                 }
             }
         }
