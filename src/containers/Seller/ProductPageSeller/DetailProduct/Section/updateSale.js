@@ -1,22 +1,24 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import './SellInformation.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faImage } from '@fortawesome/free-solid-svg-icons';
+import { withRouter } from 'react-router-dom';
 
-import { handleImageUpload, handleKeyPress } from '../../../../../method/handleMethod'
+import axios from '../../../../../axios'
 
 /**
  * Component for managing Sales information of a product.
  * Allows users to add Variations, Unit Price, Stock, Wholesale, Size Chart.
  */
-class SellInformation extends Component {
+class updateSale extends Component {
     /**
      * Constructor for the component.
      */
     constructor(props) {
         super(props);
         this.state = {
+            product: {},
+            classify: {},
             unitPrice: '',
             unitQuantity: '',
             discounts: [{ from: '', to: '', price: '' }],
@@ -36,6 +38,109 @@ class SellInformation extends Component {
             showClassification2: false,
             showDiscount: false,
         };
+        this.handleKeyPress = this.handleKeyPress.bind(this);
+    }
+
+    componentDidMount() {
+        this.fetchData()
+    } 
+
+    fetchData = () => {
+        const productId = this.props.match.params.id;
+    
+        axios.get(`http://localhost:5000/api/v1/products/detail/${productId}`, {
+            headers: {
+                'Authorization': localStorage.getItem('accessToken')
+            }
+        })
+        .then(responseProduct => {
+            this.setState({
+                product: responseProduct
+            });
+
+            axios.get(`http://localhost:5000/api/v1/products/classify/${productId}`, {
+                headers: {
+                    'Authorization': localStorage.getItem('accessToken')
+                }
+            }).then(responseClassify => {
+                if (responseClassify != null) {
+                 const priceClassify = {};
+                 const quantityClassify = {};
+                 const skuClassify = {};
+     
+                 const uniqueOptions1 = Array.from(new Set(responseClassify.data.Options.map(item => item.Value1)))
+                     .map(value1 => {
+                         const value = responseClassify.data.Options.find(item => item.Value1 === value1);
+                         return { text: value1, imageSrc: value.imageSrc ? value.imageSrc : null };
+                     });
+         
+                 const uniqueOptions2 = Array.from(new Set(responseClassify.data.Options.map(item => item.Value2)))
+                     .map(value2 => {
+                         return { text2: value2 };
+                     });
+     
+                 responseClassify.data.Options.forEach((item, i) => {
+                     const key = `${Math.floor(i / uniqueOptions2.length)}-${i % uniqueOptions2.length}`;
+                     priceClassify[key] = item.Price;
+                 });
+     
+                 responseClassify.data.Options.forEach((item, i) => {
+                     const key = `${Math.floor(i / uniqueOptions2.length)}-${i % uniqueOptions2.length}`;
+                     quantityClassify[key] = item.Stock;
+                 });
+     
+                 responseClassify.data.Options.forEach((item, i) => {
+                     const key = `${Math.floor(i / uniqueOptions2.length)}-${i % uniqueOptions2.length}`;
+                     skuClassify[key] = item.SKU;
+                 });
+         
+                 this.setState({
+                     showClassification: true,
+                     showPriceAndQuantity: false,
+                     classify: responseClassify.data,
+                     input1Value: responseClassify.data.Options[0].Option1,
+                     input2List: uniqueOptions1,
+                     priceClassify: priceClassify,
+                     quantityClassify: quantityClassify,
+                     skuClassify: skuClassify
+                 });
+         
+                 if (responseClassify.data.Options[0].Option2) {
+                     this.setState({
+                         showClassification2: true,
+                         showAdditionalInfo2: true,
+                         input1classify2Value: responseClassify.data.Options[0].Option2,
+                         inputclassify2List: uniqueOptions2,
+                     });
+                 }
+                } else {
+                    this.setState({
+                        unitPrice: responseProduct.Price,
+                        unitQuantity: responseProduct.Quantity,
+                    });
+                }
+     
+                axios.get(`http://localhost:5000/api/v1/products/wholesales/${productId}`, {
+                     headers: {
+                         'Authorization': localStorage.getItem('accessToken')
+                     }
+                 }).then(responseWholesale => {
+                    if (responseWholesale != null) {
+                        this.setState({
+                            showDiscount: true,
+                            discounts: responseWholesale.data.Value
+                        })
+                    }else {
+                        this.setState({
+                            showDiscount: false
+                        })
+                    }
+                })
+             })
+        })
+        .catch(error => {
+            console.error('Error fetching product or product detail:', error);
+        });
     }
 
     /**
@@ -66,12 +171,19 @@ class SellInformation extends Component {
             }
 
             // Call onSellDataChange function with updated data
-            this.props.onSellDataChange({
+            this.props.onSaleDataChange({
                 Classify: showClassification ? classifyObjects : null,
                 Price: this.state.unitPrice,
                 Quantity: this.state.unitQuantity,
                 Discount: showDiscount ? this.state.discounts : null
             });
+        }
+
+        if (this.props.category !== prevProps.category) {
+            const { category } = this.props;
+            if (category) {
+                this.fetchParameter(category);
+            }
         }
     }
 
@@ -198,12 +310,17 @@ class SellInformation extends Component {
      * @param {number} index - Index of the classification.
      */
     handleImageUpload = (e, index) => {
-        handleImageUpload(e, (imageSrc) => {
-            const { input2List } = this.state;
-            const updatedInput2List = [...input2List];
-            updatedInput2List[index] = { ...updatedInput2List[index], imageSrc };
-            this.setState({ input2List: updatedInput2List });
-        });
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onloadend = () => {
+                const { input2List } = this.state;
+                const updatedInput2List = [...input2List];
+                updatedInput2List[index] = { ...updatedInput2List[index], imageSrc: reader.result };
+                this.setState({ input2List: updatedInput2List });
+            };
+        }
     };
 
     /**
@@ -416,19 +533,31 @@ class SellInformation extends Component {
     cancelDiscount = () => {
         this.setState({
             showDiscount: false,
-            additionalRows: 1
+            additionalRows: 1,
+            discounts: [{ from: '', to: '', price: '' }]
         });
     }
 
+    /**
+     * Handles key press event to allow only numerical input.
+     * @param {Object} e - Event object.
+     */
+    handleKeyPress = (e) => {
+        const charCode = e.which ? e.which : e.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            e.preventDefault();
+        }
+    };
+
     render() {
         const { discounts, showClassification, input1Value, input1classify2Value, input2List, showAdditionalInfo2, inputclassify2List, showPriceAndQuantity,
-            showClassification2, showDiscount } = this.state;
+            showClassification2, showDiscount} = this.state;
 
         return (
             <div className='container'>
                 <h2>Sales Information</h2>
                 <div className="classification-container">
-                    <label style={{ display: showClassification ? 'none' : 'flex' }} className="label-name">Variations</label>
+                    <label className="label-name" style={{ display: showClassification ? 'none' : 'flex' }}>Variations</label>
                     <div className="add-classification" style={{ display: showClassification ? 'none' : 'flex' }} onClick={this.toggleClassification}>
                         <span className="icon">+</span>
                         <span className="text">Enable Variations</span>
@@ -487,7 +616,7 @@ class SellInformation extends Component {
                                         ))}
                                     </div>
                                 </div>
-                                <button onClick={this.handleAddInput2}>Add Variation</button>
+                                    <button onClick={this.handleAddInput2}>Add Variation</button>
                             </div>
                         )}
                         {showClassification && (
@@ -536,7 +665,7 @@ class SellInformation extends Component {
                                         ))}
                                     </div>
                                 </div>
-                                <button onClick={this.handleAddInputClassify2}>Add Variation</button>
+                                    <button onClick={this.handleAddInputClassify2}>Add Variation</button>
                             </div>
                         )}
                         {showClassification && (
@@ -571,15 +700,13 @@ class SellInformation extends Component {
                                                         {inputclassify2List.map((item2, index2) => (
                                                             <div key={index2} className='content-classification'>
                                                                 <input
-                                                                    type="text"
-                                                                    inputmode="none"
-                                                                    pattern="[0-9,\.]*"
+                                                                    type="number"
                                                                     className="input"
                                                                     placeholder="Input Price"
                                                                     min={1}
                                                                     value={this.state.priceClassify[`${index}-${index2}`] || ''}
                                                                     onChange={(e) => this.handlePriceClassifyChange(e, `${index}-${index2}`)}
-                                                                    onKeyPress={handleKeyPress}
+                                                                    onKeyPress={this.handleKeyPress}
                                                                 />
                                                                 <span className="currency-icon">&#8363;</span>
                                                             </div>
@@ -590,15 +717,13 @@ class SellInformation extends Component {
                                                         <div className='content-classification'>
                                                             {inputclassify2List.map((item2, index2) => (
                                                                 <input
-                                                                    type="text"
-                                                                    inputmode="none"
-                                                                    pattern="[0-9,\.]*"
+                                                                    type="number"
                                                                     className="input"
                                                                     placeholder="Input Price"
                                                                     min={1}
                                                                     value={this.state.priceClassify[`${index}-${index2}`] || ''}
                                                                     onChange={(e) => this.handlePriceClassifyChange(e, `${index}-${index2}`)}
-                                                                    onKeyPress={handleKeyPress}
+                                                                    onKeyPress={this.handleKeyPress}
                                                                 />
                                                             ))}
                                                             <span className="currency-icon">&#8363;</span>
@@ -610,15 +735,13 @@ class SellInformation extends Component {
                                                         {inputclassify2List.map((item2, index2) => (
                                                             <div key={index2} className='content-classification'>
                                                                 <input
-                                                                    type="text"
-                                                                    inputmode="none"
-                                                                    pattern="[0-9,\.]*"
+                                                                    type="number"
                                                                     className="input"
                                                                     placeholder="Input Quantity"
                                                                     min={1}
                                                                     value={this.state.quantityClassify[`${index}-${index2}`] || ''}
                                                                     onChange={(e) => this.handleQuantityClassifyChange(e, `${index}-${index2}`)}
-                                                                    onKeyPress={handleKeyPress}
+                                                                    onKeyPress={this.handleKeyPress}
                                                                 />
                                                             </div>
                                                         ))}
@@ -628,15 +751,13 @@ class SellInformation extends Component {
                                                         {inputclassify2List.map((item2, index2) => (
                                                             <div key={index2} className='content-classification'>
                                                                 <input
-                                                                    type="text"
-                                                                    inputmode="none"
-                                                                    pattern="[0-9,\.]*"
+                                                                    type="number"
                                                                     className="input"
                                                                     placeholder="Input Quantity"
                                                                     min={1}
                                                                     value={this.state.quantityClassify[`${index}-${index2}`] || ''}
                                                                     onChange={(e) => this.handleQuantityClassifyChange(e, `${index}-${index2}`)}
-                                                                    onKeyPress={handleKeyPress}
+                                                                    onKeyPress={this.handleKeyPress}
                                                                 />
                                                             </div>
                                                         ))}
@@ -684,13 +805,11 @@ class SellInformation extends Component {
                         <div className="price-product">
                             <label htmlFor="price-input" className="price-label">Price</label>
                             <input
-                                type="text"
-                                inputmode="none"
-                                pattern="[0-9,\.]*"
+                                type="number"
                                 className="price-input"
                                 placeholder="Input Price"
                                 min={1}
-                                onKeyPress={handleKeyPress}
+                                onKeyPress={this.handleKeyPress}
                                 value={this.state.unitPrice}
                                 onChange={this.handleUnitPriceChange}
                             />
@@ -699,13 +818,11 @@ class SellInformation extends Component {
                         <div className="quantity-product">
                             <label htmlFor="quantity-input" className="quantity-label">Stock</label>
                             <input
-                                type="text"
-                                inputmode="none"
-                                pattern="[0-9,\.]*"
+                                type="number"
                                 className="quantity-input"
                                 placeholder="Input Quantity"
                                 min={1}
-                                onKeyPress={handleKeyPress}
+                                onKeyPress={this.handleKeyPress}
                                 value={this.state.unitQuantity}
                                 onChange={this.handleQuantityChange}
                             />
@@ -713,7 +830,7 @@ class SellInformation extends Component {
                     </div>
                 )}
                 <div className="discount">
-                    <label style={{ display: showDiscount ? 'none' : 'flex' }} className="title-sell">Wholesale</label>
+                    <label className="title-sell" style={{ display: showDiscount ? 'none' : 'flex' }}>Wholesale</label>
                     <div className="add-discount" style={{ display: showDiscount ? 'none' : 'flex' }} onClick={this.toggleDiscount}>
                         <span className="icon">+</span>
                         <span className="text">Add Price Tier</span>
@@ -735,24 +852,20 @@ class SellInformation extends Component {
                                                 <td>Price Tier {index + 1}</td>
                                                 <td>
                                                     <input
-                                                        type="text"
-                                                        inputmode="none"
-                                                        pattern="[0-9,\.]*"
+                                                        type="number"
                                                         placeholder="From"
                                                         min={1}
-                                                        onKeyPress={handleKeyPress}
+                                                        onKeyPress={this.handleKeyPress}
                                                         value={discount.from}
                                                         onChange={(event) => this.handleFromChange(event, index)}
                                                     />
                                                 </td>
                                                 <td>
                                                     <input
-                                                        type="text"
-                                                        inputmode="none"
-                                                        pattern="[0-9,\.]*"
+                                                        type="number"
                                                         placeholder="To"
                                                         min={1}
-                                                        onKeyPress={handleKeyPress}
+                                                        onKeyPress={this.handleKeyPress}
                                                         value={discount.to}
                                                         onChange={(event) => this.handleToChange(event, index)}
                                                     />
@@ -760,12 +873,10 @@ class SellInformation extends Component {
                                                 <td>
                                                     <div className="input-with-icon">
                                                         <input
-                                                            type="text"
-                                                            inputmode="none"
-                                                            pattern="[0-9,\.]*"
+                                                            type="number"
                                                             placeholder="Input Price"
                                                             min={1}
-                                                            onKeyPress={handleKeyPress}
+                                                            onKeyPress={this.handleKeyPress}
                                                             value={discount.price}
                                                             onChange={(event) => this.handlePriceChange(event, index)}
                                                         />
@@ -809,4 +920,4 @@ const mapDispatchToProps = dispatch => {
     return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SellInformation);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(updateSale));

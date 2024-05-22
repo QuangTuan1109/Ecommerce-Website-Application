@@ -17,13 +17,15 @@ import RegisterUser from './Auth/RegisterUser'
 import Header from './Header/Header';
 
 import { CustomToastCloseButton } from '../components/CustomToast';
-import CustomScrollbars from '../components/CustomScrollbars';
 import HomePage from '../containers/HomePage/HomePage'
 import Products from './Customer/ProductsPage/Products';
 import DetailProduct from './Customer/ProductsPage/DetailProduct';
 import News from './Customer/NewsPage/News'
 import Homepage from './Seller/HomepageSeller/Homepage'
 import CreateProduct from './Seller/ProductPageSeller/CreateProduct/CreateProduct'
+import AllProduct from './Seller/ProductPageSeller/AllProduct/AllProduct'
+import DetailProductSeller from './Seller/ProductPageSeller/DetailProduct/DetailProduct';
+import UpdateProduct from './Seller/ProductPageSeller/DetailProduct/UpdateProduct';
 
 class App extends Component {
 
@@ -63,6 +65,9 @@ class App extends Component {
                                     <Route path={path.NEWS} component={userIsAuthenticated(News)}></Route>
                                     <Route path={path.HOMEPAGESELLER} component={userIsAuthenticated(Homepage)}></Route>
                                     <Route path={path.CREATEPRODUCT} component={userIsAuthenticated(CreateProduct)}></Route>
+                                    <Route path={path.ALLPRODUCT} component={userIsAuthenticated(AllProduct)}></Route>
+                                    <Route path={path.DETAILPRODUCTSELLER} component={userIsAuthenticated(DetailProductSeller)}></Route>
+                                    <Route path={path.UPDATEPRODUCT} component={userIsAuthenticated(UpdateProduct)}></Route>
                                 </Switch>
                         </div>
 

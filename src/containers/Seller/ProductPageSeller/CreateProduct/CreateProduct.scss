@@ -9,7 +9,7 @@
     .body-container {
         display: flex;
         max-height: fit-content;
-        height: 100%;
+        height: 94%;
 
         .left-content {
             position: sticky;
@@ -39,7 +39,6 @@
             }
 
             .buttons-container {
-                margin: 50px 0;
                 display: flex;
                 justify-content: flex-end;
             }

@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import './Delivery.scss';
 import axios from '../../../../../axios'
-
-import { calculateShippingFee, handleKeyPress } from '../../../../../method/handleMethod'
+import { withRouter } from 'react-router-dom';
 
 /**
- * Component for managing delivery of a product.
- * Allows users to set weight, length, width, height and delivery fee.
+ * Component for managing updatedelivery of a product.
+ * Allows users to set weight, length, width, height and updatedelivery fee.
  */
-class Delivery extends Component {
+class updateDelivery extends Component {
     /**
      * Constructor for initializing component state and binding functions.
      * @param {Object} props - Component props.
@@ -25,8 +23,9 @@ class Delivery extends Component {
             deliveryMethods: [],
             exceedLimits: false,
             selectedMethods: [],
-            methodToggles: {},
+            methodToggles: {}
         };
+        this.handleKeyPress = this.handleKeyPress.bind(this);
     }
 
     /**
@@ -50,6 +49,7 @@ class Delivery extends Component {
      * Fetches delivery methods from the server upon component mount.
      */
     componentDidMount() {
+        this.fetchProducts();
 
         axios.get('http://localhost:5000/api/v1/products/get-all-delivery')
             .then(response => {
@@ -57,6 +57,33 @@ class Delivery extends Component {
             })
             .catch(error => {
                 console.error('Error fetching delivery methods:', error);
+            });
+    }
+
+    fetchProducts = () => {
+        const productId = this.props.match.params.id
+
+        axios.get(`http://localhost:5000/api/v1/products/detail/${productId}`, {
+            headers: {
+                'Authorization': localStorage.getItem('accessToken')
+            }
+        })
+            .then(response => {
+                this.setState({
+                    product: response,
+                    weight: response.Weight,
+                    width: response.Width,
+                    length: response.Length,
+                    height: response.Height,
+                    selectedMethods: response.deliveryFee.map(item => ({name: item.name, fee: item.fee})),
+                    methodToggles: response.deliveryFee.reduce((acc, item) => {
+                        acc[item.name] = true;
+                        return acc;
+                    }, {}) });
+                this.calculateShippingFee()
+            })
+            .catch(error => {
+                console.error('Error fetching product detail:', error);
             });
     }
 
@@ -86,42 +113,79 @@ class Delivery extends Component {
     }
 
     /**
-     * Handles change in weight, width, length, height and recalculates shipping fee.
+     * Handles change in weight and recalculates shipping fee.
      * @param {Object} e - Event object.
      */
     handleWeightChange = (e) => {
         const { value } = e.target;
-        const { width, length, height, deliveryMethods } = this.state;
         this.setState({ weight: value }, () => {
-            this.setState(calculateShippingFee(value, width, length, height, deliveryMethods));
+            this.calculateShippingFee();
         });
     }
 
-    handleWidthChange = (e) => {
-        const { value } = e.target;
-        const { weight, length, height, deliveryMethods } = this.state;
-        this.setState({ width: value }, () => {
-            this.setState(calculateShippingFee(weight, value, length, height, deliveryMethods));
+    /**
+     * Calculates shipping fee based on weight, dimensions, and delivery methods.
+     */
+    calculateShippingFee = () => {
+        const { weight, width, length, height, deliveryMethods } = this.state;
+        let calculatedWeight = Math.ceil(weight / 1000);
+        const shippingFees = [];
+        let exceedLimits = {};
+        let methodToggles = { ...this.state.methodToggles };
+        let selectedMethods = [...this.state.selectedMethods];
+
+        deliveryMethods.forEach(method => {
+            const { weightLimit, sizeLimit, deliveryFees } = method;
+            let methodShippingFee = null;
+            let exceedLimit = false;
+
+            if (calculatedWeight > weightLimit || width > sizeLimit.width || length > sizeLimit.length || height > sizeLimit.height) {
+                exceedLimit = true;
+            } else {
+                exceedLimit = false;
+            }
+
+            if (width && length && height &&
+                width <= sizeLimit.width && length <= sizeLimit.length && height <= sizeLimit.height) {
+                const dimensionalWeight = (width * length * height) / 6000;
+                calculatedWeight = Math.max(dimensionalWeight, calculatedWeight);
+            }
+
+            if (Math.ceil(calculatedWeight) && Math.ceil(calculatedWeight) <= weightLimit) {
+                for (let limit in deliveryFees) {
+                    if (Math.ceil(calculatedWeight) === parseFloat(limit)) {
+                        methodShippingFee = deliveryFees[limit];
+                        break;
+                    }
+                }
+            }
+            shippingFees.push(methodShippingFee);
+            exceedLimits[method.deliveryMethod] = exceedLimit;
+
+            // Remove method if it's selected and exceed limit
+            if (exceedLimit && methodToggles[method.deliveryMethod]) {
+                methodToggles[method.deliveryMethod] = false;
+                selectedMethods = selectedMethods.filter(selectedMethod => selectedMethod.name !== method.deliveryMethod);
+            }
         });
+        this.setState({ shippingFees, exceedLimits, methodToggles, selectedMethods });
     }
-    handleLengthChange = (e) => {
-        const { value } = e.target;
-        const { weight, width, height, deliveryMethods } = this.state;
-        this.setState({ length: value }, () => {
-            this.setState(calculateShippingFee(weight, width, value, height, deliveryMethods));
-        });
-    }
-    handleHeightChange = (e) => {
-        const { value } = e.target;
-        const { weight, width, length, deliveryMethods } = this.state;
-        this.setState({ height: value }, () => {
-            this.setState(calculateShippingFee(weight, width, length, value, deliveryMethods));
-        });
-    }
+
+    /**
+     * Handles key press event to allow only numerical input for weight and dimensions.
+     * @param {Object} e - Event object.
+     */
+    handleKeyPress = (e) => {
+        const charCode = e.which ? e.which : e.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            e.preventDefault();
+        }
+    };
 
     render() {
         const { weight, shippingFees, deliveryMethods } = this.state;
-
+        console.log(this.state.exceedLimits)
+        
         return (
             <div className='container'>
                 <h2>Shipping</h2>
@@ -132,15 +196,13 @@ class Delivery extends Component {
                         </div>
                         <div className="content-container">
                             <input
-                                type="text"
-                                inputmode="none"
-                                pattern="[0-9,\.]*"
+                                type="number"
                                 className="price-input"
                                 placeholder="Input Weight"
                                 value={weight}
                                 onChange={this.handleWeightChange}
                                 min={1}
-                                onKeyPress={handleKeyPress}
+                                onKeyPress={this.handleKeyPress}
                             />
                             <span className="unit">gr</span>
                         </div>
@@ -151,46 +213,47 @@ class Delivery extends Component {
                         </div>
                         <div className="content-container">
                             <input
-                                type="text"
-                                inputmode="none"
-                                pattern="[0-9,\.]*"
+                                type="number"
                                 className="price-input"
                                 placeholder="Width"
                                 min={1}
-                                onChange={this.handleWidthChange}
-                                onKeyPress={handleKeyPress}
+                                value={this.state.width}
+                                onChange={(e) => {
+                                    this.setState({ width: e.target.value }, this.calculateShippingFee);
+                                }}
+                                onKeyPress={this.handleKeyPress}
                             />
                             <span className="multiply-icon">X</span>
                             <input
-                                type="text"
-                                inputmode="none"
-                                pattern="[0-9,\.]*"
+                                type="number"
                                 className="price-input"
                                 placeholder="Length"
+                                value={this.state.length}
                                 min={1}
-                                onChange={this.handleLengthChange}
-                                onKeyPress={handleKeyPress}
+                                onChange={(e) => {
+                                    this.setState({ length: e.target.value }, this.calculateShippingFee);
+                                }}
+                                onKeyPress={this.handleKeyPress}
                             />
                             <span className="multiply-icon">X</span>
                             <input
-                                type="text"
-                                inputmode="none"
-                                pattern="[0-9,\.]*"
+                                type="number"
                                 className="price-input"
                                 placeholder="Height"
+                                value={this.state.height}
                                 min={1}
-                                onChange={this.handleHeightChange}
-                                onKeyPress={handleKeyPress}
+                                onChange={(e) => {
+                                    this.setState({ height: e.target.value }, this.calculateShippingFee);
+                                }}
+                                onKeyPress={this.handleKeyPress}
                             />
                         </div>
-
                     </div>
                     <div className="content-section">
                         {shippingFees && (
                             <div className="label-container">
                                 <label className="label-name">Shipping Fee</label>
                             </div>
-
                         )}
                         <div className="content-container">
                             <div className="delivery-table">
@@ -206,7 +269,7 @@ class Delivery extends Component {
                                             {weight ? (
                                                 <div className='delivery-info'>
                                                     <label className='name-price' style={{ color: this.state.exceedLimits[method.deliveryMethod] ? 'red' : 'inherit' }}>
-                                                        {shippingFees[index] !== null && this.state.exceedLimits[method.deliveryMethod] === false ? `Shipping Fee: ${shippingFees[index]} đ` : 'Weight or parcel size value is invalid'}
+                                                        {shippingFees[index] !== null && this.state.exceedLimits[method.deliveryMethod] === false ? `Shipping Fee: ${shippingFees[index]} đ` : 'Weight value is invalid'}
                                                     </label>
                                                 </div>
                                             ) : (
@@ -248,4 +311,4 @@ const mapDispatchToProps = dispatch => {
     return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Delivery);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(updateDelivery));

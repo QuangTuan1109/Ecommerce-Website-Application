@@ -1,0 +1,131 @@
+.all-product-seller-container {
+    height: 100vh;
+
+    .body-container {
+        display: grid;
+        grid-template-columns: minmax(200px, 16%) minmax(400px, 84%);
+        grid-template-rows: min-content;
+        overflow-y: auto;
+        max-height: 100vh;
+
+        .sidebar {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            background-color: #f0f0f0;
+            overflow-y: auto;
+            z-index: 1; 
+        }
+
+        .main-content {
+            min-width: 400px;
+            background-color: #fff;
+            padding: 10px;
+            position: relative;
+            margin-bottom: 60px;
+
+            .header-content {
+                
+                .tools-header {
+                    display: flex;
+                    justify-content: space-between;
+                    flex-direction: row;
+                    
+                    .left-header-content {
+                        .navbar-content {
+                            display: flex; // Hiển thị các mục nằm ngang
+                            justify-content: space-between; // Các mục được căn đều ra hai bên
+                            border-bottom: 1px solid #ccc; // Đường viền dưới cho navbar-content
+                        
+                            .sub-nav {
+                                display: flex; // Hiển thị các mục nằm ngang
+                                list-style: none; // Loại bỏ dấu hiệu danh sách
+                                padding: 0; // Loại bỏ padding mặc định của danh sách
+                        
+                                .sub-nav-item {
+                                    padding: 10px;
+                                    position: relative;
+                        
+                                    &:hover {
+                                        color: #007bff; // Màu chữ khi hover
+                                        cursor: pointer;
+                                    }
+                        
+                                    &.active {
+                                        color: #007bff; // Màu chữ cho mục active
+                                        font-weight: bold; // In đậm chữ cho mục active
+                        
+                                        &:after {
+                                            content: ''; // Thêm nội dung ảo để tạo đường gạch chân
+                                            position: absolute; // Vị trí tuyệt đối
+                                            left: 0; // Bắt đầu từ bên trái
+                                            bottom: 0; // Đặt ở phía dưới của mục
+                                            width: 100%; // Chiều rộng bằng chiều rộng của mục
+                                            border-bottom: 2px solid #007bff; // Gạch chân dưới cho mục active
+                                        }
+                                    }
+                        
+                                    .nav-icon {
+                                        margin-right: 5px; // Khoảng cách giữa biểu tượng và văn bản
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    .right-header-content {
+                        display: flex;
+                        
+                        .tool-select {
+                            select {
+                                width: 400px;
+                                margin-right: 20px;
+                            }
+                        }
+
+                        .add-product {
+                            cursor: pointer;
+                            display: flex;
+                            align-items: center;
+                            background-color: #4caf50;
+                            color: #ffffff;
+                            padding: 0px 8px;
+                            border-radius: 3px;
+                            width: 160px;
+                            height: 43px;
+
+                            .add-product-link {
+                                text-decoration: none;
+                                color: #fff;
+                                
+                                .icon {
+                                    margin-right: 5px;
+                                }
+                                
+                                .text {
+                                    font-size: 14px;
+                                    font-weight: bold;
+                                }
+                            }
+                    
+                        }
+                    }
+                }
+
+            }
+
+            .body-content {
+                .section {
+                    margin-bottom: 20px;
+                    border: 1px solid #ccc;
+                    border-radius: 5px;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                    padding: 20px;
+                    height: auto;
+                    transition: height 0.3s ease;
+                }
+            }
+            
+        }
+    }
+}

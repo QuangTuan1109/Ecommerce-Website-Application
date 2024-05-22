@@ -1,19 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import './BasicInformation.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Dropzone from 'react-dropzone';
+import {withRouter } from 'react-router-dom';
 import { faCamera, faEdit, faTrash, faPen } from '@fortawesome/free-solid-svg-icons';
 import axios from '../../../../../axios';
 import { updateCategory } from '../../../../../store/actions';
 
-import { handleImageUpload } from '../../../../../method/handleMethod'
 
 /**
  * Component for managing basic information of a product.
  * Allows users to add images, videos, product name, category, and description.
  */
-class BasicInformation extends Component {
+class updateBasic extends Component {
     /**
     * Constructor method for initializing state.
     * @param {object} props - The props passed to the component.
@@ -22,6 +21,7 @@ class BasicInformation extends Component {
         super(props);
         // Initialize component state
         this.state = {
+            product: {},
             images: [],
             editMode: false,
             loading: true,
@@ -47,6 +47,15 @@ class BasicInformation extends Component {
         };
     }
 
+    /*
+     * Lifecycle method called after component mounts.
+     * Calls fetchCategories method to load categories.
+     */
+        componentDidMount() {
+            this.fetchCategories();
+            this.fetchProducts();
+        }
+
     componentDidUpdate(prevProps, prevState) {
         if (prevState !== this.state) {
             this.props.onBasicDataChange({
@@ -57,6 +66,28 @@ class BasicInformation extends Component {
                 Description: this.state.description
             });
         }
+    }
+
+    fetchProducts = () => {
+        const productId = this.props.match.params.id
+
+        axios.get(`http://localhost:5000/api/v1/products/detail/${productId}`, {
+            headers: {
+                'Authorization': localStorage.getItem('accessToken')
+            }
+        })
+            .then(response => {
+                this.setState({
+                    product: response,
+                    images: response.Image, 
+                    video: response.Video,
+                    productName: response.Name,
+                    category: response.Category,
+                    description: response.Description });
+            })
+            .catch(error => {
+                console.error('Error fetching product detail:', error);
+            });
     }
 
     /**
@@ -78,25 +109,22 @@ class BasicInformation extends Component {
         }
     }
 
-    /*
-     * Lifecycle method called after component mounts.
-     * Calls fetchCategories method to load categories.
-     */
-    componentDidMount() {
-        this.fetchCategories();
-    }
-
     /**
      * Handles adding an image to the image list.
      * @param {Event} e - The event object.
      */
     handleAddImage = (e) => {
-        handleImageUpload(e, (imageSrc) => {
-            const { images } = this.state;
-            if (images.length < 9) {
-                this.setState({ images: [...images, imageSrc] });
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onloadend = () => {
+                const { images } = this.state;
+                if (images.length < 9) {
+                    this.setState({ images: [...images, reader.result] });
+                }
             }
-        });
+        }
     }
 
     /**
@@ -558,6 +586,7 @@ class BasicInformation extends Component {
                         <textarea
                             className="description-input"
                             placeholder="Nhập mô tả sản phẩm (tối đa 3000 ký tự)"
+                            value={this.state.description}
                             maxLength={3000}
                             onChange={this.handleDescriptionChange}
                         />
@@ -573,7 +602,7 @@ class BasicInformation extends Component {
 
 const mapStateToProps = state => {
     return {
-        isLoggedIn: state.admin.isLoggedIn
+        isLoggedIn: state.seller.isLoggedIn,
     };
 };
 
@@ -585,4 +614,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(BasicInformation);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(updateBasic));

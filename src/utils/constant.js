@@ -8,7 +8,10 @@ export const path = {
     DETAIL_PRODUCT_PAGE: '/product/id',
     NEWS: '/news',
     HOMEPAGESELLER: '/seller',
-    CREATEPRODUCT: '/create-product'
+    CREATEPRODUCT: '/create-product',
+    ALLPRODUCT: '/all-product',
+    DETAILPRODUCTSELLER: '/detail-product-seller/:id',
+    UPDATEPRODUCT: '/update-product/:id'
 };
 
 export const languages = {

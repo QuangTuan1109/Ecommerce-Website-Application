@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import './OtherInformation.scss';
+import { withRouter } from 'react-router-dom';
+import axios from '../../../../../axios'
 
 /**
  * Component for managing others information of a product.
  * Allows users to add pre-order, condition, sku.
  */
-class OtherInformation extends Component {
+class updateOther extends Component {
     /**
      * Constructor for initializing component state.
      * @param {Object} props - Component props.
@@ -35,6 +36,31 @@ class OtherInformation extends Component {
                 SKU: this.state.sku
             });
         }
+    }
+
+    componentDidMount() {
+        this.fetchProducts()
+    } 
+
+    fetchProducts = () => {
+        const productId = this.props.match.params.id
+
+        axios.get(`http://localhost:5000/api/v1/products/detail/${productId}`, {
+            headers: {
+                'Authorization': localStorage.getItem('accessToken')
+            }
+        })
+            .then(response => {
+                this.setState({
+                    product: response,
+                    selectedOption: response.preOrderGoods, 
+                    preparationTime: response.preparationTime,
+                    condition: response.Status,
+                    sku: response.SKU });
+            })
+            .catch(error => {
+                console.error('Error fetching product detail:', error);
+            });
     }
 
     /**
@@ -165,4 +191,4 @@ const mapDispatchToProps = dispatch => {
     return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(OtherInformation);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(updateOther));

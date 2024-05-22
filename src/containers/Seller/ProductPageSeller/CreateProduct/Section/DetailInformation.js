@@ -28,7 +28,7 @@ class DetailInformation extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        // Refetch data if category prop changes
+        // Refetch data if category prop changes    
         if (this.props.category !== prevProps.category) {
             const { category } = this.props;
             if (category) {

@@ -78,22 +78,16 @@ class NavbarHomepage extends Component {
                         {openMenus['productManagement'] && (
                             <ul className="sub-nav">
                                 <li className="sub-nav-item">
-                                    <FontAwesomeIcon icon={faShoppingCart} className="nav-icon" />
-                                    Tất Cả Sản Phẩm
+                                    <Link to="/all-product" className="nav-item-link">
+                                        <FontAwesomeIcon icon={faShoppingCart} className="nav-icon" />
+                                        Tất Cả Sản Phẩm
+                                    </Link>
                                 </li>
                                 <li className="sub-nav-item">
                                     <Link to="/create-product" className="nav-item-link">
                                         <FontAwesomeIcon icon={faBoxOpen} className="nav-icon" />
                                         Thêm Sản Phẩm
                                     </Link>
-                                </li>
-                                <li className="sub-nav-item">
-                                    <FontAwesomeIcon icon={faBoxOpen} className="nav-icon" />
-                                    Sản Phẩm Vi Phạm
-                                </li>
-                                <li className="sub-nav-item">
-                                    <FontAwesomeIcon icon={faBoxOpen} className="nav-icon" />
-                                    Cài Đặt Sản Phẩm
                                 </li>
                             </ul>
                         )}
