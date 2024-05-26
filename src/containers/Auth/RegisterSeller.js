@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import './RegisterUser.scss';
 import vietnamData from './vietnam-data.json';
 import axios from '../../axios'
 
-class RegisterUser extends Component {
+class RegisterSeller extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -33,18 +32,16 @@ class RegisterUser extends Component {
 
     handleRegister = async () => {
         try {
-            const response = await axios.post('http://localhost:5000/api/v1/signup', {
+            const response = await axios.patch('http://localhost:5000/api/v1/signup-seller', {
                 Fullname: this.state.Fullname,
                 Image: this.state.Image,
                 Address: this.state.Address,
-                Sex: this.state.Sex,
-                Nation: this.state.Nation,
-                DOB: this.state.DOB,
-                ProvinceOrCity: `${this.state.City} - ${this.state.Province}`,
                 Phone: this.state.Phone,
                 Email: this.state.Email,
-                Password: this.state.Password
-            });
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+        }});
             console.log('Registration successful:', response);
         } catch (error) {
             console.error('Error registering:', error.response.data.error.message);
@@ -92,7 +89,7 @@ class RegisterUser extends Component {
             <div className='register-container'>
                 <div className='form-container'>
                     <div className='form-section'>
-                        <h2>Register</h2>
+                        <h2>Register Seller Channel</h2>
                         <form onSubmit={this.handleSubmit}>
                             <div className='form-group'>
                                 <input type='file' id='image' className='input-file' onChange={this.handleImageChange} />
@@ -103,53 +100,17 @@ class RegisterUser extends Component {
                                     </div>
                                 </label>
                             </div>
-
                             <div className='form-group'>
-                                <input type='text' name='Fullname' value={this.state.Fullname} onChange={this.handleChange} placeholder='Fullname' required />
+                                <input type='text' name='Fullname' value={this.state.Fullname} onChange={this.handleChange} placeholder='Shop name' required />
                             </div>
                             <div className='form-group'>
                                 <input type='text' name='Address' value={this.state.Address} onChange={this.handleChange} placeholder='Address' />
-                            </div>
-                            <div className='form-group'>
-                                <select name='Sex' value={this.state.Sex} onChange={this.handleChange} required>
-                                    <option value=''>Sex</option>
-                                    <option value='Male'>Male</option>
-                                    <option value='Female'>Female</option>
-                                </select>
-                            </div>
-                            <div className='form-group'>
-                                <input type='text' name='Nation' value={this.state.Nation} onChange={this.handleChange} placeholder='Nation' />
-                            </div>
-                            <div className='form-group'>
-                                <input type='date' name='DOB' value={this.state.DOB} onChange={this.handleChange} placeholder='Date of Birth' />
-                            </div>
-                            <div className='form-group'>
-                                <select name='Province' value={this.state.Province} onChange={this.handleProvinceChange} required>
-                                    <option value=''>Select Province</option>
-                                    {this.state.provinces.map(province => (
-                                        <option key={province} value={province}>{province}</option>
-                                    ))}
-                                </select>
-                            </div>
-                            <div className='form-group'>
-                                <select name='City' value={this.state.City} onChange={this.handleCityChange} required>
-                                    <option value=''>Select City</option>
-                                    {this.state.cities.map(city => (
-                                        <option key={city} value={city}>{city}</option>
-                                    ))}
-                                </select>
                             </div>
                             <div className='form-group'>
                                 <input type='text' name='Phone' value={this.state.Phone} onChange={this.handleChange} placeholder='Phone' required />
                             </div>
                             <div className='form-group'>
                                 <input type='email' name='Email' value={this.state.Email} onChange={this.handleChange} placeholder='Email' required />
-                            </div>
-                            <div className='form-group'>
-                                <input type='password' name='Password' value={this.state.Password} onChange={this.handleChange} placeholder='Password' required />
-                            </div>
-                            <div className='form-group'>
-                                <input type='password' name='confirmPassword' value={this.state.confirmPassword} onChange={this.handleChange} placeholder='Confirm Password' required />
                             </div>
                             <div className='form-group'>
                                 <button type='submit' onClick={this.handleRegister}>Register</button>
@@ -173,4 +134,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(RegisterUser);
+export default connect(mapStateToProps, mapDispatchToProps)(RegisterSeller);

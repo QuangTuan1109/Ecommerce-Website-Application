@@ -14,6 +14,7 @@ import Home from '../routes/Home';
 //import Login from '../routes/Login';
 import Login from './Auth/Login';
 import RegisterUser from './Auth/RegisterUser'
+import RegisterSeller from './Auth/RegisterSeller';
 import Header from './Header/Header';
 
 import { CustomToastCloseButton } from '../components/CustomToast';
@@ -59,6 +60,7 @@ class App extends Component {
                                     <Route path={path.HOME} exact component={(Home)} />
                                     <Route path={path.LOGIN} component={userIsNotAuthenticated(Login)} />
                                     <Route path={path.REGISTERUSER} component={userIsNotAuthenticated(RegisterUser)} />
+                                    <Route path={path.REGISTERSELLER} component={userIsAuthenticated(RegisterSeller)} />
                                     <Route path={path.HOMEPAGE} component={HomePage} />
                                     <Route path={path.PRODUCT_PAGE} component={Products}></Route>
                                     <Route path={path.DETAIL_PRODUCT_PAGE} component={userIsAuthenticated(DetailProduct)}></Route>

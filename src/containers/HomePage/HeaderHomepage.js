@@ -70,7 +70,7 @@ class HeaderHomepage extends Component {
             }
         } catch (error) {
             if (error.response && error.response.status === 403) {
-                window.open('/news', '_blank')
+                window.open('/seller-account-register', '_blank')
             }
         }
     }
@@ -168,7 +168,11 @@ class HeaderHomepage extends Component {
                                         <div className='avatar-image'>
                                             {User && (
                                                 <>
-                                                    <div className="avatar-img">{User.user.CustomerID.Image ? User.user.CustomerID.Image : firstInitial}</div>
+                                                    {User.user.CustomerID.Image ? (
+                                                        <img src={User.user.CustomerID.Image} alt='avt' className="avatar-img" />
+                                                    ) : (
+                                                        <div className="avatar-img">{User.user.CustomerID.Image}</div>
+                                                    )}
                                                     <div className='menu'>
                                                         <h3>{User.user.CustomerID.Fullname}</h3>
                                                         <p>Customer</p>
