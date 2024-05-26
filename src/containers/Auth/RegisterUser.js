@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './RegisterUser.scss';
-import logo from '../../assets/images/logo-website.png';
 import vietnamData from './vietnam-data.json';
 
 class RegisterUser extends Component {
@@ -65,8 +64,6 @@ class RegisterUser extends Component {
 
     handleSubmit = (event) => {
         event.preventDefault();
-        // Dispatch action to submit registration data
-        // Example: this.props.registerUser(this.state);
     }
 
     render() {
@@ -78,7 +75,7 @@ class RegisterUser extends Component {
                         <form onSubmit={this.handleSubmit}>
                             <div className='form-group'>
                                 <input type='file' id='image' className='input-file' onChange={this.handleImageChange} />
-                                <label htmlFor='image-avt' className='image-label'>
+                                <label htmlFor='image' className='image-label'>
                                     <div className='image-upload-avt'>
                                         {!this.state.Image && <span>Upload Avatar</span>}
                                         {this.state.Image && <img src={this.state.Image} alt='Uploaded' className='uploaded-image' />}

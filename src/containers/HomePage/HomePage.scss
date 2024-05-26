@@ -1,5 +1,11 @@
 .homepage-container {
+    height: 100vh;
     background: #DCDCDC;
+
+    .homepage-body {
+        height: 80%;
+        overflow: auto;
+    }
 
     // .slick-prev {
     //     left: -10px !important;

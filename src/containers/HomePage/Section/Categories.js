@@ -65,7 +65,7 @@ class Categories extends Component {
 
 const mapStateToProps = state => {
     return {
-        isLoggedIn: state.admin.isLoggedIn
+        isLoggedIn: state.customer.isLoggedIn
     };
 };
 

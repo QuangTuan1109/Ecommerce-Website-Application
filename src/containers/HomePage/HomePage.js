@@ -29,15 +29,19 @@ class HomePage extends Component {
 
         return (
             <div className='homepage-container'>
-                <HeaderHomepage />
-                <Introduction settings = {settings} />
-                <Categories settings = {settings}/>
-                <FeaturedProducts />
-                <Recommended />
-                <TopSearch />
-                <News />
-                <AboutUs />
-                <FooterHomepage />
+                <div className='homepage-header'>
+                    <HeaderHomepage />
+                </div>
+                <div className='homepage-body'>
+                    <Introduction settings = {settings} />
+                    <Categories settings = {settings}/>
+                    <FeaturedProducts />
+                    <Recommended />
+                    <TopSearch />
+                    <News />
+                    <AboutUs />
+                    <FooterHomepage />
+                </div>
             </div>
         );
     }

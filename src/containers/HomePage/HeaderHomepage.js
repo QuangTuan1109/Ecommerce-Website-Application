@@ -79,6 +79,12 @@ class HeaderHomepage extends Component {
         const { isLoggedIn } = this.props;
         const { User } = this.state;
 
+        let firstInitial = "";
+        if (User && User.user && User.user.CustomerID && User.user.CustomerID.Fullname) {
+            const sellerName = User.user.CustomerID.Fullname;
+            firstInitial = sellerName.charAt(0);
+        }
+
         return (
             <div className='home-header-container'>
                 <div className='home-header-content'>
@@ -162,9 +168,7 @@ class HeaderHomepage extends Component {
                                         <div className='avatar-image'>
                                             {User && (
                                                 <>
-                                                    <div className='avt'>
-                                                        <img src={User.user.CustomerID.Image ? User.user.CustomerID.Image : avt} alt={'avt'} />
-                                                    </div>
+                                                    <div className="avatar-img">{User.user.CustomerID.Image ? User.user.CustomerID.Image : firstInitial}</div>
                                                     <div className='menu'>
                                                         <h3>{User.user.CustomerID.Fullname}</h3>
                                                         <p>Customer</p>
