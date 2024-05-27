@@ -6,6 +6,8 @@ import { withRouter } from 'react-router-dom';
 
 import axios from '../../../../../axios'
 
+import { handleImageUpload ,handleKeyPress, handleFileDelete } from '../../../../../method/handleMethod'
+
 /**
  * Component for managing Sales information of a product.
  * Allows users to add Variations, Unit Price, Stock, Wholesale, Size Chart.
@@ -38,7 +40,6 @@ class updateSale extends Component {
             showClassification2: false,
             showDiscount: false,
         };
-        this.handleKeyPress = this.handleKeyPress.bind(this);
     }
 
     componentDidMount() {
@@ -309,18 +310,38 @@ class updateSale extends Component {
      * @param {Object} e - Event object.
      * @param {number} index - Index of the classification.
      */
-    handleImageUpload = (e, index) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onloadend = () => {
+    handleImageUpload = async (e, index) => {
+        const { input2List } = this.state;
+        const previousImageSrc = input2List[index].imageSrc;
+        
+        const deletePreviousImage = async (imageSrc) => {
+            if (imageSrc) {
+                try {
+                    const startIndex = imageSrc[0].indexOf('/o/') + 3;
+                    const storagePath = imageSrc[0].substring(startIndex);
+                    await handleFileDelete(storagePath, () => {
+                        const updatedInput2List = [...this.state.input2List];
+                        updatedInput2List[index] = { ...updatedInput2List[index], imageSrc: null };
+                        this.setState({ input2List: updatedInput2List });
+                    }, 'delete-image');
+                } catch (error) {
+                    console.error('Error deleting previous image:', error);
+                }
+            }
+        };
+            
+        await deletePreviousImage(previousImageSrc);
+        handleImageUpload(e,
+            (imageSrc) => {
                 const { input2List } = this.state;
                 const updatedInput2List = [...input2List];
-                updatedInput2List[index] = { ...updatedInput2List[index], imageSrc: reader.result };
+                updatedInput2List[index] = { ...updatedInput2List[index], imageSrc };
                 this.setState({ input2List: updatedInput2List });
-            };
-        }
+            },
+            (error) => {
+                console.error(error);
+            }
+        );
     };
 
     /**
@@ -387,8 +408,27 @@ class updateSale extends Component {
      * Removes an input field for classification 1.
      * @param {number} index - Index of the classification.
      */
-    handleRemoveInput2 = (index) => {
+    handleRemoveInput2 = async (index) => {
         const { input2List } = this.state;
+        const previousImageSrc = input2List[index].imageSrc;
+        
+        const deletePreviousImage = async (imageSrc) => {
+            if (imageSrc) {
+                try {
+                    const startIndex = imageSrc[0].indexOf('/o/') + 3;
+                    const storagePath = imageSrc[0].substring(startIndex);
+                    await handleFileDelete(storagePath, () => {
+                        const updatedInput2List = [...this.state.input2List];
+                        updatedInput2List[index] = { ...updatedInput2List[index], imageSrc: null };
+                        this.setState({ input2List: updatedInput2List });
+                    }, 'delete-image');
+                } catch (error) {
+                    console.error('Error deleting previous image:', error);
+                }
+            }
+        };
+            
+        await deletePreviousImage(previousImageSrc);
         input2List.splice(index, 1);
         this.setState({ input2List });
     };
@@ -538,17 +578,6 @@ class updateSale extends Component {
         });
     }
 
-    /**
-     * Handles key press event to allow only numerical input.
-     * @param {Object} e - Event object.
-     */
-    handleKeyPress = (e) => {
-        const charCode = e.which ? e.which : e.keyCode;
-        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-            e.preventDefault();
-        }
-    };
-
     render() {
         const { discounts, showClassification, input1Value, input1classify2Value, input2List, showAdditionalInfo2, inputclassify2List, showPriceAndQuantity,
             showClassification2, showDiscount} = this.state;
@@ -592,7 +621,7 @@ class updateSale extends Component {
                                                     {item.imageSrc && <img src={item.imageSrc} alt={`Product ${index}`} />}
                                                 </div>
                                                 <div className="input2-actions">
-                                                    {index >= 1 ? (
+                                                    {input2List.length >= 1 ? (
                                                         <FontAwesomeIcon
                                                             icon={faTrash}
                                                             className="delete-icon"
@@ -706,7 +735,7 @@ class updateSale extends Component {
                                                                     min={1}
                                                                     value={this.state.priceClassify[`${index}-${index2}`] || ''}
                                                                     onChange={(e) => this.handlePriceClassifyChange(e, `${index}-${index2}`)}
-                                                                    onKeyPress={this.handleKeyPress}
+                                                                    onKeyPress={handleKeyPress}
                                                                 />
                                                                 <span className="currency-icon">&#8363;</span>
                                                             </div>
@@ -723,7 +752,7 @@ class updateSale extends Component {
                                                                     min={1}
                                                                     value={this.state.priceClassify[`${index}-${index2}`] || ''}
                                                                     onChange={(e) => this.handlePriceClassifyChange(e, `${index}-${index2}`)}
-                                                                    onKeyPress={this.handleKeyPress}
+                                                                    onKeyPress={handleKeyPress}
                                                                 />
                                                             ))}
                                                             <span className="currency-icon">&#8363;</span>
@@ -741,7 +770,7 @@ class updateSale extends Component {
                                                                     min={1}
                                                                     value={this.state.quantityClassify[`${index}-${index2}`] || ''}
                                                                     onChange={(e) => this.handleQuantityClassifyChange(e, `${index}-${index2}`)}
-                                                                    onKeyPress={this.handleKeyPress}
+                                                                    onKeyPress={handleKeyPress}
                                                                 />
                                                             </div>
                                                         ))}
@@ -757,7 +786,7 @@ class updateSale extends Component {
                                                                     min={1}
                                                                     value={this.state.quantityClassify[`${index}-${index2}`] || ''}
                                                                     onChange={(e) => this.handleQuantityClassifyChange(e, `${index}-${index2}`)}
-                                                                    onKeyPress={this.handleKeyPress}
+                                                                    onKeyPress={handleKeyPress}
                                                                 />
                                                             </div>
                                                         ))}
@@ -809,7 +838,7 @@ class updateSale extends Component {
                                 className="price-input"
                                 placeholder="Input Price"
                                 min={1}
-                                onKeyPress={this.handleKeyPress}
+                                onKeyPress={handleKeyPress}
                                 value={this.state.unitPrice}
                                 onChange={this.handleUnitPriceChange}
                             />
@@ -822,7 +851,7 @@ class updateSale extends Component {
                                 className="quantity-input"
                                 placeholder="Input Quantity"
                                 min={1}
-                                onKeyPress={this.handleKeyPress}
+                                onKeyPress={handleKeyPress}
                                 value={this.state.unitQuantity}
                                 onChange={this.handleQuantityChange}
                             />
@@ -855,7 +884,7 @@ class updateSale extends Component {
                                                         type="number"
                                                         placeholder="From"
                                                         min={1}
-                                                        onKeyPress={this.handleKeyPress}
+                                                        onKeyPress={handleKeyPress}
                                                         value={discount.from}
                                                         onChange={(event) => this.handleFromChange(event, index)}
                                                     />
@@ -865,7 +894,7 @@ class updateSale extends Component {
                                                         type="number"
                                                         placeholder="To"
                                                         min={1}
-                                                        onKeyPress={this.handleKeyPress}
+                                                        onKeyPress={handleKeyPress}
                                                         value={discount.to}
                                                         onChange={(event) => this.handleToChange(event, index)}
                                                     />
@@ -876,7 +905,7 @@ class updateSale extends Component {
                                                             type="number"
                                                             placeholder="Input Price"
                                                             min={1}
-                                                            onKeyPress={this.handleKeyPress}
+                                                            onKeyPress={handleKeyPress}
                                                             value={discount.price}
                                                             onChange={(event) => this.handlePriceChange(event, index)}
                                                         />

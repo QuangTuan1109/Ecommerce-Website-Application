@@ -18,7 +18,8 @@ class AllProductContent extends Component {
             selectedCategory: null, // Trạng thái lưu trữ ngành hàng đã chọn
             currentPage: 0, // Trang hiện tại
             productsPerPage: 10, // Số sản phẩm trên mỗi trang
-            products: []
+            products: [],
+            loading: true,
         };
     }
 
@@ -27,6 +28,7 @@ class AllProductContent extends Component {
     }
 
     fetchProducts = () => {
+        
         const accessToken = localStorage.getItem('accessToken');
         if (accessToken) {
             try {

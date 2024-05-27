@@ -7,7 +7,7 @@ import { faCamera, faEdit, faTrash, faPen } from '@fortawesome/free-solid-svg-ic
 import axios from '../../../../../axios';
 import { updateCategory } from '../../../../../store/actions';
 
-import { handleImageUpload } from '../../../../../method/handleMethod'
+import { handleImageUpload, handleFileDelete } from '../../../../../method/handleMethod'
 
 /**
  * Component for managing basic information of a product.
@@ -23,6 +23,7 @@ class BasicInformation extends Component {
         // Initialize component state
         this.state = {
             images: [],
+            errImage: '',
             editMode: false,
             loading: true,
             activeImageIndex: null,
@@ -90,14 +91,27 @@ class BasicInformation extends Component {
      * Handles adding an image to the image list.
      * @param {Event} e - The event object.
      */
-    handleAddImage = (e) => {
-        handleImageUpload(e, (imageSrc) => {
-            const { images } = this.state;
-            if (images.length < 9) {
-                this.setState({ images: [...images, imageSrc] });
-            }
-        });
-    }
+    handleAddImage = async (event) => {
+        const acceptedFiles = Array.from(event.target.files);
+    
+        if (this.state.images.length + acceptedFiles.length > 9) {
+            this.setState({ errImage: 'You can upload a maximum of 9 images.' });
+            return;
+        }
+    
+        try {
+            handleImageUpload(event, (imageUrls) => {
+                this.setState((prevState) => ({
+                    images: [...prevState.images, ...imageUrls],
+                }));
+            }, (error) => {
+                console.error('Error uploading images:', error);
+            });
+        } catch (error) {
+            console.error('Error uploading images:', error);
+        }
+    };
+    
 
     /**
      * Handles hovering over an image item in the image list.
@@ -117,17 +131,27 @@ class BasicInformation extends Component {
     /**
      * Deletes the currently active image from the image list.
      */
-    handleDeleteImage = () => {
+    handleDeleteImage = async () => {
         const { images, activeImageIndex } = this.state;
-        images.splice(activeImageIndex, 1);
-        this.setState({ images, activeImageIndex: null, editMode: false });
-    }
-
+        try {
+            const imagePath = images[activeImageIndex];
+            const startIndex = imagePath.indexOf('/o/') + 3;
+            const storagePath = imagePath.substring(startIndex);
+            await handleFileDelete(storagePath, () => {
+                const updatedImages = [...images];
+                updatedImages.splice(activeImageIndex, 1);
+                this.setState({ images: updatedImages, activeImageIndex: null, editMode: false });
+            }, 'delete-image');
+        } catch (error) {
+            console.error('Error deleting image:', error);
+        }
+    };
+    
     /**
      * Handles adding a video file to the video section.
      * @param {Array<File>} acceptedFiles - Array of accepted video files.
      */
-    handleAddVideo = async (acceptedFiles) =>{
+    handleAddVideo = async (acceptedFiles) => {
         const file = acceptedFiles[0];
         if (this.state.video) {
             this.setState({ error: 'Only one video can be uploaded.' });
@@ -141,7 +165,7 @@ class BasicInformation extends Component {
                         'Authorization': localStorage.getItem('accessToken')
                     }
                 });
-    
+
                 // Check if upload was successful
                 if (response) {
                     //Assuming server responds with the URL of the uploaded video
@@ -159,8 +183,17 @@ class BasicInformation extends Component {
     /**
      * Deletes the currently uploaded video.
      */
-    handleDeleteVideo = () => {
-        this.setState({ video: null });
+    handleDeleteVideo = async () => {
+        const { video } = this.state;
+        try {
+            const startIndex = video.indexOf('/o/') + 3;
+            const storagePath = video.substring(startIndex);
+            await handleFileDelete(storagePath, () => {
+                this.setState({ video: null });
+            }, 'delete-video');
+        } catch (error) {
+            console.error('Error deleting video:', error);
+        }
     };
 
     /**
@@ -220,27 +253,28 @@ class BasicInformation extends Component {
         try {
             // Clear lower level categories when a higher level category is clicked
             if (level === 1) {
-                this.setState({ 
+                this.setState({
                     categoriesLevel2: [],
                     categoriesLevel3: [],
                     categoriesLevel4: [],
-                    selectedCategoryLevel1: category, 
-                    selectedCategoryLevel2: null, 
-                    selectedCategoryLevel3: null, 
-                    selectedCategoryLevel4: null  });
+                    selectedCategoryLevel1: category,
+                    selectedCategoryLevel2: null,
+                    selectedCategoryLevel3: null,
+                    selectedCategoryLevel4: null
+                });
             } else if (level === 2) {
-                this.setState({ 
-                    categoriesLevel3: [], 
-                    categoriesLevel4: [], 
-                    selectedCategoryLevel2: category, 
-                    selectedCategoryLevel3: null, 
-                    selectedCategoryLevel4: null  
+                this.setState({
+                    categoriesLevel3: [],
+                    categoriesLevel4: [],
+                    selectedCategoryLevel2: category,
+                    selectedCategoryLevel3: null,
+                    selectedCategoryLevel4: null
                 });
             } else if (level === 3) {
                 this.setState({
-                    categoriesLevel4: [], 
-                    selectedCategoryLevel3: category, 
-                    selectedCategoryLevel4: null 
+                    categoriesLevel4: [],
+                    selectedCategoryLevel3: category,
+                    selectedCategoryLevel4: null
                 });
             }
 
@@ -388,9 +422,9 @@ class BasicInformation extends Component {
                                 {(activeImageIndex === index && !editMode) && (
                                     <div className="image-overlay">
                                         <FontAwesomeIcon icon={faEdit} onClick={this.handleEditImage}
-                                        style={{ fontSize: '20px', margin: '10px 25px 5px 30px', cursor: 'pointer' }} />
-                                        <FontAwesomeIcon icon={faTrash} onClick={this.handleDeleteImage} 
-                                        style={{ fontSize: '20px', margin: '10px 25px 5px 30px', cursor: 'pointer' }}/>
+                                            style={{ fontSize: '20px', margin: '10px 25px 5px 30px', cursor: 'pointer' }} />
+                                        <FontAwesomeIcon icon={faTrash} onClick={this.handleDeleteImage}
+                                            style={{ fontSize: '20px', margin: '10px 25px 5px 30px', cursor: 'pointer' }} />
                                     </div>
                                 )}
                                 {(activeImageIndex === index && editMode) && (
@@ -434,8 +468,8 @@ class BasicInformation extends Component {
                     {/* Video notes */}
                     <div className="video-notes">
                         <p>Please upload a short introduction video about your product.</p>
-                         <p>Video will help customers better understand your product.</p>
-                         <p>Note: Only 1 video is allowed.</p>
+                        <p>Video will help customers better understand your product.</p>
+                        <p>Note: Only 1 video is allowed.</p>
                     </div>
                 </div>
                 {/* Product Name Section */}
@@ -573,7 +607,7 @@ class BasicInformation extends Component {
 
 const mapStateToProps = state => {
     return {
-        isLoggedIn: state.admin.isLoggedIn
+        isLoggedIn: state.seller.isLoggedIn
     };
 };
 

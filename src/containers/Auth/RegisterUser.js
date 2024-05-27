@@ -4,6 +4,9 @@ import './RegisterUser.scss';
 import vietnamData from './vietnam-data.json';
 import axios from '../../axios'
 
+import { handleAvatarUpload, handleAvatarDelete } from '../../method/handleMethod';
+import CustomPopup from '../../components/CustomPopup';
+
 class RegisterUser extends Component {
     constructor(props) {
         super(props);
@@ -21,7 +24,9 @@ class RegisterUser extends Component {
             Password: '',
             confirmPassword: '',
             provinces: [],
-            cities: []
+            cities: [],
+            popupType: '',
+            onConfirm: null
         };
     }
 
@@ -33,7 +38,7 @@ class RegisterUser extends Component {
 
     handleRegister = async () => {
         try {
-            const response = await axios.post('http://localhost:5000/api/v1/signup', {
+            await axios.post('http://localhost:5000/api/v1/signup', {
                 Fullname: this.state.Fullname,
                 Image: this.state.Image,
                 Address: this.state.Address,
@@ -45,9 +50,9 @@ class RegisterUser extends Component {
                 Email: this.state.Email,
                 Password: this.state.Password
             });
-            console.log('Registration successful:', response);
+            this.showPopup('Your account registered successfully!', 'successful', this.handleSuccess);
         } catch (error) {
-            console.error('Error registering:', error.response.data.error.message);
+            this.showPopup('Failed to signup.', 'error', this.handleFailure);
         }
     }
 
@@ -68,26 +73,83 @@ class RegisterUser extends Component {
         this.setState({ [event.target.name]: event.target.value });
     }
 
-    handleImageChange = (event) => {
-        const file = event.target.files[0];
-        const reader = new FileReader();
-
-        reader.onloadend = () => {
-            this.setState({
-                Image: reader.result
-            });
+    handleImageChange = async (event) => {
+        const avt = this.state.Image
+        const deletePreviousImage = async (imageSrc) => {
+            if (imageSrc) {
+                try {
+                    const startIndex = imageSrc.indexOf('/o/') + 3;
+                    const storagePath = imageSrc.substring(startIndex);
+                    await handleAvatarDelete(storagePath, () => {
+                        this.setState({ Image: ''});
+                    }, 'delete-avt');
+                } catch (error) {
+                    console.error('Error deleting previous image:', error);
+                }
+            }
         };
 
-        if (file) {
-            reader.readAsDataURL(file);
-        }
-    }
+        await deletePreviousImage(avt);
+
+        handleAvatarUpload(event, (imageUrls) => {
+            const imageUrl = imageUrls.length > 0 ? imageUrls[0] : null;
+
+            this.setState({ Image: imageUrl });
+        }, (error) => {
+            console.error('Error uploading image:', error);
+        });
+    };
 
     handleSubmit = (event) => {
         event.preventDefault();
     }
 
+    handleCancel = () => {
+        const { basicData, detailData, sellData, deliveryData, otherData } = this.state;
+        const hasData = basicData || detailData || sellData || deliveryData || otherData;
+
+        if (!hasData) {
+            this.props.history.goBack();
+        } else {
+            this.showPopup('Are you sure you want to cancel?', 'confirm', this.confirmCancel);
+        }
+    }
+
+    handleSuccess = () => {
+        this.closePopup();
+        this.props.history.push('/');
+    }
+
+    handleFailure = () => {
+        this.closePopup();
+    }
+
+    confirmCancel = () => {
+        this.closePopup();
+        this.props.history.goBack();
+    }
+
+    showPopup = (message, type, onConfirm = null) => {
+        this.setState({
+            popupVisible: true,
+            popupMessage: message,
+            popupType: type,
+            onConfirm: onConfirm
+        });
+    }
+
+    closePopup = () => {
+        this.setState({
+            popupVisible: false,
+            popupMessage: '',
+            popupType: '',
+            onConfirm: null
+        });
+    }
+
     render() {
+        const { popupVisible, popupMessage, popupType, onConfirm } = this.state;
+
         return (
             <div className='register-container'>
                 <div className='form-container'>
@@ -155,6 +217,14 @@ class RegisterUser extends Component {
                                 <button type='submit' onClick={this.handleRegister}>Register</button>
                             </div>
                         </form>
+                        {popupVisible && (
+                            <CustomPopup
+                                message={popupMessage}
+                                type={popupType}
+                                onClose={this.closePopup}
+                                onConfirm={onConfirm}
+                            />
+                        )}
                     </div>
                 </div>
             </div>

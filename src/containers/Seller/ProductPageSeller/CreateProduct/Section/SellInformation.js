@@ -4,7 +4,7 @@ import './SellInformation.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faImage } from '@fortawesome/free-solid-svg-icons';
 
-import { handleImageUpload, handleKeyPress } from '../../../../../method/handleMethod'
+import { handleImageUpload, handleKeyPress, handleFileDelete } from '../../../../../method/handleMethod'
 
 /**
  * Component for managing Sales information of a product.
@@ -197,13 +197,38 @@ class SellInformation extends Component {
      * @param {Object} e - Event object.
      * @param {number} index - Index of the classification.
      */
-    handleImageUpload = (e, index) => {
-        handleImageUpload(e, (imageSrc) => {
-            const { input2List } = this.state;
-            const updatedInput2List = [...input2List];
-            updatedInput2List[index] = { ...updatedInput2List[index], imageSrc };
-            this.setState({ input2List: updatedInput2List });
-        });
+    handleImageUpload = async (e, index) => {
+        const { input2List } = this.state;
+        const previousImageSrc = input2List[index].imageSrc;
+        
+        const deletePreviousImage = async (imageSrc) => {
+            if (imageSrc) {
+                try {
+                    const startIndex = imageSrc[0].indexOf('/o/') + 3;
+                    const storagePath = imageSrc[0].substring(startIndex);
+                    await handleFileDelete(storagePath, () => {
+                        const updatedInput2List = [...this.state.input2List];
+                        updatedInput2List[index] = { ...updatedInput2List[index], imageSrc: null };
+                        this.setState({ input2List: updatedInput2List });
+                    }, 'delete-image');
+                } catch (error) {
+                    console.error('Error deleting previous image:', error);
+                }
+            }
+        };
+            
+        await deletePreviousImage(previousImageSrc);
+        handleImageUpload(e,
+            (imageSrc) => {
+                const { input2List } = this.state;
+                const updatedInput2List = [...input2List];
+                updatedInput2List[index] = { ...updatedInput2List[index], imageSrc };
+                this.setState({ input2List: updatedInput2List });
+            },
+            (error) => {
+                console.error(error);
+            }
+        );
     };
 
     /**
@@ -270,8 +295,27 @@ class SellInformation extends Component {
      * Removes an input field for classification 1.
      * @param {number} index - Index of the classification.
      */
-    handleRemoveInput2 = (index) => {
+    handleRemoveInput2 = async (index) => {
         const { input2List } = this.state;
+        const previousImageSrc = input2List[index].imageSrc;
+        
+        const deletePreviousImage = async (imageSrc) => {
+            if (imageSrc) {
+                try {
+                    const startIndex = imageSrc[0].indexOf('/o/') + 3;
+                    const storagePath = imageSrc[0].substring(startIndex);
+                    await handleFileDelete(storagePath, () => {
+                        const updatedInput2List = [...this.state.input2List];
+                        updatedInput2List[index] = { ...updatedInput2List[index], imageSrc: null };
+                        this.setState({ input2List: updatedInput2List });
+                    }, 'delete-image');
+                } catch (error) {
+                    console.error('Error deleting previous image:', error);
+                }
+            }
+        };
+            
+        await deletePreviousImage(previousImageSrc);
         input2List.splice(index, 1);
         this.setState({ input2List });
     };
@@ -424,6 +468,8 @@ class SellInformation extends Component {
         const { discounts, showClassification, input1Value, input1classify2Value, input2List, showAdditionalInfo2, inputclassify2List, showPriceAndQuantity,
             showClassification2, showDiscount } = this.state;
 
+            console.log(input2List)
+
         return (
             <div className='container'>
                 <h2>Sales Information</h2>
@@ -463,7 +509,7 @@ class SellInformation extends Component {
                                                     {item.imageSrc && <img src={item.imageSrc} alt={`Product ${index}`} />}
                                                 </div>
                                                 <div className="input2-actions">
-                                                    {index >= 1 ? (
+                                                    {input2List.length > 1 ? (
                                                         <FontAwesomeIcon
                                                             icon={faTrash}
                                                             className="delete-icon"

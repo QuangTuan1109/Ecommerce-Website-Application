@@ -3,6 +3,9 @@ import { connect } from 'react-redux';
 import vietnamData from './vietnam-data.json';
 import axios from '../../axios'
 
+import { handleAvatarUpload, handleAvatarDelete } from '../../method/handleMethod';
+import CustomPopup from '../../components/CustomPopup';
+
 class RegisterSeller extends Component {
     constructor(props) {
         super(props);
@@ -20,7 +23,9 @@ class RegisterSeller extends Component {
             Password: '',
             confirmPassword: '',
             provinces: [],
-            cities: []
+            cities: [],
+            popupType: '',
+            onConfirm: null
         };
     }
 
@@ -32,7 +37,7 @@ class RegisterSeller extends Component {
 
     handleRegister = async () => {
         try {
-            const response = await axios.patch('http://localhost:5000/api/v1/signup-seller', {
+            await axios.patch('http://localhost:5000/api/v1/signup-seller', {
                 Fullname: this.state.Fullname,
                 Image: this.state.Image,
                 Address: this.state.Address,
@@ -42,9 +47,9 @@ class RegisterSeller extends Component {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
         }});
-            console.log('Registration successful:', response);
+            this.showPopup('Your seller channel registered successfully!', 'successful', this.handleSuccess);
         } catch (error) {
-            console.error('Error registering:', error.response.data.error.message);
+            this.showPopup('Failed to signup.', 'error', this.handleFailure);
         }
     }
 
@@ -65,26 +70,83 @@ class RegisterSeller extends Component {
         this.setState({ [event.target.name]: event.target.value });
     }
 
-    handleImageChange = (event) => {
-        const file = event.target.files[0];
-        const reader = new FileReader();
-
-        reader.onloadend = () => {
-            this.setState({
-                Image: reader.result
-            });
+    handleImageChange = async (event) => {
+        const avt = this.state.Image
+        const deletePreviousImage = async (imageSrc) => {
+            if (imageSrc) {
+                try {
+                    const startIndex = imageSrc.indexOf('/o/') + 3;
+                    const storagePath = imageSrc.substring(startIndex);
+                    await handleAvatarDelete(storagePath, () => {
+                        this.setState({ Image: ''});
+                    }, 'delete-avt');
+                } catch (error) {
+                    console.error('Error deleting previous image:', error);
+                }
+            }
         };
 
-        if (file) {
-            reader.readAsDataURL(file);
-        }
-    }
+        await deletePreviousImage(avt);
+
+        handleAvatarUpload(event, (imageUrls) => {
+            const imageUrl = imageUrls.length > 0 ? imageUrls[0] : null;
+
+            this.setState({ Image: imageUrl });
+        }, (error) => {
+            console.error('Error uploading image:', error);
+        });
+    };
 
     handleSubmit = (event) => {
         event.preventDefault();
     }
 
+    handleCancel = () => {
+        const { basicData, detailData, sellData, deliveryData, otherData } = this.state;
+        const hasData = basicData || detailData || sellData || deliveryData || otherData;
+
+        if (!hasData) {
+            this.props.history.goBack();
+        } else {
+            this.showPopup('Are you sure you want to cancel?', 'confirm', this.confirmCancel);
+        }
+    }
+
+    handleSuccess = () => {
+        this.closePopup();
+        this.props.history.push('/seller');
+    }
+
+    handleFailure = () => {
+        this.closePopup();
+    }
+
+    confirmCancel = () => {
+        this.closePopup();
+        this.props.history.goBack();
+    }
+
+    showPopup = (message, type, onConfirm = null) => {
+        this.setState({
+            popupVisible: true,
+            popupMessage: message,
+            popupType: type,
+            onConfirm: onConfirm
+        });
+    }
+
+    closePopup = () => {
+        this.setState({
+            popupVisible: false,
+            popupMessage: '',
+            popupType: '',
+            onConfirm: null
+        });
+    }
+
     render() {
+        const { popupVisible, popupMessage, popupType, onConfirm } = this.state;
+
         return (
             <div className='register-container'>
                 <div className='form-container'>
@@ -116,6 +178,14 @@ class RegisterSeller extends Component {
                                 <button type='submit' onClick={this.handleRegister}>Register</button>
                             </div>
                         </form>
+                        {popupVisible && (
+                            <CustomPopup
+                                message={popupMessage}
+                                type={popupType}
+                                onClose={this.closePopup}
+                                onConfirm={onConfirm}
+                            />
+                        )}
                     </div>
                 </div>
             </div>

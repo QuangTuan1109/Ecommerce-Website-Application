@@ -6,6 +6,7 @@ import {withRouter } from 'react-router-dom';
 import { faCamera, faEdit, faTrash, faPen } from '@fortawesome/free-solid-svg-icons';
 import axios from '../../../../../axios';
 import { updateCategory } from '../../../../../store/actions';
+import { handleImageUpload } from '../../../../../method/handleMethod'
 
 
 /**
@@ -113,19 +114,25 @@ class updateBasic extends Component {
      * Handles adding an image to the image list.
      * @param {Event} e - The event object.
      */
-    handleAddImage = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onloadend = () => {
-                const { images } = this.state;
-                if (images.length < 9) {
-                    this.setState({ images: [...images, reader.result] });
-                }
-            }
+    handleAddImage = (event) => {
+        const acceptedFiles = Array.from(event.target.files);
+        const currentImagesCount = this.state.images.length;
+    
+        if (currentImagesCount + acceptedFiles.length > 9) {
+          this.setState({ error: 'You can upload a maximum of 9 images.' });
+          return;
         }
-    }
+    
+        handleImageUpload(event, (imageUrls) => {
+          this.setState((prevState) => ({
+            images: [...prevState.images, ...imageUrls],
+            error: ''
+          }));
+        }, (errorMessage) => {
+          this.setState({ error: errorMessage });
+        });
+      };
+
 
     /**
      * Handles hovering over an image item in the image list.
@@ -138,8 +145,24 @@ class updateBasic extends Component {
     /**
      * Activates edit mode for the image.
      */
-    handleEditImage = () => {
-        this.setState({ editMode: true });
+    handleDeleteImage = async () => {
+        const { images, activeImageIndex } = this.state;
+        try {
+            const imagePath = images[activeImageIndex];
+            const startIndex = imagePath.indexOf('/o/') + 3;
+            const storagePath = imagePath.substring(startIndex);
+
+            await axios.delete(`http://localhost:5000/api/v1/products/delete-image/${storagePath}`, {
+                headers: {
+                    'Authorization': localStorage.getItem('accessToken')
+                }
+            });
+    
+            images.splice(activeImageIndex, 1);
+            this.setState({ images, activeImageIndex: null, editMode: false });
+        } catch (error) {
+            console.error('Error deleting image:', error);
+        }
     }
 
     /**
@@ -187,8 +210,21 @@ class updateBasic extends Component {
     /**
      * Deletes the currently uploaded video.
      */
-    handleDeleteVideo = () => {
-        this.setState({ video: null });
+    handleDeleteVideo = async () => {
+        try {
+            const videoFile = this.state.video
+            const startIndex = videoFile.indexOf('/o/') + 3;
+            const storagePath = videoFile.substring(startIndex);
+
+            await axios.delete(`http://localhost:5000/api/v1/products/delete-video/${storagePath}`, {
+                headers: {
+                    'Authorization': localStorage.getItem('accessToken')
+                }
+            });
+            this.setState({ video: null });
+        } catch (error) {
+            console.error('Error deleting video:', error);
+        }
     };
 
     /**
