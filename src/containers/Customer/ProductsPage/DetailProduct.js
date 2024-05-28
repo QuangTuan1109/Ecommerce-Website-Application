@@ -11,6 +11,7 @@ import axios from '../../../axios'
 import { formatCurrency } from '../../../method/handleMethod'
 
 import Slider from 'react-slick'
+import { width } from '@fortawesome/free-solid-svg-icons/fa0';
 
 class DetailProduct extends Component {
     constructor(props) {
@@ -129,6 +130,14 @@ class DetailProduct extends Component {
                                 </div>
                             </div>
                             <div className='product-information-component2'>
+                                <div className='video-product'>
+                                    {product.Video && (
+                                        <video width="100%" height="500px" controls>
+                                            <source src={product.Video} type="video/mp4" />
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    )}
+                                </div>
                                 <div className='name-product'>
                                     <label>{product.Name}</label>
                                 </div>
@@ -152,30 +161,24 @@ class DetailProduct extends Component {
                                             <span>{formatCurrency(product.Price)}</span>
                                         )}
                                     </div>
-                                    <div className='quantity-size-info'>
-                                        <div className='quantity-part'>
-                                            <label>Quantity: </label>
-                                            <input className="minus is-form" type="button" value="-" onClick={() => this.handleDecreaseQualityProduct()} />
-                                            <input aria-label="quantity" className="input-qty" name="" type="number" value={this.state.value} />
-                                            <input className="plus is-form" type="button" value="+" onClick={() => this.handleIncreaseQualityProduct()} />
+                                    {product.Classify && product.Classify.length > 0 && product.Classify[0].Options[0].Value2 && (
+                                        <div className='option2-part'>
+                                            <label>{product.Classify[0].Options[0].Option2}: </label>
+                                            {[...new Set(product.Classify[0].Options.map(option => option.Value2))].map((value, index) => (
+                                                <label key={index} className={"custom-radio" + (this.state.option2 === value ? " checked" : "")}>
+                                                    <input type="radio" name="option2" value={value} onClick={() => this.handleOption2Change(value)} checked={this.state.option2 === value} />
+                                                    {value}
+                                                </label>
+                                            ))}
                                         </div>
-                                        {product.Classify && product.Classify.length > 0 && product.Classify[0].Options[0].Value2 && (
-                                            <div className='option2-part'>
-                                                <label>{product.Classify[0].Options[0].Option2} </label>
-                                                {[...new Set(product.Classify[0].Options.map(option => option.Value2))].map((value, index) => (
-                                                    <label key={index} className={"custom-radio" + (this.state.option2 === value ? " checked" : "")}>
-                                                        <input type="radio" name="option2" value={value} onClick={() => this.handleOption2Change(value)} checked={this.state.option2 === value} />
-                                                        {value}
-                                                    </label>
-                                                ))}
-                                            </div>
-                                        )}
-                                    </div>
+                                    )}
                                     {product.Classify && product.Classify.length > 0 && (
                                         <div className='option1-part'>
                                             <label>{product.Classify[0].Options[0].Option1}: </label>
                                             {product.Classify[0].Options.map((option, index) => (
                                                 index === 0 || option.Value1 !== product.Classify[0].Options[index - 1].Value1 ? (
+                                                    <>
+                                                    <img src={option.Image} width='50px' height='50px' alt={`Images ${index}`} />
                                                     <label key={index} className={"custom-radio" + (this.state.option1 === option.Value1 ? " checked" : "")}>
                                                         <input
                                                             type="radio"
@@ -186,10 +189,19 @@ class DetailProduct extends Component {
                                                         />
                                                         {option.Value1}
                                                     </label>
+                                                    </>
                                                 ) : null
                                             ))}
                                         </div>
                                     )}
+                                    <div className='quantity-size-info'>
+                                        <div className='quantity-part'>
+                                            <label>Quantity: </label>
+                                            <input className="minus is-form" type="button" value="-" onClick={() => this.handleDecreaseQualityProduct()} />
+                                            <input aria-label="quantity" className="input-qty" name="" type="number" value={this.state.value} />
+                                            <input className="plus is-form" type="button" value="+" onClick={() => this.handleIncreaseQualityProduct()} />
+                                        </div>
+                                    </div>
 
                                     <div className='add-btn'>
                                         <input className="add-to-cart-btn" type="button" value="Add To Cart" />

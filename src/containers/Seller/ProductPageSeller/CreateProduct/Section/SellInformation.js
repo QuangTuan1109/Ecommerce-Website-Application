@@ -468,8 +468,6 @@ class SellInformation extends Component {
         const { discounts, showClassification, input1Value, input1classify2Value, input2List, showAdditionalInfo2, inputclassify2List, showPriceAndQuantity,
             showClassification2, showDiscount } = this.state;
 
-            console.log(input2List)
-
         return (
             <div className='container'>
                 <h2>Sales Information</h2>

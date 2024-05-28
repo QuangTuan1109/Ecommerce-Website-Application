@@ -116,6 +116,7 @@ class DetailProduct extends Component {
                 </div>
             );
         }
+        console.log(product)
 
         return (
             <div className='detail-product-seller-container'>
@@ -202,19 +203,19 @@ class DetailProduct extends Component {
                         <div className="section">
                             <div className='sales-container'>
                                 <h2>Sales Information</h2>
-                                {product.classifyDetails && (
+                                {product.Classify && (
                                     <div className="classification-container">
                                         <div className="classify-group">
                                             <div className="product-table">
                                                 <table>
                                                     <tbody>
                                                         <tr>
-                                                            {product.classifyDetails.slice(0).map((item, index) => (
+                                                            {product.Classify.slice(0).map((item, index) => (
                                                                 <th colSpan={item.Options[0].Value2 ? "5" : "4"} key={index}>Variation List</th>
                                                             ))}
                                                         </tr>
                                                         <tr className="product-row">
-                                                            {product.classifyDetails.slice(0).map((item, index) => (
+                                                            {product.Classify.slice(0).map((item, index) => (
                                                                 <>
                                                                     <td style={{ width: '20%' }}>{item.Options[0].Option1}</td>
                                                                     {item.Options[0].Value2 && <td style={{ width: '20%' }}>{item.Options[0].Option2}</td>}
@@ -224,7 +225,7 @@ class DetailProduct extends Component {
                                                             <td style={{ width: '20%' }}>Stock</td>
                                                             <td style={{ width: '20%' }}>SKU</td>
                                                         </tr>
-                                                        {product.classifyDetails.slice(0).map((item, index) => (
+                                                        {product.Classify.slice(0).map((item, index) => (
                                                             item.Options.map((option, optionIndex) => (
                                                                 <tr className="row-content" key={`${index}-${optionIndex}`}>
                                                                     <td>
@@ -373,7 +374,7 @@ class DetailProduct extends Component {
                                         </div>
                                     </div>
                                     <div className="content-section">
-                                        {(product.Length && product.Height && product.Width) && (
+                                        {(product.Length != null && product.Height != null && product.Width!= null ) && (
                                             <>
                                                 <div className="label-container">
                                                     <label className="label-name">Parcel Size</label>

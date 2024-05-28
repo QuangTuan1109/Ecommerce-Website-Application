@@ -240,7 +240,7 @@
 
                             label {
                                 font-size: 17px;
-                                margin-right: 10px;
+                                margin: 10px;
                             }
 
 
@@ -249,7 +249,7 @@
                             }
 
                             .custom-radio {
-                                width: 80px;
+                                width: 100px;
                                 height: 25px;
                                 border-radius: 20px;
                                 font-size: 14px;
@@ -273,7 +273,6 @@
                         }
 
                         .add-btn {
-                            margin-top: 370px;
                             margin-right: 10px;
                             display: flex;
                             justify-content: end;

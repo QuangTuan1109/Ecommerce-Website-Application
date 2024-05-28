@@ -72,7 +72,7 @@ class updateSale extends Component {
                  const uniqueOptions1 = Array.from(new Set(responseClassify.data.Options.map(item => item.Value1)))
                      .map(value1 => {
                          const value = responseClassify.data.Options.find(item => item.Value1 === value1);
-                         return { text: value1, imageSrc: value.imageSrc ? value.imageSrc : null };
+                         return { text: value1, imageSrc: value.Image[0] ? value.Image[0] : null };
                      });
          
                  const uniqueOptions2 = Array.from(new Set(responseClassify.data.Options.map(item => item.Value2)))
