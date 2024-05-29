@@ -9,6 +9,7 @@ import avt from '../../../assets/images/avatar.png'
 import './DetailProduct.scss';
 import axios from '../../../axios'
 import { formatCurrency } from '../../../method/handleMethod'
+import CustomPopup from '../../../components/CustomPopup';
 
 import Slider from 'react-slick'
 import { width } from '@fortawesome/free-solid-svg-icons/fa0';
@@ -18,10 +19,15 @@ class DetailProduct extends Component {
         super(props);
         this.state = {
             product: {},
-            value: 1,
             mainImage: '',
-            option1: null,
-            option2: null
+            Value1: null,
+            Value2: null,
+            Option1: null,
+            Option2: null,
+            Quantity: 1,
+            unitPrice: null,
+            popupType: '',
+            onConfirm: null
         };
     }
 
@@ -36,29 +42,61 @@ class DetailProduct extends Component {
                 'Authorization': localStorage.getItem('accessToken')
             }
         })
-            .then(response => this.setState({ product: response, mainImage: response.Image[0] }))
+            .then(response => this.setState({ 
+                product: response, 
+                mainImage: response.Image[0],
+                unitPrice: response.Classify ? null : response.Price
+            }))
             .catch(error => {
                 console.error('Error fetching data:', error);
             });
     }
 
+    handleAddToCartButton() {
+        const { productId } = this.props.match.params;
+        const formData = {
+            Option1: this.state.Option1,
+            Value1: this.state.Value1,
+            Option2: this.state.Option2,
+            Value2: this.state.Value2,
+            Quantity: this.state.Quantity,
+            Price: this.state.unitPrice
+        }
+
+        try {
+            axios.post(`http://localhost:5000/api/v1/order/${productId}/add-to-cart`, formData, {
+                headers: {
+                    'Authorization': localStorage.getItem('accessToken')
+                }
+            })
+            .then(response => {
+                this.showPopup('Successfully!', 'successful', this.handleSuccess);
+            })
+            .catch(error => {
+                this.showPopup('Failed to add to cart.', 'error', this.handleFailure);
+            });
+        } catch (error) {
+            this.showPopup('Failed to add to cart.', 'error', this.handleFailure);
+        }       
+    }
+
     handleIncreaseQualityProduct() {
         this.setState((prevState, props) => {
             return {
-                value: prevState.value + 1
+                Quantity: prevState.Quantity + 1
             }
         })
     }
 
     handleDecreaseQualityProduct() {
         this.setState((prevState, props) => {
-            if (prevState.value == 1) {
+            if (prevState.Quantity == 1) {
                 return {
-                    value: prevState.value = 1
+                    Quantity: prevState.Quantity = 1
                 }
             } else {
                 return {
-                    value: prevState.value - 1
+                    Quantity: prevState.Quantity - 1
                 }
             }
         })
@@ -72,14 +110,52 @@ class DetailProduct extends Component {
         this.setState({ mainImage: this.state.product.Image[0] });
     }
 
-    handleOption1Change = (value) => {
-        this.setState({ option1: value });
+    handleOption1Change = (value, option) => {
+        this.setState({ Value1: value, Option1: option });
     };
 
-    handleOption2Change = (value) => {
-        this.setState({ option2: value });
+    handleOption2Change = (value, option) => {
+        this.setState({ Value2: value, Option2: option });
     };
 
+    handleSuccess = () => {
+        this.closePopup();
+        this.setState({
+            Value2: null,
+            Value1: null,
+            Option1: null,
+            Option2: null,
+            Quantity: 1
+        })
+        this.props.history.push('/cart');
+    }
+
+    handleFailure = () => {
+        this.closePopup();
+    }
+
+    confirmCancel = () => {
+        this.closePopup();
+        this.props.history.goBack();
+    }
+
+    showPopup = (message, type, onConfirm = null) => {
+        this.setState({
+            popupVisible: true,
+            popupMessage: message,
+            popupType: type,
+            onConfirm: onConfirm
+        });
+    }
+
+    closePopup = () => {
+        this.setState({
+            popupVisible: false,
+            popupMessage: '',
+            popupType: '',
+            onConfirm: null
+        });
+    }
 
     render() {
         let settings = {
@@ -90,10 +166,10 @@ class DetailProduct extends Component {
             slidesToScroll: 1,
         };
 
-        const { product, mainImage } = this.state
+        const { product, mainImage, popupVisible, popupMessage, popupType, onConfirm } = this.state
 
         return (
-            <div className={`detail-container`}>
+            <div className='detail-container'>
                 <div className='detail-header'>
                     <HeaderHomepage />
                 </div>
@@ -165,30 +241,39 @@ class DetailProduct extends Component {
                                         <div className='option2-part'>
                                             <label>{product.Classify[0].Options[0].Option2}: </label>
                                             {[...new Set(product.Classify[0].Options.map(option => option.Value2))].map((value, index) => (
-                                                <label key={index} className={"custom-radio" + (this.state.option2 === value ? " checked" : "")}>
-                                                    <input type="radio" name="option2" value={value} onClick={() => this.handleOption2Change(value)} checked={this.state.option2 === value} />
+                                                <label key={index} className={"custom-radio" + (this.state.Value2 === value ? " checked" : "")}>
+                                                    <input
+                                                        type="radio"
+                                                        name="option2"
+                                                        value={value}
+                                                        onClick={() => this.handleOption2Change(value, product.Classify[0].Options[0].Option2)}
+                                                        checked={this.state.Value2 === value}
+                                                    />
                                                     {value}
                                                 </label>
                                             ))}
                                         </div>
                                     )}
+
                                     {product.Classify && product.Classify.length > 0 && (
                                         <div className='option1-part'>
                                             <label>{product.Classify[0].Options[0].Option1}: </label>
                                             {product.Classify[0].Options.map((option, index) => (
                                                 index === 0 || option.Value1 !== product.Classify[0].Options[index - 1].Value1 ? (
                                                     <>
-                                                    <img src={option.Image} width='50px' height='50px' alt={`Images ${index}`} />
-                                                    <label key={index} className={"custom-radio" + (this.state.option1 === option.Value1 ? " checked" : "")}>
-                                                        <input
-                                                            type="radio"
-                                                            name="option1"
-                                                            value={option.Value1}
-                                                            onClick={() => this.handleOption1Change(option.Value1)}
-                                                            checked={this.state.option1 === option.Value1}
-                                                        />
-                                                        {option.Value1}
-                                                    </label>
+                                                        {option.Image && (
+                                                            <img src={option.Image} width='50px' height='50px' alt={`Images ${index}`} />
+                                                        )}
+                                                        <label key={index} className={"custom-radio" + (this.state.Value1 === option.Value1 ? " checked" : "")}>
+                                                            <input
+                                                                type="radio"
+                                                                name="option1"
+                                                                value={option.Value1}
+                                                                onClick={() => this.handleOption1Change(option.Value1, option.Option1)}
+                                                                checked={this.state.Value1 === option.Value1}
+                                                            />
+                                                            {option.Value1}
+                                                        </label>
                                                     </>
                                                 ) : null
                                             ))}
@@ -198,13 +283,13 @@ class DetailProduct extends Component {
                                         <div className='quantity-part'>
                                             <label>Quantity: </label>
                                             <input className="minus is-form" type="button" value="-" onClick={() => this.handleDecreaseQualityProduct()} />
-                                            <input aria-label="quantity" className="input-qty" name="" type="number" value={this.state.value} />
+                                            <input aria-label="quantity" className="input-qty" name="" type="number" value={this.state.Quantity} />
                                             <input className="plus is-form" type="button" value="+" onClick={() => this.handleIncreaseQualityProduct()} />
                                         </div>
                                     </div>
 
                                     <div className='add-btn'>
-                                        <input className="add-to-cart-btn" type="button" value="Add To Cart" />
+                                        <input className="add-to-cart-btn" onClick={() => this.handleAddToCartButton()} type="button" value="Add To Cart" />
                                         <input className="buy-btn" type="button" value="Buy Now" />
                                     </div>
                                     <div className='social-like-part'>
@@ -223,38 +308,37 @@ class DetailProduct extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div className='seler-information'>
-                            <div className='seller-infor'>
-                                <div className='avt-seller-part'>
-                                    <img src={avt} alt={'avt'} />
-                                    <div className='name-seller'>
-                                        <h5>Lê Quang Tuấn</h5>
-                                        <small>Online 2h ago</small>
+                        {product.SellerID && (
+                            <div className='seler-information'>
+                                <div className='seller-infor'>
+                                    <div className='avt-seller-part'>
+                                        <img src={product.SellerID.Image} alt={'avt'} />
+                                        <div className='name-seller'>
+                                            <h5>{product.SellerID.Fullname}</h5>
+                                            <small>Online 2h ago</small>
+                                        </div>
+                                    </div>
+                                    <div className='information'>
+                                        <div className='contact-btn'>
+                                            <Link to='/' className='contact-btn-link'><i class="fas fa-comment"> Chat now</i></Link>
+                                            <div className="vertical-line"></div>
+                                            <Link to='/' className='contact-btn-link'><i class="fas fa-eye"> See shop</i></Link>
+                                        </div>
                                     </div>
                                 </div>
-                                <div className='information'>
-                                    <div className='contact-btn'>
-                                        <Link to='/' className='contact-btn-link'><i class="fas fa-comment"> Chat now</i></Link>
-                                        <div className="vertical-line"></div>
-                                        <Link to='/' className='contact-btn-link'><i class="fas fa-eye"> See shop</i></Link>
+                                <div className='seller-detail-infor'>
+                                    <div>
+                                        <h5>Rating: <span>16,5k</span></h5>
+                                        <h5>Products: <span>812</span></h5>
+                                    </div>
+                                    <div>
+                                        <h5>Joining: <span>3 months</span></h5>
+                                        <h5>Follower: <span>31.2k</span></h5>
                                     </div>
                                 </div>
                             </div>
-                            <div className='seller-detail-infor'>
-                                <div>
-                                    <h5>Rating: <span>16,5k</span></h5>
-                                    <h5>Products: <span>812</span></h5>
-                                </div>
-                                <div>
-                                    <h5>Rating: <span>16,5k</span></h5>
-                                    <h5>Products: <span>812</span></h5>
-                                </div>
-                                <div>
-                                    <h5>Joining: <span>3 months</span></h5>
-                                    <h5>Follower: <span>31.2k</span></h5>
-                                </div>
-                            </div>
-                        </div>
+
+                        )}
                         <div className='product-detail'>
                             <div className='block-tabs'>
                                 <input type='radio' id='description' name='mytabs' />
@@ -703,6 +787,14 @@ class DetailProduct extends Component {
                             </div>
                         </div>
                     </div>
+                    {popupVisible && (
+                            <CustomPopup
+                                message={popupMessage}
+                                type={popupType}
+                                onClose={this.closePopup}
+                                onConfirm={onConfirm}
+                            />
+                        )}
                     <AboutUs />
                     <FooterHomepage />
                 </div>

@@ -74,14 +74,14 @@ class Header extends Component {
                             </div>
                         </div>
                         <div className="avatar">
-                            {User.user.CustomerID.Image ? (
+                            {User.user.SellerID.Image ? (
                                 <img src={User.user.SellerID.Image} alt='avt' className="avatar-img" />
                             ) : (
                                 <div className="avatar-img">{firstInitial}</div>
                             )}
                             <div className="seller-name">{User.user.SellerID.Fullname}</div>
                             <div className="seller-info-box">
-                                {User.user.CustomerID.Image ? (
+                                {User.user.SellerID.Image ? (
                                     <img src={User.user.SellerID.Image} alt='avt' className="avatar-img-in-box" />
                                 ) : (
                                     <div className="avatar-img-in-box">{firstInitial}</div>

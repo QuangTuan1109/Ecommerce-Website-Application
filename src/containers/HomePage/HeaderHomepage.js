@@ -129,7 +129,7 @@ class HeaderHomepage extends Component {
                                     <div className='right-content-sec2'>
                                         <div className='user-features'>
                                             <Link to='/' className='component-link'><i className="fas fa-heart"></i></Link>
-                                            <Link to='/' className='component-link'><i className="fas fa-shopping-cart"></i></Link>
+                                            <Link to='/cart' className='component-link'><i className="fas fa-shopping-cart"></i></Link>
                                             <Link to='/' className='component-link'><i className="fas fa-comment-alt"></i></Link>
                                             <div className='notification-section'>
                                                 <div className='notification-icon'>
@@ -171,7 +171,7 @@ class HeaderHomepage extends Component {
                                                     {User.user.CustomerID.Image ? (
                                                         <img src={User.user.CustomerID.Image} alt='avt' className="avatar-img" />
                                                     ) : (
-                                                        <div className="avatar-img">{User.user.CustomerID.Image}</div>
+                                                        <div className="avatar-img">{firstInitial}</div>
                                                     )}
                                                     <div className='menu'>
                                                         <h3>{User.user.CustomerID.Fullname}</h3>
