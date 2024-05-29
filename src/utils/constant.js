@@ -9,6 +9,7 @@ export const path = {
     NEWS: '/news',
     DETAIL_PRODUCT_PAGE: '/product/detail/:productId',
     CART: '/cart',
+    CHECKOUT: '/checkout',
     HOMEPAGESELLER: '/seller',
     CREATEPRODUCT: '/create-product',
     ALLPRODUCT: '/all-product',

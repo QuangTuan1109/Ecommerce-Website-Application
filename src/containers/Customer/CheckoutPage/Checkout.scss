@@ -1,0 +1,105 @@
+.checkout-container {
+    height: 100vh;
+
+    .checkout-body {
+        height: 100%;
+        overflow-y: auto;
+        
+        .checkout-content {
+            padding: 20px;
+
+            .delivery-address-section {
+                margin: 0px 100px;
+                padding: 20px;
+                background-color: #ccc;
+    
+            }
+    
+            .product-section {
+                margin: 15px 100px;
+                padding: 20px;
+                background-color: #ccc;
+
+                .product-cart-item {
+                    padding: 10px;
+                    margin: 15px 0;
+                    background-color: #fff;
+                    
+                    .product-info {
+                        display: flex;
+                        border-bottom: 1px solid #444;
+
+                        .product-name {
+                            font-size: 15px;
+                            width: 25%;
+                            margin: 15px;
+                            
+                            label {
+                                font-weight: bold;
+                            }
+                        }
+
+                        .product-param {
+                            display: flex;
+                            flex-direction: row;
+                            justify-content: space-between;
+                            width: 50%;
+                            margin: 15px 0 30px 200px;
+                            font-size: 15px;
+
+                            span {
+                                font-weight: bold;
+                            }
+                        }
+
+                    }
+
+                    .voucher {
+                        display: flex;
+                        justify-content: flex-end;
+                        margin: 20px 0;
+
+                        .voucher-btn {
+                            background: none;
+                            border: none;
+                            padding: 0;
+                            margin: 0;
+                            cursor: pointer;
+
+                            span {
+                                color: #78a206;
+                                font-size: 15px;
+                                &:hover {
+                                    color: #750c0c
+                                }
+                            }
+
+                        }
+                    }
+
+                    .note {
+                        border-top: 1px solid #444;
+                    }
+                }
+            }
+    
+            .voucher-section {
+                margin: 15px 100px;
+                padding: 20px;
+                background-color: #ccc;
+            }
+    
+            .delivery-information {
+                margin: 15px 100px;
+                padding: 20px;
+                background-color: #ccc;
+            }
+    
+            .checkout {
+                margin: 15px 100px;
+                padding: 20px;
+                background-color: #ccc;
+            }
+        }
+    }
+}

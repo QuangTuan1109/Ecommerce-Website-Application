@@ -23,6 +23,7 @@ import Products from './Customer/ProductsPage/Products';
 import DetailProduct from './Customer/ProductsPage/DetailProduct';
 import News from './Customer/NewsPage/News'
 import Cart from './Customer/CartPage/Cart';
+import Checkout from './Customer/CheckoutPage/Checkout'
 import Homepage from './Seller/HomepageSeller/Homepage'
 import CreateProduct from './Seller/ProductPageSeller/CreateProduct/CreateProduct'
 import AllProduct from './Seller/ProductPageSeller/AllProduct/AllProduct'
@@ -67,6 +68,7 @@ class App extends Component {
                                     <Route path={path.DETAIL_PRODUCT_PAGE} component={userIsAuthenticated(DetailProduct)}></Route>
                                     <Route path={path.NEWS} component={userIsAuthenticated(News)}></Route>
                                     <Route path={path.CART} component={userIsAuthenticated(Cart)}></Route>
+                                    <Route path={path.CHECKOUT} component={userIsAuthenticated(Checkout)}></Route>
                                     <Route path={path.HOMEPAGESELLER} component={userIsAuthenticated(Homepage)}></Route>
                                     <Route path={path.CREATEPRODUCT} component={userIsAuthenticated(CreateProduct)}></Route>
                                     <Route path={path.ALLPRODUCT} component={userIsAuthenticated(AllProduct)}></Route>
