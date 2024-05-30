@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter } from "react-router-dom";
+import { withRouter, Prompt } from "react-router-dom";
 import { connect } from "react-redux";
 
 import HeaderHomepage from '../../HomePage/HeaderHomepage';
@@ -22,13 +22,13 @@ class Checkout extends Component {
             selectedVoucher: null,
             deliveryMethod: '',
             totalAmount: 0,
+            selectedDeliveryOptions: {},
+            isBlocking: true,
+            voucherShop: null
         };
     }
 
     componentDidMount() {
-        // this.fetchAddress();
-        // this.fetchVouchers();
-
         const totalPayment = localStorage.getItem('totalPayment');
         const selectProductCart = localStorage.getItem('selectProductCart');
 
@@ -38,7 +38,45 @@ class Checkout extends Component {
         if (selectProductCart) {
             this.setState({ productCart: JSON.parse(selectProductCart) });
         }
+
+        if (selectProductCart) {
+            // Parse productCart from localStorage
+            const productCart = JSON.parse(selectProductCart);
+            // Set default delivery method and fee for each product
+            const updatedProductCart = productCart.map(item => ({
+                ...item,
+                deliveryMethod: item.ProductID.deliveryFee[0].name,
+                deliveryFee: item.ProductID.deliveryFee[0].fee,
+                totalAmountPerProduct: item.TotalPrices + item.ProductID.deliveryFee[0].fee,
+            }));
+            this.setState({ productCart: updatedProductCart });
+        }
+
+        window.addEventListener('beforeunload', this.handleBeforeUnload);
     }
+
+    componentWillUnmount() {
+        window.removeEventListener('beforeunload', this.handleBeforeUnload);
+        localStorage.removeItem('selectProductCart');
+        localStorage.removeItem('totalPayment');
+    }
+
+    handleBeforeUnload = (event) => {
+        if (this.state.isBlocking) {
+            event.preventDefault();
+            event.returnValue = '';
+        }
+    };
+
+    handleLeavePage = (location) => {
+        const userConfirmed = window.confirm("Bạn có chắc chắn muốn rời khỏi trang này? Giỏ hàng và thông tin thanh toán của bạn sẽ bị xóa.");
+        if (userConfirmed) {
+            localStorage.removeItem('selectProductCart');
+            localStorage.removeItem('totalPayment');
+            return true; // Cho phép điều hướng
+        }
+        return false; // Chặn điều hướng
+    };
 
     fetchAddress() {
         // Fetch customer address from API
@@ -74,15 +112,34 @@ class Checkout extends Component {
         this.setState({ deliveryMethod: method });
     }
 
+    handleDeliveryOptionChange = (e, productId, fee) => {
+        const { value } = e.target;
+        this.setState(prevState => ({
+            productCart: prevState.productCart.map(item => {
+                if (item.ProductID._id === productId) {
+                    return {
+                        ...item,
+                        deliveryMethod: value,
+                        deliveryFee: fee,
+                        totalAmountPerProduct: item.TotalPrices + fee
+                    };
+                }
+                return item;
+            })
+        }));
+    };
+
+
     handleCheckout = () => {
         // Handle the checkout process
-        const { address, productCart, selectedVoucher, deliveryMethod } = this.state;
+        const { address, productCart, selectedVoucher, deliveryMethod, selectedDeliveryOptions } = this.state;
         // Construct checkout data and send to API
         const checkoutData = {
             address,
             productCart,
             voucher: selectedVoucher,
-            deliveryMethod
+            deliveryMethod,
+            deliveryOptions: selectedDeliveryOptions
         };
         // Call the API to complete the checkout process
         axios.post(`http://localhost:5000/api/v1/order/checkout`, checkoutData, {
@@ -91,6 +148,7 @@ class Checkout extends Component {
             }
         })
             .then(res => {
+                this.setState({ isBlocking: false });
                 this.showPopup('Checkout successful!', 'successful', this.handleSuccess);
             })
             .catch(error => {
@@ -130,10 +188,15 @@ class Checkout extends Component {
     }
 
     render() {
-        const { popupVisible, popupMessage, popupType, onConfirm, address, productCart, voucherList, selectedVoucher, deliveryMethod, totalAmount } = this.state;
+        const { popupVisible, popupMessage, popupType, onConfirm, address, productCart, voucherList, selectedVoucher, deliveryMethod, totalAmount, voucherShop } = this.state;
+        console.log(productCart)
 
         return (
             <div className='checkout-container'>
+                <Prompt
+                    when={this.state.isBlocking}
+                    message={(location) => this.handleLeavePage(location)}
+                />
                 <div className='checkout-header'>
                     <HeaderHomepage />
                 </div>
@@ -142,20 +205,20 @@ class Checkout extends Component {
                         {/* Delivery Address Section */}
                         <div className='delivery-address-section'>
                             <h3>Địa Chỉ Nhận Hàng</h3>
-                            {address ? (
-                                <div>
-                                    <span>{address.name} ({address.phone})</span>
-                                    <span>{address.address}</span>
-                                    <button onClick={() => this.showPopup('Edit Address', 'edit', this.confirmCancel)}>Thay Đổi</button>
-                                </div>
-                            ) : (
-                                <div>No address available</div>
-                            )}
+                            <div>
+                                {/* <input
+                                    type="radio"
+                                    name={`deliveryOption-${item.ProductID._id}`}
+                                    value={deli.name}
+                                    checked={item.deliveryMethod === deli.name}
+                                    onChange={(e) => this.handleDeliveryOptionChange(e, item.ProductID._id, deli.fee)}
+                                /> */}
+                            </div>
                         </div>
 
                         {/* Product Section */}
                         <div className='product-section'>
-                            <h3>Sản phẩm</h3>
+                            <h3>Products</h3>
                             {productCart.length > 0 ? (
                                 productCart.map((item, index) => (
                                     <div key={index} className='product-cart-item'>
@@ -179,9 +242,64 @@ class Checkout extends Component {
                                             </button>
                                         </div>
                                         <div className='note'>
-                                            <button className='voucher-btn'>
-                                                <span>Select voucher</span>
-                                            </button>
+                                            <div className='note-part'>
+                                                <label className='note-title'>Note: </label>
+                                                <input type='text' placeholder='Note to seller...' />
+                                            </div>
+                                            <div className='delivery-part'>
+                                                <span>Đơn vị vận chuyển</span>
+                                                <div className='delivery-btn'>
+                                                    {item.ProductID.deliveryFee.map((deli, index) => (
+                                                        <label
+                                                            key={index}
+                                                            className={`delivery-option ${item.deliveryMethod === deli.name ? 'selected' : ''}`}
+                                                        >
+                                                            <input
+                                                                type="radio"
+                                                                name={`deliveryOption-${item.ProductID._id}`}
+                                                                value={deli.name}
+                                                                checked={item.deliveryMethod === deli.name}
+                                                                onChange={(e) => this.handleDeliveryOptionChange(e, item.ProductID._id, deli.fee)}
+                                                            />
+                                                            {deli.name} : {formatCurrency(deli.fee)}
+                                                        </label>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className='total-amount'>
+                                            <div className='ingredient-price'>
+                                                <div className='label-price'>
+                                                    <label>The total amount ({item.Quantity} products):</label>
+                                                </div>
+                                                <div className='value-price'>
+                                                    <span>{formatCurrency(item.TotalPrices)}</span>
+                                                </div>
+                                            </div>
+                                            {/* {voucherShop && (
+                                                <div className='ingredient-price'><p>The total amount: <span>{formatCurrency(item.TotalPrices)}</span></p></div>
+                                            )} */}
+                                            {item.deliveryMethod && (
+                                                <div className='ingredient-price'>
+                                                    <div className='label-price'>
+                                                        <label>Transport fee: </label>
+                                                    </div>
+                                                    <div className='value-price'>
+                                                        <span>{formatCurrency(item.deliveryFee)}</span>
+                                                    </div>
+                                                </div>
+                                            )}
+                                            <div className='ingredient-price'>
+                                                <div className='label-price'>
+                                                    <label>Total cost of goods: </label>
+                                                </div>
+                                                <div className='value-price'>
+                                                    <span className='total-amount-product'>{formatCurrency(voucherShop
+                                                        ? item.totalAmountPerProduct - voucherShop
+                                                        : item.totalAmountPerProduct
+                                                    )}</span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 ))
@@ -209,51 +327,42 @@ class Checkout extends Component {
                             )}
                         </div>
 
-                        {/* Delivery Information Section */}
-                        <div className='delivery-information'>
-                            <h3>Thông Tin Vận Chuyển</h3>
-                            <select value={deliveryMethod} onChange={(e) => this.handleDeliveryMethodChange(e.target.value)}>
-                                <option value=''>Select Delivery Method</option>
-                                <option value='standard'>Standard Delivery</option>
-                                <option value='express'>Express Delivery</option>
-                            </select>
+                        {/* Total Amount Section */}
+                        <div className='total-amount-section'>
+                            <h3>Total Amount</h3>
+                            <span>{formatCurrency(totalAmount)}</span>
                         </div>
 
-                        {/* Checkout Section */}
-                        <div className='checkout'>
-                            <h3>Thanh toán</h3>
-                            <div>Tổng tiền hàng: {formatCurrency(totalAmount)}</div>
-                            <div>
-                                <button onClick={this.handleCheckout}>Đặt hàng</button>
-                            </div>
+                        {/* Checkout Button */}
+                        <div className='checkout-button'>
+                            <button onClick={this.handleCheckout}>Thanh Toán</button>
                         </div>
                     </div>
-
-                    {popupVisible && (
-                        <CustomPopup
-                            message={popupMessage}
-                            type={popupType}
-                            onClose={this.closePopup}
-                            onConfirm={onConfirm}
-                        />
-                    )}
-                    <AboutUs />
-                    <FooterHomepage />
+                    <div className='checkout-footer'>
+                        <AboutUs />
+                        <FooterHomepage />
+                    </div>
                 </div>
+                {popupVisible && (
+                    <CustomPopup
+                        message={popupMessage}
+                        type={popupType}
+                        onConfirm={onConfirm}
+                        onClose={this.closePopup}
+                    />
+                )}
             </div>
         );
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        isLoggedIn: state.customer.isLoggedIn,
-    };
-};
+const mapStateToProps = (state) => ({
+    isLoggedIn: state.customer.isLoggedIn,
+});
 
-const mapDispatchToProps = dispatch => {
-    return {
-    };
-};
+const mapDispatchToProps = (dispatch) => ({
+    // Map your dispatch to props
+});
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Checkout));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Checkout));
+

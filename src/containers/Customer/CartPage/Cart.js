@@ -25,10 +25,10 @@ class Cart extends Component {
     componentDidMount() {
         this.fetchProductCart();
         const selectProductCartFromStorage = localStorage.getItem('selectProductCart');
-    if (selectProductCartFromStorage) {
-        const selectProductCart = JSON.parse(selectProductCartFromStorage);
-        this.setState({ selectProductCart });
-    }
+        if (selectProductCartFromStorage && !this.props.selectedProductsFromProps) {
+            const selectProductCart = JSON.parse(selectProductCartFromStorage);
+            this.setState({ selectProductCart });
+        }
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -93,17 +93,17 @@ class Cart extends Component {
     }
 
     handleBuyProductCart() {
-    const { selectProductCart, totalPayment } = this.state;
-
-    if (selectProductCart.length > 0) {
-        localStorage.setItem('selectProductCart', JSON.stringify(selectProductCart));
-        localStorage.setItem('totalPayment', totalPayment.toString());
-
-        this.props.history.push('/checkout');
-    } else {
-        this.showPopup('No products selected for checkout.', 'error', this.handleFailure);
+        const { selectProductCart, totalPayment } = this.state;
+    
+        if (selectProductCart.length > 0) {
+            localStorage.setItem('selectProductCart', JSON.stringify(selectProductCart));
+            localStorage.setItem('totalPayment', totalPayment.toString());
+    
+            this.props.history.push('/checkout');
+        } else {
+            this.showPopup('No products selected for checkout.', 'error', this.handleFailure);
+        }
     }
-}
 
 
     handleQuantityChange = (amount) => {
