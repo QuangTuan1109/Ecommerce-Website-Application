@@ -1,0 +1,212 @@
+.create-voucher-container {
+    height: 100vh;
+    
+    .body {
+        padding: 20px 20% 100px 20%;
+        background-color: #444;
+        height: 100%;
+        overflow-y: auto;
+
+        .voucher-basic-infor, .voucher-setup-infor, .product-apply {
+            border: 1px solid #444;
+            background-color: #ccc;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+
+            .title-component {
+                font-size: 20px;
+                margin-bottom: 10px;
+            }
+
+            .basic-form {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .basic-content {
+                margin-bottom: 10px;
+                display: flex;
+                flex-direction: column;
+
+                &:last-child {
+                    margin-right: 0;
+                }
+
+                .label-content {
+                    display: block;
+                    font-weight: bold;
+                    margin-bottom: 5px;
+                }
+
+                .input-content {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+
+                    input[type='text'], input[type='number'], input[type='datetime-local'] {
+                        padding: 5px;
+                        border: 1px solid #ccc;
+                        background-color: #2c2c2c;
+                        border-radius: 5px;
+                        color: #ddd;
+                        margin-right: 10px;
+                        width: 100%;
+                    }
+
+                    .input-select {
+                        width: 100px;
+                        margin-top: 10px;
+                    }
+                }
+
+                select {
+                    padding: 5px;
+                    border: 1px solid #ccc;
+                    background-color: #2c2c2c;
+                    border-radius: 5px;
+                    color: #ddd;
+                    margin-right: 10px;
+                }
+
+                .time-inputs {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                }
+            }
+        }
+
+        .product-apply {
+            .header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 10px;
+                background-color: #333;
+                color: #fff;
+                border-bottom: 1px solid #ccc;
+
+                .close-btn {
+                    background-color: #444;
+                    color: #fff;
+                    border: none;
+                    border-radius: 5px;
+                    padding: 5px 10px;
+                    cursor: pointer;
+                }
+            }
+
+            .filter-section {
+                padding: 10px;
+                display: flex;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 10px;
+                background-color: #555;
+                border-bottom: 1px solid #ccc;
+
+                label {
+                    color: #fff;
+                    margin-right: 5px;
+                }
+
+                select, input[type="text"] {
+                    padding: 5px;
+                    border: 1px solid #ccc;
+                    background-color: #2c2c2c;
+                    border-radius: 5px;
+                    color: #ddd;
+                }
+
+                .search-btn, .reset-btn {
+                    background-color: #007bff;
+                    color: #fff;
+                    padding: 5px 10px;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                }
+
+                .checkbox-label {
+                    display: flex;
+                    align-items: center;
+                    color: #fff;
+
+                    input[type="checkbox"] {
+                        margin-right: 5px;
+                    }
+                }
+            }
+
+            .product-list {
+                padding: 10px;
+                background-color: #666;
+
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    
+                    th, td {
+                        text-align: center;
+                        padding: 10px;
+                        border: 1px solid #ccc;
+                        color: #fff;
+                    }
+
+                    th {
+                        background-color: #444;
+                    }
+
+                    .no-product {
+                        text-align: center;
+                        color: #ccc;
+
+                        .no-product-icon {
+                            background: no-repeat center center;
+                            width: 50px;
+                            height: 50px;
+                            margin: 0 auto;
+                        }
+                    }
+                }
+            }
+        }
+
+        .cancel-btn,
+        .save-btn, {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+            color: #fff;
+    
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+
+        .cancel-btn {
+            background-color: #000;
+        }
+
+        .save-btn {
+            background-color: #28a745;
+        }
+
+        .select-btn {
+            background-color: red; /* Màu đỏ mặc định */
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 50%;
+
+        }
+
+        .selected {
+            background-color: green; /* Màu xanh khi đã chọn */
+            color: white; /* Màu chữ trắng */
+        }
+    }
+}

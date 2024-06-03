@@ -29,6 +29,8 @@ import CreateProduct from './Seller/ProductPageSeller/CreateProduct/CreateProduc
 import AllProduct from './Seller/ProductPageSeller/AllProduct/AllProduct'
 import DetailProductSeller from './Seller/ProductPageSeller/DetailProduct/DetailProduct';
 import UpdateProduct from './Seller/ProductPageSeller/DetailProduct/UpdateProduct';
+import VoucherList from './Seller/MarketingSeller/Voucher/VoucherList/VoucherList';
+import AddVoucher from './Seller/MarketingSeller/Voucher/AddVoucher/AddVoucher';
 
 class App extends Component {
 
@@ -74,6 +76,8 @@ class App extends Component {
                                     <Route path={path.ALLPRODUCT} component={userIsAuthenticated(AllProduct)}></Route>
                                     <Route path={path.DETAILPRODUCTSELLER} component={userIsAuthenticated(DetailProductSeller)}></Route>
                                     <Route path={path.UPDATEPRODUCT} component={userIsAuthenticated(UpdateProduct)}></Route>
+                                    <Route path={path.VOUCHERLIST} component={userIsAuthenticated(VoucherList)}></Route>
+                                    <Route path={path.ADDVOUCHER} component={userIsAuthenticated(AddVoucher)}></Route>
                                 </Switch>
                         </div>
 

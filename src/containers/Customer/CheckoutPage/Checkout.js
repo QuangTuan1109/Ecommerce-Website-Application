@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { withRouter, Prompt } from "react-router-dom";
 import { connect } from "react-redux";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTag } from '@fortawesome/free-solid-svg-icons';
 
 import HeaderHomepage from '../../HomePage/HeaderHomepage';
 import AboutUs from '../../HomePage/Section/AboutUs';
@@ -16,16 +18,16 @@ class Checkout extends Component {
         this.state = {
             popupType: '',
             onConfirm: null,
-            address: null,
             productCart: [],
             voucherList: [],
-            selectedVoucher: null,
+            selectedVoucher: [],
             deliveryMethod: '',
             totalAmount: 0,
             selectedDeliveryOptions: {},
             isBlocking: true,
-            voucherShop: null
+            showVoucherPopup: {}
         };
+        this.currentPopupIndex = null;
     }
 
     componentDidMount() {
@@ -40,9 +42,7 @@ class Checkout extends Component {
         }
 
         if (selectProductCart) {
-            // Parse productCart from localStorage
             const productCart = JSON.parse(selectProductCart);
-            // Set default delivery method and fee for each product
             const updatedProductCart = productCart.map(item => ({
                 ...item,
                 deliveryMethod: item.ProductID.deliveryFee[0].name,
@@ -93,30 +93,51 @@ class Checkout extends Component {
             });
     }
 
-    fetchVouchers() {
-        // Fetch available vouchers from API
-        axios.get(`http://localhost:5000/api/v1/vouchers`)
-            .then(res => {
-                this.setState({ voucherList: res.data });
-            })
-            .catch(error => {
-                console.error('Error fetching vouchers:', error);
-            });
+    handleVoucherSelect = (voucher, productId, classifyDetail) => {
+        const { selectedVoucher } = this.state;
+    
+        const index = selectedVoucher.findIndex(item => item.productId === productId && item.classifyDetail === classifyDetail);
+    
+        if (index !== -1) {
+            const updatedSelectedVoucher = [...selectedVoucher];
+            const productVoucherIndex = updatedSelectedVoucher[index].vouchers.findIndex(v => v._id === voucher._id);
+    
+            if (productVoucherIndex !== -1) {
+                updatedSelectedVoucher[index].vouchers.splice(productVoucherIndex, 1);
+            } else {
+                updatedSelectedVoucher[index].vouchers.push(voucher);
+            }
+            this.setState({ selectedVoucher: updatedSelectedVoucher });
+        } else {
+            const newSelectedVoucher = {
+                productId: productId,
+                classifyDetail: classifyDetail,
+                vouchers: [voucher]
+            };
+            this.setState(prevState => ({
+                selectedVoucher: [...prevState.selectedVoucher, newSelectedVoucher]
+            }));
+        }
     }
+    
+    
 
-    handleVoucherSelect = (voucher) => {
-        this.setState({ selectedVoucher: voucher });
-    }
 
     handleDeliveryMethodChange = (method) => {
         this.setState({ deliveryMethod: method });
     }
 
-    handleDeliveryOptionChange = (e, productId, fee) => {
+    handleDeliveryOptionChange = (e, productId, classifyDetail, fee) => {
         const { value } = e.target;
         this.setState(prevState => ({
             productCart: prevState.productCart.map(item => {
-                if (item.ProductID._id === productId) {
+                const isMatchingProduct = classifyDetail 
+                ? item.ProductID._id === productId &&
+                  item.classifyDetail.Value1 === classifyDetail.Value1 &&
+                  item.classifyDetail.Value2 === classifyDetail.Value2
+                : item.ProductID._id === productId;
+
+                if (isMatchingProduct) {
                     return {
                         ...item,
                         deliveryMethod: value,
@@ -128,6 +149,7 @@ class Checkout extends Component {
             })
         }));
     };
+    
 
 
     handleCheckout = () => {
@@ -155,6 +177,26 @@ class Checkout extends Component {
                 this.showPopup('Checkout failed.', 'error', this.handleFailure);
             });
     }
+
+    toggleVoucherPopup = (index) => {
+        const { productCart, showVoucherPopup, currentPopupIndex } = this.state;
+        const updatedShowVoucherPopup = { ...showVoucherPopup };
+        updatedShowVoucherPopup[index] = currentPopupIndex === index ? !updatedShowVoucherPopup[index] : true;
+        this.setState({ showVoucherPopup: updatedShowVoucherPopup, currentPopupIndex: index });
+        
+        const product = productCart[index];
+        if (product && !product.voucherList) {
+            const sellerId = product.ProductID.SellerID;
+            axios.get(`http://localhost:5000/api/v1/promotion/get-voucher-seller/${sellerId}`)
+                .then(res => {
+                    const updatedProductCart = [...this.state.productCart];
+                    updatedProductCart[index].voucherList = res.data;
+                    this.setState({ productCart: updatedProductCart });
+                })
+                .catch(error => console.error(error));
+        }
+    };
+    
 
     handleSuccess = () => {
         this.closePopup();
@@ -188,8 +230,7 @@ class Checkout extends Component {
     }
 
     render() {
-        const { popupVisible, popupMessage, popupType, onConfirm, address, productCart, voucherList, selectedVoucher, deliveryMethod, totalAmount, voucherShop } = this.state;
-        console.log(productCart)
+        const { popupVisible, popupMessage, popupType, onConfirm, productCart, voucherList, selectedVoucher, deliveryMethod, totalAmount, showVoucherPopup } = this.state;
 
         return (
             <div className='checkout-container'>
@@ -220,89 +261,167 @@ class Checkout extends Component {
                         <div className='product-section'>
                             <h3>Products</h3>
                             {productCart.length > 0 ? (
-                                productCart.map((item, index) => (
-                                    <div key={index} className='product-cart-item'>
-                                        <div className='product-info'>
-                                            <div className='product-img'>
-                                                <img src={item.classifyDetail.Image ? item.classifyDetail.Image : item.ProductID.Image[0]} width='100px' height='100px' alt='Product' className='product-image' />
-                                            </div>
-                                            <div className='product-name'>
-                                                <label>{item.ProductID.Name}</label>
-                                                <span>Product Classification: {item.classifyDetail.Value1}, {item.classifyDetail.Value2}</span>
-                                            </div>
-                                            <div className='product-param'>
-                                                <div className='unit-price'><span>Unit Price:</span> {formatCurrency(item.classifyDetail ? item.classifyDetail.Price : item.ProductID.Price)}</div>
-                                                <div className='quantity'><span>Quantity:</span> {item.Quantity}</div>
-                                                <div className='total-price'><span>Total Price:</span> {formatCurrency(item.TotalPrices)}</div>
-                                            </div>
-                                        </div>
-                                        <div className='voucher'>
-                                            <button className='voucher-btn'>
-                                                <span>Select voucher</span>
-                                            </button>
-                                        </div>
-                                        <div className='note'>
-                                            <div className='note-part'>
-                                                <label className='note-title'>Note: </label>
-                                                <input type='text' placeholder='Note to seller...' />
-                                            </div>
-                                            <div className='delivery-part'>
-                                                <span>Đơn vị vận chuyển</span>
-                                                <div className='delivery-btn'>
-                                                    {item.ProductID.deliveryFee.map((deli, index) => (
-                                                        <label
-                                                            key={index}
-                                                            className={`delivery-option ${item.deliveryMethod === deli.name ? 'selected' : ''}`}
-                                                        >
-                                                            <input
-                                                                type="radio"
-                                                                name={`deliveryOption-${item.ProductID._id}`}
-                                                                value={deli.name}
-                                                                checked={item.deliveryMethod === deli.name}
-                                                                onChange={(e) => this.handleDeliveryOptionChange(e, item.ProductID._id, deli.fee)}
-                                                            />
-                                                            {deli.name} : {formatCurrency(deli.fee)}
-                                                        </label>
-                                                    ))}
+                                productCart.map((item, index) => {
+                                    const productVouchers = selectedVoucher.find(v => v.classifyDetail ? v.productId === item.ProductID._id 
+                                        && v.classifyDetail.Value1 === item.classifyDetail.Value1
+                                        && v.classifyDetail.Value2 === item.classifyDetail.Value2
+                                        : v.productId === item.ProductID._id);
+
+                                        console.log(item)
+
+                                    return (
+                                        <div key={index} className='product-cart-item'>
+                                            <div className='product-info'>
+                                                <div className='product-img'>
+                                                    <img src={item.classifyDetail.Image ? item.classifyDetail.Image : item.ProductID.Image[0]} width='100px' height='100px' alt='Product' className='product-image' />
+                                                </div>
+                                                <div className='product-name'>
+                                                    <label>{item.ProductID.Name}</label>
+                                                    <span>Product Classification: {item.classifyDetail.Value1}, {item.classifyDetail.Value2}</span>
+                                                </div>
+                                                <div className='product-param'>
+                                                    <div className='unit-price'><span>Unit Price:</span>{formatCurrency(item.TotalPrices)}</div>
+                                                    <div className='quantity'><span>Quantity:</span> {item.Quantity}</div>
+                                                    <div className='total-price'><span>Total Price:</span> {formatCurrency(item.TotalPrices)}</div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div className='total-amount'>
-                                            <div className='ingredient-price'>
-                                                <div className='label-price'>
-                                                    <label>The total amount ({item.Quantity} products):</label>
+                                            <div className="voucher">
+                                                {productVouchers && productVouchers.vouchers.map((itemVoucher, voIndex) => (
+                                                    <div key={voIndex} className='selected-voucher'>
+                                                        <FontAwesomeIcon icon={faTag} />
+                                                        <span>-{itemVoucher.discountType === 'amount' ?
+                                                            formatCurrency(itemVoucher.discountValue) :
+                                                            `${itemVoucher.discountValue}%`}</span>
+                                                    </div>
+                                                ))}
+                                                <button className='voucher-btn' onClick={() => this.toggleVoucherPopup(index)}>
+                                                    <span>Select voucher</span>
+                                                </button>
+                                                {showVoucherPopup  &&  index === this.state.currentPopupIndex && (
+                                                    <div className="voucher-popup">
+                                                        <div className="voucher-header">
+                                                            <h3>Voucher Shop</h3>
+                                                            <span className="close-btn" onClick={this.toggleVoucherPopup}>&times;</span>
+                                                        </div>
+                                                        {item.voucherList && item.voucherList.length  > 0 ? (
+                                                            item.voucherList.map((voucher, voucherIndex) => {
+                                                                const isDisabled = voucher.status === 'Disabled' ||
+                                                                    (voucher.discountType === 'amount' && voucher.minOrderAmount > item.TotalPrices) ||
+                                                                    (voucher.discountType === 'percentage' && (item.TotalPrices - item.TotalPrices * voucher.discountValue / 100) > voucher.maxReduction) ||
+                                                                    (productVouchers && productVouchers.vouchers.some(selected => selected.typeCode === voucher.typeCode && selected._id !== voucher._id)) ||
+                                                                    ((item.totalAmountPerProduct - item.TotalPrices * (voucher.discountType === 'amount' ? 1 : (1 - voucher.discountValue / 100))) < 0);
+                                                                    console.log(voucher)
+                                                                return (
+                                                                    <div key={voucherIndex} className={`voucher-item ${isDisabled ? 'disabled' : ''}`}>
+                                                                        <div className="voucher-info">
+                                                                            <div className='voucher-img'>
+                                                                                <img src={voucher.image} width='100px' height='100%' alt='voucher' className='product-image' />
+                                                                            </div>
+                                                                            <div className='voucher-detail'>
+                                                                                <span className="voucher-name">{voucher.nameVoucher}</span>
+                                                                                <span className='voucher-value'>Discount {voucher.discountType === 'amount' ?
+                                                                                    formatCurrency(voucher.discountValue) :
+                                                                                    `${voucher.discountValue}%`}</span>
+                                                                                <span className="voucher-conditions">Simple to minimal {formatCurrency(voucher.minOrderAmount)}</span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <button
+                                                                            className={`voucher-select-btn ${productVouchers && productVouchers.vouchers.some(selected => selected._id === voucher._id) ? 'cancel' : ''}`}
+                                                                            onClick={() => this.handleVoucherSelect(voucher, item.ProductID._id, item.classifyDetail)}
+                                                                            disabled={isDisabled}
+                                                                        >
+                                                                            {productVouchers && productVouchers.vouchers.some(selected => selected._id === voucher._id) ? 'Hủy' : 'Dùng'}
+                                                                        </button>
+                                                                    </div>
+                                                                );
+                                                            })
+                                                        ) : (
+                                                            <div className='no-voucher'>The shop doesn't have vouchers yet</div>
+                                                        )}
+
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div className='note'>
+                                                <div className='note-part'>
+                                                    <label className='note-title'>Note: </label>
+                                                    <input type='text' placeholder='Note to seller...' />
                                                 </div>
-                                                <div className='value-price'>
-                                                    <span>{formatCurrency(item.TotalPrices)}</span>
+                                                <div className='delivery-part'>
+                                                    <span>Đơn vị vận chuyển</span>
+                                                    <div className='delivery-btn'>
+                                                        {item.ProductID.deliveryFee.map((deli, index) => (
+                                                            <label
+                                                                key={index}
+                                                                className={`delivery-option ${item.deliveryMethod === deli.name ? 'selected' : ''}`}
+                                                            >
+                                                                <input
+                                                                    type="radio"
+                                                                    name={`deliveryOption-${item.ProductID._id}`}
+                                                                    value={deli.name}
+                                                                    checked={item.deliveryMethod === deli.name}
+                                                                    onChange={(e) => this.handleDeliveryOptionChange(e, item.ProductID._id, item.classifyDetail, deli.fee)}
+                                                                />
+                                                                {deli.name} : {formatCurrency(deli.fee)}
+                                                            </label>
+                                                        ))}
+                                                    </div>
                                                 </div>
                                             </div>
-                                            {/* {voucherShop && (
-                                                <div className='ingredient-price'><p>The total amount: <span>{formatCurrency(item.TotalPrices)}</span></p></div>
-                                            )} */}
-                                            {item.deliveryMethod && (
+                                            <div className='total-amount'>
                                                 <div className='ingredient-price'>
                                                     <div className='label-price'>
-                                                        <label>Transport fee: </label>
+                                                        <label>The total amount ({item.Quantity} products):</label>
                                                     </div>
                                                     <div className='value-price'>
-                                                        <span>{formatCurrency(item.deliveryFee)}</span>
+                                                        <span>{formatCurrency(item.TotalPrices)}</span>
                                                     </div>
                                                 </div>
-                                            )}
-                                            <div className='ingredient-price'>
-                                                <div className='label-price'>
-                                                    <label>Total cost of goods: </label>
-                                                </div>
-                                                <div className='value-price'>
-                                                    <span className='total-amount-product'>{formatCurrency(voucherShop
-                                                        ? item.totalAmountPerProduct - voucherShop
-                                                        : item.totalAmountPerProduct
-                                                    )}</span>
+                                                {productVouchers && productVouchers.vouchers && productVouchers.vouchers.length > 0 && (
+                                                    <div className='ingredient-price'>
+                                                        <div className='label-price'>
+                                                            <label>Discount:</label>
+                                                        </div>
+                                                        <div className='value-price'>
+                                                            {productVouchers.vouchers.map((itemVoucher, index) => (
+                                                                <span key={index}>
+                                                                    -{itemVoucher.discountType === 'amount'
+                                                                        ? formatCurrency(itemVoucher.discountValue)
+                                                                        : `${itemVoucher.discountValue}%`}
+                                                                </span>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                )}
+                                                {item.deliveryMethod && (
+                                                    <div className='ingredient-price'>
+                                                        <div className='label-price'>
+                                                            <label>Transport fee: </label>
+                                                        </div>
+                                                        <div className='value-price'>
+                                                            <span>{formatCurrency(item.deliveryFee)}</span>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                                <div className='ingredient-price'>
+                                                    <div className='label-price'>
+                                                        <label>Total cost of goods: </label>
+                                                    </div>
+                                                    <div className='value-price'>
+                                                        <span className='total-amount-product'>{formatCurrency(productVouchers
+                                                            ? item.totalAmountPerProduct - productVouchers.vouchers.reduce((totalDiscount, voucher) => {
+                                                                return totalDiscount + (voucher.discountType === 'amount' ? voucher.discountValue : (item.TotalPrices * voucher.discountValue / 100));
+                                                            }, 0)
+                                                            : item.totalAmountPerProduct
+                                                        )}</span>
+
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                ))
+                                    )
+
+                                })
                             ) : (
                                 <div>No products in the cart</div>
                             )}
@@ -311,7 +430,7 @@ class Checkout extends Component {
                         {/* Voucher Section */}
                         <div className='voucher-section'>
                             <h3>Chọn Voucher</h3>
-                            {voucherList.length > 0 ? (
+                            {/* {voucherList.length > 0 ? (
                                 voucherList.map((voucher, index) => (
                                     <button
                                         key={index}
@@ -324,7 +443,7 @@ class Checkout extends Component {
                                 ))
                             ) : (
                                 <div>No vouchers available</div>
-                            )}
+                            )} */}
                         </div>
 
                         {/* Total Amount Section */}

@@ -59,13 +59,35 @@
                         justify-content: flex-end;
                         margin: 20px 0;
 
+                        .selected-voucher {
+                            display: flex;
+                            align-items: center;
+                            background-color: #f5f5f5;
+                            border: 1px solid #ddd;
+                            border-radius: 4px;
+                            padding: 8px 12px;
+                            margin: 8px 5px;
+                          
+                            .fa-tag {
+                              color: #ff5722; 
+                              margin-right: 8px;
+                            }
+                          
+                            span {
+                              font-size: 14px;
+                              font-weight: 500;
+                              color: #333;
+                            }
+                          }
+                          
+                    
                         .voucher-btn {
                             background: none;
                             border: none;
                             padding: 0;
                             margin: 0;
                             cursor: pointer;
-
+                    
                             span {
                                 color: #78a206;
                                 font-size: 15px;
@@ -73,10 +95,100 @@
                                     color: #750c0c
                                 }
                             }
+                        }
+                        .voucher-popup {
+                            position: fixed;
+                            top: 50%;
+                            left: 50%;
+                            transform: translate(-50%, -50%);
+                            background-color: white;
+                            width: 600px;
+                            max-height: 50%;
+                            overflow-y: auto;
+                            border-radius: 10px;
+                            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+                            z-index: 1000;
+                            padding: 20px;
 
+                            .no-voucher {
+                                text-align: center;
+                                height: 100px;
+                            }
+
+                            .voucher-header {
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                                border-bottom: 1px solid #ddd;
+                                padding-bottom: 10px;
+                                margin-bottom: 20px;
+
+                                h3 {
+                                    margin: 0;
+                                }
+
+                                .close-btn {
+                                    cursor: pointer;
+                                    font-size: 18px;
+                                }
+                            }
+                            .voucher-item {
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                                margin-bottom: 15px;
+                                padding: 10px;
+                                border: 1px solid #ddd;
+                                border-radius: 5px;
+
+                                
+                                .voucher-info {
+                                    display: flex;
+                                    flex-direction: row;
+                                    
+                                    .voucher-detail {
+                                        display: flex;
+                                        flex-direction: column;
+                                        padding: 10px;
+                                        
+                                        .voucher-name {
+                                            font-size: 16px;
+                                            font-weight: bold;
+                                        }
+                                        
+                                        .voucher-conditions {
+                                            font-size: 14px;
+                                            color: #666;
+                                        }
+                                    }
+                                }
+                                
+                                .voucher-select-btn {
+                                    background-color: #28a745;
+                                    color: white;
+                                    border: none;
+                                    padding: 5px 10px;
+                                    border-radius: 5px;
+                                    cursor: pointer;
+        
+                                    &:disabled {
+                                        color: #444;
+                                        background-color: #ddd;
+                                        cursor: not-allowed;
+                                    }
+                                }
+                                .cancel {
+                                    background-color: #750c0c;
+                                    cursor: pointer;
+                                }
+
+                            }
+                            .voucher-item.disabled {
+                                opacity: 0.5;
+                            }
                         }
                     }
-
+                    
                     .note {
                         display: flex;
                         justify-content: space-between;
@@ -159,8 +271,10 @@
                            }
 
                            .value-price {
-                            width: 70px;
+                            width: 100px;
                             text-align: end;
+                            display: flex;
+                            flex-direction: column;
                            }
 
                            .total-amount-product {

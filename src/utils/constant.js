@@ -14,7 +14,9 @@ export const path = {
     CREATEPRODUCT: '/create-product',
     ALLPRODUCT: '/all-product',
     DETAILPRODUCTSELLER: '/detail-product-seller/:id',
-    UPDATEPRODUCT: '/update-product/:id'
+    UPDATEPRODUCT: '/update-product/:id',
+    VOUCHERLIST: '/voucher/list',
+    ADDVOUCHER: '/add-voucher'
 };
 
 export const languages = {

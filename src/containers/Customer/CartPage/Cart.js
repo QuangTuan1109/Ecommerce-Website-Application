@@ -3,11 +3,11 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 
 import HeaderHomepage from '../../HomePage/HeaderHomepage';
-import AboutUs from '../../HomePage/Section/AboutUs'
+import AboutUs from '../../HomePage/Section/AboutUs';
 import FooterHomepage from '../../HomePage/FooterHomepage';
 import './Cart.scss';
-import axios from '../../../axios'
-import { formatCurrency } from '../../../method/handleMethod'
+import axios from '../../../axios';
+import { formatCurrency } from '../../../method/handleMethod';
 import CustomPopup from '../../../components/CustomPopup';
 
 class Cart extends Component {
@@ -23,6 +23,7 @@ class Cart extends Component {
     }
 
     componentDidMount() {
+        localStorage.removeItem('selectProductCart');
         this.fetchProductCart();
         const selectProductCartFromStorage = localStorage.getItem('selectProductCart');
         if (selectProductCartFromStorage && !this.props.selectedProductsFromProps) {
@@ -45,9 +46,9 @@ class Cart extends Component {
         })
             .then(res => {
                 if (res) {
-                    this.setState({ productCart: res.data })
+                    this.setState({ productCart: res.data });
                 } else {
-                    this.setState({ productCart: [] })
+                    this.setState({ productCart: [] });
                 }
             })
             .catch(error => {
@@ -55,16 +56,19 @@ class Cart extends Component {
             });
     }
 
-    handleDeleteProductCart(productId) {
+    handleDeleteProductCart(productId, classifyDetail) {
         axios.delete(`http://localhost:5000/api/v1/order/cart/${productId}`, {
             headers: {
-                'Authorization': localStorage.getItem('accessToken')
-            }
+                'Authorization': localStorage.getItem('accessToken'),
+            },
+            data: { classifyDetail }
         })
             .then(res => {
                 this.showPopup('Product saved successfully!', 'successful', this.handleSuccess);
                 this.setState(prevState => ({
-                    productCart: prevState.productCart.filter(item => item.ProductID._id !== productId)
+                    productCart: prevState.productCart.filter(item => !(classifyDetail ? item.ProductID._id === productId
+                        && item.classifyDetail.Value1 === classifyDetail.Value1 
+                        && item.classifyDetail.Value2 === classifyDetail.Value2 : item.ProductID._id === productId))
                 }));
             })
             .catch(error => {
@@ -77,11 +81,13 @@ class Cart extends Component {
             const selectProductCart = [...prevState.selectProductCart];
             let totalPayment = prevState.totalPayment;
 
-            const { CustomerID, ...productWithoutCustomerID } = product;
-
-            const productIndex = selectProductCart.findIndex(item => item.ProductID === product.ProductID);
+            const productIndex = selectProductCart.findIndex(item => product.classifyDetail ? 
+                item.ProductID._id === product.ProductID._id 
+                && item.classifyDetail.Value1 === product.classifyDetail.Value1 
+                && item.classifyDetail.Value2 === product.classifyDetail.Value2 
+                : item.ProductID._id === product.ProductID._id);
             if (productIndex === -1) {
-                selectProductCart.push(productWithoutCustomerID);
+                selectProductCart.push(product);
                 totalPayment += product.TotalPrices;
             } else {
                 selectProductCart.splice(productIndex, 1);
@@ -104,7 +110,6 @@ class Cart extends Component {
             this.showPopup('No products selected for checkout.', 'error', this.handleFailure);
         }
     }
-
 
     handleQuantityChange = (amount) => {
         this.setState((prevState) => {
@@ -147,6 +152,7 @@ class Cart extends Component {
     render() {
         const { productCart, selectProductCart, totalPayment, popupVisible, popupMessage, popupType, onConfirm } = this.state;
 
+        console.log(selectProductCart)
         return (
             <div className='cart-container'>
                 <div className='cart-header'>
@@ -156,20 +162,28 @@ class Cart extends Component {
                     {productCart.length !== 0 ? (
                         <div className='cart-content'>
                             <div className='cart-header-row'>
-                                <div class="product">Product</div>
-                                <div class="unit-price">Unit Price</div>
-                                <div class="quantity">Quantity</div>
-                                <div class="total-price">Total Price</div>
-                                <div class="action">Action</div>
+                                <div className="product">Product</div>
+                                <div className="unit-price">Unit Price</div>
+                                <div className="quantity">Quantity</div>
+                                <div className="total-price">Total Price</div>
+                                <div className="action">Action</div>
                             </div>
                             <div className='cart-item'>
                                 <div className='item-details'>
                                     {productCart && productCart.map(item => (
                                         <div
-                                            key={item.ProductID._id}
-                                            className={`item-info ${selectProductCart.find(selectedItem => selectedItem.ProductID._id === item.ProductID._id) ? 'selected-item' : ''}`}
+                                            key={`${item.ProductID._id}-${item.classifyDetail.Value1}-${item.classifyDetail.Value2}`}
+                                            className={`item-info ${selectProductCart.find(selectedItem =>  selectedItem.classifyDetail ?
+                                                selectedItem.ProductID._id === item.ProductID._id 
+                                                    && selectedItem.classifyDetail.Value1 === item.classifyDetail.Value1 
+                                                    && selectedItem.classifyDetail.Value2 === item.classifyDetail.Value2
+                                                : selectedItem.ProductID._id === item.ProductID._id ) ? 'selected-item' : ''}`}
                                         >
-                                            <div className={`product-info-basic ${selectProductCart.find(selectedItem => selectedItem.ProductID._id === item.ProductID._id) ? 'selected-item' : ''}`}>
+                                            <div className={`product-info-basic ${selectProductCart.find(selectedItem =>  selectedItem.classifyDetail ?
+                                                selectedItem.ProductID._id === item.ProductID._id 
+                                                    && selectedItem.classifyDetail.Value1 === item.classifyDetail.Value1 
+                                                    && selectedItem.classifyDetail.Value2 === item.classifyDetail.Value2
+                                                : selectedItem.ProductID._id === item.ProductID._id ) ? 'selected-item' : ''}`}>
                                                 <div className='product-img'>
                                                     <img src={item.classifyDetail.Image ? item.classifyDetail.Image : item.ProductID.Image[0]} width='100px' height='100px' alt='Product' className='product-image' />
                                                 </div>
@@ -179,7 +193,6 @@ class Cart extends Component {
                                                 </div>
                                             </div>
                                             <div className='pricing'>
-                                                {/* <span className='original-price'>₫226.000</span> */}
                                                 <span className='sale-price'>{formatCurrency(item.classifyDetail ? item.classifyDetail.Price : item.ProductID.Price)}</span>
                                             </div>
                                             <div className='quantity-control'>
@@ -189,8 +202,13 @@ class Cart extends Component {
                                             </div>
                                             <div className='total-price'>{formatCurrency(item.TotalPrices)}</div>
                                             <div className='actions'>
-                                                <button className='choose-item' onClick={() => this.handleChooseProductCart(item)}>{selectProductCart.find(selectedItem => selectedItem.ProductID._id === item.ProductID._id) ? 'Unselect' : 'Select'}</button>
-                                                <button className='remove-item' onClick={() => this.handleDeleteProductCart(item.ProductID._id)} >Remove</button>
+                                                <button className='choose-item' onClick={() => this.handleChooseProductCart(item)}>{selectProductCart.find(selectedItem => 
+                                                selectedItem.classifyDetail ?
+                                                selectedItem.ProductID._id === item.ProductID._id 
+                                                    && selectedItem.classifyDetail.Value1 === item.classifyDetail.Value1 
+                                                    && selectedItem.classifyDetail.Value2 === item.classifyDetail.Value2
+                                                : selectedItem.ProductID._id === item.ProductID._id ) ? 'Unselect' : 'Select'}</button>
+                                                <button className='remove-item' onClick={() => this.handleDeleteProductCart(item.ProductID._id, item.classifyDetail)} >Remove</button>
                                             </div>
                                         </div>
                                     ))}

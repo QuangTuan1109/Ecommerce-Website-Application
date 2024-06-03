@@ -108,8 +108,10 @@ class NavbarHomepage extends Component {
                                     Quảng Cáo ShopSpace
                                 </li>
                                 <li className="sub-nav-item">
-                                    <FontAwesomeIcon icon={faBoxOpen} className="nav-icon" />
-                                    Mã Giảm Giá Của Tôi
+                                    <Link to="/voucher/list" className="nav-item-link">
+                                        <FontAwesomeIcon icon={faBoxOpen} className="nav-icon" />
+                                        Mã giảm giá của shop
+                                    </Link>
                                 </li>
                                 <li className="sub-nav-item">
                                     <FontAwesomeIcon icon={faBoxOpen} className="nav-icon" />
