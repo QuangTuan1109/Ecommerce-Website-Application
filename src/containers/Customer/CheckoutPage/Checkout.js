@@ -3,6 +3,7 @@ import { withRouter, Prompt } from "react-router-dom";
 import { connect } from "react-redux";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTag } from '@fortawesome/free-solid-svg-icons';
+import CryptoJS from 'crypto-js';
 
 import HeaderHomepage from '../../HomePage/HeaderHomepage';
 import AboutUs from '../../HomePage/Section/AboutUs';
@@ -25,24 +26,30 @@ class Checkout extends Component {
             totalAmount: 0,
             selectedDeliveryOptions: {},
             isBlocking: true,
-            showVoucherPopup: {}
+            showVoucherPopup: {},
         };
         this.currentPopupIndex = null;
     }
 
     componentDidMount() {
-        const totalPayment = localStorage.getItem('totalPayment');
-        const selectProductCart = localStorage.getItem('selectProductCart');
+        const encryptedData = localStorage.getItem('encryptedData');
+
+        // Giải mã dữ liệu bằng AES với privateKey
+        const bytes = CryptoJS.AES.decrypt(encryptedData, 'lequangtuan1109');
+        const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+
+        // Sử dụng dữ liệu đã giải mã
+        const { selectProductCart, totalPayment } = decryptedData;
 
         if (totalPayment) {
             this.setState({ totalAmount: JSON.parse(totalPayment) });
         }
         if (selectProductCart) {
-            this.setState({ productCart: JSON.parse(selectProductCart) });
+            this.setState({ productCart: selectProductCart });
         }
 
         if (selectProductCart) {
-            const productCart = JSON.parse(selectProductCart);
+            const productCart = selectProductCart;
             const updatedProductCart = productCart.map(item => ({
                 ...item,
                 deliveryMethod: item.ProductID.deliveryFee[0].name,
@@ -57,8 +64,7 @@ class Checkout extends Component {
 
     componentWillUnmount() {
         window.removeEventListener('beforeunload', this.handleBeforeUnload);
-        localStorage.removeItem('selectProductCart');
-        localStorage.removeItem('totalPayment');
+        localStorage.removeItem('encryptedData');
     }
 
     handleBeforeUnload = (event) => {
@@ -71,8 +77,7 @@ class Checkout extends Component {
     handleLeavePage = (location) => {
         const userConfirmed = window.confirm("Bạn có chắc chắn muốn rời khỏi trang này? Giỏ hàng và thông tin thanh toán của bạn sẽ bị xóa.");
         if (userConfirmed) {
-            localStorage.removeItem('selectProductCart');
-            localStorage.removeItem('totalPayment');
+            localStorage.removeItem('encryptedData');
             return true; // Cho phép điều hướng
         }
         return false; // Chặn điều hướng
@@ -93,35 +98,97 @@ class Checkout extends Component {
             });
     }
 
-    handleVoucherSelect = (voucher, productId, classifyDetail) => {
+    handleVoucherSelect = (customer, voucher, sellerId, productId, classifyDetail) => {
         const { selectedVoucher } = this.state;
     
+        // Tìm thông tin về việc sử dụng voucher hiện tại của khách hàng
+        const currentUsageByIndex = customer.usageHistory.find(item => item.voucherId === voucher._id);
+        let currentUsage = currentUsageByIndex ? currentUsageByIndex.currentUsage : 0;
+    
+        // Tạo một đối tượng voucher mới để lưu vào local storage và thêm vào mảng selectedVoucher
+        const newVoucher = {
+            customerID: customer._id,
+            Voucher: voucher,
+            sellerID: sellerId,
+            currentUsage: currentUsage
+        };
+    
+        // Khóa bí mật để mã hóa dữ liệu
+        const privateKey = 'lequangtuan1109';
+    
+        // Tìm vị trí của sản phẩm trong mảng selectedVoucher
         const index = selectedVoucher.findIndex(item => item.productId === productId && item.classifyDetail === classifyDetail);
     
+        // Tạo một mảng updatedSelectedVoucher để lưu các cập nhật
+        const updatedSelectedVoucher = [...selectedVoucher];
+    
+        // Kiểm tra nếu voucher này đã được sử dụng ở bất kỳ sản phẩm nào của cùng một cửa hàng
+        let voucherUsedInSameSeller = false;
+        updatedSelectedVoucher.forEach(item => {
+            item.vouchers.forEach(v => {
+                if (v.Voucher._id === voucher._id && v.sellerID === sellerId) {
+                    voucherUsedInSameSeller = true;
+                    currentUsage = Math.max(currentUsage, v.currentUsage); // Lấy số lần sử dụng lớn nhất
+                }
+            });
+        });
+    
         if (index !== -1) {
-            const updatedSelectedVoucher = [...selectedVoucher];
-            const productVoucherIndex = updatedSelectedVoucher[index].vouchers.findIndex(v => v._id === voucher._id);
+            // Sản phẩm đã tồn tại trong selectedVoucher
+            const productVoucherIndex = updatedSelectedVoucher[index].vouchers.findIndex(v => v.Voucher._id === voucher._id);
     
             if (productVoucherIndex !== -1) {
+                // Nếu voucher đã được chọn trước đó, hủy bỏ nó
                 updatedSelectedVoucher[index].vouchers.splice(productVoucherIndex, 1);
+                newVoucher.currentUsage = currentUsage - 1; // Giảm số lần sử dụng
             } else {
-                updatedSelectedVoucher[index].vouchers.push(voucher);
+                // Nếu voucher chưa được chọn trước đó, thêm nó vào mảng
+                if (currentUsage >= voucher.maxUsagePerUser) {
+                    this.showPopup('Bạn đã hết lượt sử dụng voucher.', 'error', this.handleFailure);
+                }else {
+                    newVoucher.currentUsage = currentUsage + 1; // Tăng số lần sử dụng
+                    updatedSelectedVoucher[index].vouchers.push(newVoucher);
+                }
             }
-            this.setState({ selectedVoucher: updatedSelectedVoucher });
         } else {
-            const newSelectedVoucher = {
-                productId: productId,
-                classifyDetail: classifyDetail,
-                vouchers: [voucher]
-            };
-            this.setState(prevState => ({
-                selectedVoucher: [...prevState.selectedVoucher, newSelectedVoucher]
-            }));
+            // Nếu sản phẩm chưa được chọn voucher trước đó, tạo một mảng mới và thêm voucher vào đó
+            if (currentUsage >= voucher.maxUsagePerUser) {
+                this.showPopup('Bạn đã hết lượt sử dụng voucher.', 'error', this.handleFailure);
+            } else {
+                newVoucher.currentUsage = currentUsage + 1;
+        
+                const initialSelectedVoucher = {
+                    productId: productId,
+                    classifyDetail: classifyDetail,
+                    vouchers: [newVoucher]
+                };
+        
+                // Thêm sản phẩm mới vào updatedSelectedVoucher
+                updatedSelectedVoucher.push(initialSelectedVoucher);
+            }
         }
+    
+        // Cập nhật currentUsage cho tất cả các sản phẩm thuộc cùng một người bán và voucher
+        updatedSelectedVoucher.forEach(item => {
+            item.vouchers.forEach(v => {
+                if (v.Voucher._id === voucher._id && v.sellerID === sellerId) {
+                    v.currentUsage = newVoucher.currentUsage;
+                }
+            });
+        });
+    
+        // Cập nhật state với mảng selectedVoucher đã cập nhật
+        this.setState({ selectedVoucher: updatedSelectedVoucher });
+    
+        // Cập nhật và lưu dữ liệu đã mã hóa vào local storage
+        const dataToEncrypt = JSON.stringify({ selectedVoucher: updatedSelectedVoucher });
+        const encryptedData = CryptoJS.AES.encrypt(dataToEncrypt, privateKey).toString();
+        localStorage.setItem('encryptedVoucher', encryptedData);
     }
     
     
-
+    
+    
 
     handleDeliveryMethodChange = (method) => {
         this.setState({ deliveryMethod: method });
@@ -131,11 +198,11 @@ class Checkout extends Component {
         const { value } = e.target;
         this.setState(prevState => ({
             productCart: prevState.productCart.map(item => {
-                const isMatchingProduct = classifyDetail 
-                ? item.ProductID._id === productId &&
-                  item.classifyDetail.Value1 === classifyDetail.Value1 &&
-                  item.classifyDetail.Value2 === classifyDetail.Value2
-                : item.ProductID._id === productId;
+                const isMatchingProduct = classifyDetail
+                    ? item.ProductID._id === productId &&
+                    item.classifyDetail.Value1 === classifyDetail.Value1 &&
+                    item.classifyDetail.Value2 === classifyDetail.Value2
+                    : item.ProductID._id === productId;
 
                 if (isMatchingProduct) {
                     return {
@@ -149,7 +216,7 @@ class Checkout extends Component {
             })
         }));
     };
-    
+
 
 
     handleCheckout = () => {
@@ -183,7 +250,7 @@ class Checkout extends Component {
         const updatedShowVoucherPopup = { ...showVoucherPopup };
         updatedShowVoucherPopup[index] = currentPopupIndex === index ? !updatedShowVoucherPopup[index] : true;
         this.setState({ showVoucherPopup: updatedShowVoucherPopup, currentPopupIndex: index });
-        
+
         const product = productCart[index];
         if (product && !product.voucherList) {
             const sellerId = product.ProductID.SellerID;
@@ -196,7 +263,7 @@ class Checkout extends Component {
                 .catch(error => console.error(error));
         }
     };
-    
+
 
     handleSuccess = () => {
         this.closePopup();
@@ -232,6 +299,7 @@ class Checkout extends Component {
     render() {
         const { popupVisible, popupMessage, popupType, onConfirm, productCart, voucherList, selectedVoucher, deliveryMethod, totalAmount, showVoucherPopup } = this.state;
 
+        console.log(selectedVoucher)
         return (
             <div className='checkout-container'>
                 <Prompt
@@ -262,12 +330,10 @@ class Checkout extends Component {
                             <h3>Products</h3>
                             {productCart.length > 0 ? (
                                 productCart.map((item, index) => {
-                                    const productVouchers = selectedVoucher.find(v => v.classifyDetail ? v.productId === item.ProductID._id 
+                                    const productVouchers = selectedVoucher.find(v => v.classifyDetail ? v.productId === item.ProductID._id
                                         && v.classifyDetail.Value1 === item.classifyDetail.Value1
                                         && v.classifyDetail.Value2 === item.classifyDetail.Value2
                                         : v.productId === item.ProductID._id);
-
-                                        console.log(item)
 
                                     return (
                                         <div key={index} className='product-cart-item'>
@@ -289,28 +355,31 @@ class Checkout extends Component {
                                                 {productVouchers && productVouchers.vouchers.map((itemVoucher, voIndex) => (
                                                     <div key={voIndex} className='selected-voucher'>
                                                         <FontAwesomeIcon icon={faTag} />
-                                                        <span>-{itemVoucher.discountType === 'amount' ?
-                                                            formatCurrency(itemVoucher.discountValue) :
-                                                            `${itemVoucher.discountValue}%`}</span>
+                                                        <span>-{itemVoucher.Voucher.discountType === 'amount' ?
+                                                            formatCurrency(itemVoucher.Voucher.discountValue) :
+                                                            `${itemVoucher.Voucher.discountValue}%`}</span>
                                                     </div>
                                                 ))}
                                                 <button className='voucher-btn' onClick={() => this.toggleVoucherPopup(index)}>
                                                     <span>Select voucher</span>
                                                 </button>
-                                                {showVoucherPopup  &&  index === this.state.currentPopupIndex && (
+                                                {showVoucherPopup && index === this.state.currentPopupIndex && (
                                                     <div className="voucher-popup">
                                                         <div className="voucher-header">
                                                             <h3>Voucher Shop</h3>
                                                             <span className="close-btn" onClick={this.toggleVoucherPopup}>&times;</span>
                                                         </div>
-                                                        {item.voucherList && item.voucherList.length  > 0 ? (
+                                                        {item.voucherList && item.voucherList.length > 0 ? (
                                                             item.voucherList.map((voucher, voucherIndex) => {
                                                                 const isDisabled = voucher.status === 'Disabled' ||
                                                                     (voucher.discountType === 'amount' && voucher.minOrderAmount > item.TotalPrices) ||
+                                                                    (item.CustomerID.usageHistory.some(history => {
+                                                                        return history.voucherId.toString() === voucher._id && history.currentUsage === voucher.maxUsagePerUser;
+                                                                    })) ||
                                                                     (voucher.discountType === 'percentage' && (item.TotalPrices - item.TotalPrices * voucher.discountValue / 100) > voucher.maxReduction) ||
-                                                                    (productVouchers && productVouchers.vouchers.some(selected => selected.typeCode === voucher.typeCode && selected._id !== voucher._id)) ||
+                                                                    (productVouchers && productVouchers.vouchers.some(selected => selected.Voucher.typeCode === voucher.typeCode && selected.Voucher._id !== voucher._id)) ||
                                                                     ((item.totalAmountPerProduct - item.TotalPrices * (voucher.discountType === 'amount' ? 1 : (1 - voucher.discountValue / 100))) < 0);
-                                                                    console.log(voucher)
+
                                                                 return (
                                                                     <div key={voucherIndex} className={`voucher-item ${isDisabled ? 'disabled' : ''}`}>
                                                                         <div className="voucher-info">
@@ -326,11 +395,11 @@ class Checkout extends Component {
                                                                             </div>
                                                                         </div>
                                                                         <button
-                                                                            className={`voucher-select-btn ${productVouchers && productVouchers.vouchers.some(selected => selected._id === voucher._id) ? 'cancel' : ''}`}
-                                                                            onClick={() => this.handleVoucherSelect(voucher, item.ProductID._id, item.classifyDetail)}
+                                                                            className={`voucher-select-btn ${productVouchers && productVouchers.vouchers.some(selected => selected.Voucher._id === voucher._id) ? 'cancel' : ''}`}
+                                                                            onClick={() => this.handleVoucherSelect(item.CustomerID, voucher, item.ProductID.SellerID, item.ProductID._id, item.classifyDetail)}
                                                                             disabled={isDisabled}
                                                                         >
-                                                                            {productVouchers && productVouchers.vouchers.some(selected => selected._id === voucher._id) ? 'Hủy' : 'Dùng'}
+                                                                            {productVouchers && productVouchers.vouchers.some(selected => selected.Voucher._id === voucher._id) ? 'Hủy' : 'Dùng'}
                                                                         </button>
                                                                     </div>
                                                                 );
@@ -385,9 +454,9 @@ class Checkout extends Component {
                                                         <div className='value-price'>
                                                             {productVouchers.vouchers.map((itemVoucher, index) => (
                                                                 <span key={index}>
-                                                                    -{itemVoucher.discountType === 'amount'
-                                                                        ? formatCurrency(itemVoucher.discountValue)
-                                                                        : `${itemVoucher.discountValue}%`}
+                                                                    -{itemVoucher.Voucher.discountType === 'amount'
+                                                                        ? formatCurrency(itemVoucher.Voucher.discountValue)
+                                                                        : `${itemVoucher.Voucher.discountValue}%`}
                                                                 </span>
                                                             ))}
                                                         </div>
@@ -410,7 +479,7 @@ class Checkout extends Component {
                                                     <div className='value-price'>
                                                         <span className='total-amount-product'>{formatCurrency(productVouchers
                                                             ? item.totalAmountPerProduct - productVouchers.vouchers.reduce((totalDiscount, voucher) => {
-                                                                return totalDiscount + (voucher.discountType === 'amount' ? voucher.discountValue : (item.TotalPrices * voucher.discountValue / 100));
+                                                                return totalDiscount + (voucher.Voucher.discountType === 'amount' ? voucher.Voucher.discountValue : (item.TotalPrices * voucher.Voucher.discountValue / 100));
                                                             }, 0)
                                                             : item.totalAmountPerProduct
                                                         )}</span>

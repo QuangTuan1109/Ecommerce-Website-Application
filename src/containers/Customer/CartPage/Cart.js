@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
+import CryptoJS from 'crypto-js';
 
 import HeaderHomepage from '../../HomePage/HeaderHomepage';
 import AboutUs from '../../HomePage/Section/AboutUs';
@@ -23,9 +24,9 @@ class Cart extends Component {
     }
 
     componentDidMount() {
-        localStorage.removeItem('selectProductCart');
+        localStorage.removeItem('encryptedData');
         this.fetchProductCart();
-        const selectProductCartFromStorage = localStorage.getItem('selectProductCart');
+        const selectProductCartFromStorage = localStorage.getItem('encryptedData');
         if (selectProductCartFromStorage && !this.props.selectedProductsFromProps) {
             const selectProductCart = JSON.parse(selectProductCartFromStorage);
             this.setState({ selectProductCart });
@@ -33,8 +34,15 @@ class Cart extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (prevState.selectProductCart !== this.state.selectProductCart) {
-            localStorage.setItem('selectProductCart', JSON.stringify(this.state.selectProductCart));
+        const {selectProductCart} = this.state
+        if (prevState.selectProductCart !== selectProductCart) {
+            const privateKey = 'lequangtuan1109';
+    
+            const dataToEncrypt = JSON.stringify({ selectProductCart });
+    
+            const encryptedData = CryptoJS.AES.encrypt(dataToEncrypt, privateKey).toString();
+    
+            localStorage.setItem('encryptedData', encryptedData);
         }
     }
 
@@ -100,17 +108,17 @@ class Cart extends Component {
 
     handleBuyProductCart() {
         const { selectProductCart, totalPayment } = this.state;
+        const privateKey = 'lequangtuan1109';
     
-        if (selectProductCart.length > 0) {
-            localStorage.setItem('selectProductCart', JSON.stringify(selectProductCart));
-            localStorage.setItem('totalPayment', totalPayment.toString());
+        const dataToEncrypt = JSON.stringify({ selectProductCart, totalPayment });
     
-            this.props.history.push('/checkout');
-        } else {
-            this.showPopup('No products selected for checkout.', 'error', this.handleFailure);
-        }
-    }
+        const encryptedData = CryptoJS.AES.encrypt(dataToEncrypt, privateKey).toString();
+    
+        localStorage.setItem('encryptedData', encryptedData);
 
+        this.props.history.push('/checkout');
+    }
+    
     handleQuantityChange = (amount) => {
         this.setState((prevState) => {
             const newQuantity = prevState.quantity + amount;
