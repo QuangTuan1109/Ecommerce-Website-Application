@@ -34,11 +34,9 @@ class Checkout extends Component {
     componentDidMount() {
         const encryptedData = localStorage.getItem('encryptedData');
 
-        // Giải mã dữ liệu bằng AES với privateKey
         const bytes = CryptoJS.AES.decrypt(encryptedData, 'lequangtuan1109');
         const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
 
-        // Sử dụng dữ liệu đã giải mã
         const { selectProductCart, totalPayment } = decryptedData;
 
         if (totalPayment) {
@@ -75,12 +73,12 @@ class Checkout extends Component {
     };
 
     handleLeavePage = (location) => {
-        const userConfirmed = window.confirm("Bạn có chắc chắn muốn rời khỏi trang này? Giỏ hàng và thông tin thanh toán của bạn sẽ bị xóa.");
+        const userConfirmed = window.confirm("Are you sure you want to leave this page? Your shopping cart and payment information will be deleted.");
         if (userConfirmed) {
             localStorage.removeItem('encryptedData');
-            return true; // Cho phép điều hướng
+            return true;
         }
-        return false; // Chặn điều hướng
+        return false;
     };
 
     fetchAddress() {
