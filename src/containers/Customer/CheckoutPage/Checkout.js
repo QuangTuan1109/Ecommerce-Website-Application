@@ -97,15 +97,12 @@ class Checkout extends Component {
                 console.error('Error fetching address:', error);
             });
     }
-
     handleVoucherSelect = (customer, voucher, sellerId, productId, classifyDetail) => {
         const { selectedVoucher } = this.state;
     
-        // Tìm thông tin về việc sử dụng voucher hiện tại của khách hàng
         const currentUsageByIndex = customer.usageHistory.find(item => item.voucherId === voucher._id);
         let currentUsage = currentUsageByIndex ? currentUsageByIndex.currentUsage : 0;
     
-        // Tạo một đối tượng voucher mới để lưu vào local storage và thêm vào mảng selectedVoucher
         const newVoucher = {
             customerID: customer._id,
             Voucher: voucher,
@@ -113,62 +110,49 @@ class Checkout extends Component {
             currentUsage: currentUsage
         };
     
-        // Khóa bí mật để mã hóa dữ liệu
-        const privateKey = 'lequangtuan1109';
-    
-        // Tìm vị trí của sản phẩm trong mảng selectedVoucher
         const index = selectedVoucher.findIndex(item => item.productId === productId && item.classifyDetail === classifyDetail);
     
-        // Tạo một mảng updatedSelectedVoucher để lưu các cập nhật
         const updatedSelectedVoucher = [...selectedVoucher];
     
-        // Kiểm tra nếu voucher này đã được sử dụng ở bất kỳ sản phẩm nào của cùng một cửa hàng
         let voucherUsedInSameSeller = false;
         updatedSelectedVoucher.forEach(item => {
             item.vouchers.forEach(v => {
                 if (v.Voucher._id === voucher._id && v.sellerID === sellerId) {
                     voucherUsedInSameSeller = true;
-                    currentUsage = Math.max(currentUsage, v.currentUsage); // Lấy số lần sử dụng lớn nhất
+                    currentUsage = Math.max(currentUsage, v.currentUsage);
                 }
             });
         });
     
         if (index !== -1) {
-            // Sản phẩm đã tồn tại trong selectedVoucher
             const productVoucherIndex = updatedSelectedVoucher[index].vouchers.findIndex(v => v.Voucher._id === voucher._id);
     
             if (productVoucherIndex !== -1) {
-                // Nếu voucher đã được chọn trước đó, hủy bỏ nó
                 updatedSelectedVoucher[index].vouchers.splice(productVoucherIndex, 1);
-                newVoucher.currentUsage = currentUsage - 1; // Giảm số lần sử dụng
+                newVoucher.currentUsage = currentUsage - 1; 
             } else {
-                // Nếu voucher chưa được chọn trước đó, thêm nó vào mảng
                 if (currentUsage >= voucher.maxUsagePerUser) {
-                    this.showPopup('Bạn đã hết lượt sử dụng voucher.', 'error', this.handleFailure);
-                }else {
-                    newVoucher.currentUsage = currentUsage + 1; // Tăng số lần sử dụng
+                    this.showPopup('You have expired to use the voucher.', 'error', this.handleFailure);
+                } else {
+                    newVoucher.currentUsage = currentUsage + 1;
                     updatedSelectedVoucher[index].vouchers.push(newVoucher);
                 }
             }
         } else {
-            // Nếu sản phẩm chưa được chọn voucher trước đó, tạo một mảng mới và thêm voucher vào đó
-            if (currentUsage >= voucher.maxUsagePerUser) {
-                this.showPopup('Bạn đã hết lượt sử dụng voucher.', 'error', this.handleFailure);
+            newVoucher.currentUsage = currentUsage + 1;
+            if (newVoucher.currentUsage > voucher.maxUsagePerUser) {
+                this.showPopup('You have expired to use the voucher.', 'error', this.handleFailure);
             } else {
-                newVoucher.currentUsage = currentUsage + 1;
-        
                 const initialSelectedVoucher = {
                     productId: productId,
                     classifyDetail: classifyDetail,
                     vouchers: [newVoucher]
                 };
-        
-                // Thêm sản phẩm mới vào updatedSelectedVoucher
+    
                 updatedSelectedVoucher.push(initialSelectedVoucher);
             }
         }
     
-        // Cập nhật currentUsage cho tất cả các sản phẩm thuộc cùng một người bán và voucher
         updatedSelectedVoucher.forEach(item => {
             item.vouchers.forEach(v => {
                 if (v.Voucher._id === voucher._id && v.sellerID === sellerId) {
@@ -177,17 +161,8 @@ class Checkout extends Component {
             });
         });
     
-        // Cập nhật state với mảng selectedVoucher đã cập nhật
         this.setState({ selectedVoucher: updatedSelectedVoucher });
-    
-        // Cập nhật và lưu dữ liệu đã mã hóa vào local storage
-        const dataToEncrypt = JSON.stringify({ selectedVoucher: updatedSelectedVoucher });
-        const encryptedData = CryptoJS.AES.encrypt(dataToEncrypt, privateKey).toString();
-        localStorage.setItem('encryptedVoucher', encryptedData);
     }
-    
-    
-    
     
 
     handleDeliveryMethodChange = (method) => {
@@ -216,8 +191,6 @@ class Checkout extends Component {
             })
         }));
     };
-
-
 
     handleCheckout = () => {
         // Handle the checkout process
@@ -378,7 +351,8 @@ class Checkout extends Component {
                                                                     })) ||
                                                                     (voucher.discountType === 'percentage' && (item.TotalPrices - item.TotalPrices * voucher.discountValue / 100) > voucher.maxReduction) ||
                                                                     (productVouchers && productVouchers.vouchers.some(selected => selected.Voucher.typeCode === voucher.typeCode && selected.Voucher._id !== voucher._id)) ||
-                                                                    ((item.totalAmountPerProduct - item.TotalPrices * (voucher.discountType === 'amount' ? 1 : (1 - voucher.discountValue / 100))) < 0);
+                                                                    ((item.totalAmountPerProduct - item.TotalPrices * (voucher.discountType === 'amount' ? 1 : (1 - voucher.discountValue / 100))) < 0) ||
+                                                                    (!voucher.productId.includes(item.ProductID._id));
 
                                                                 return (
                                                                     <div key={voucherIndex} className={`voucher-item ${isDisabled ? 'disabled' : ''}`}>

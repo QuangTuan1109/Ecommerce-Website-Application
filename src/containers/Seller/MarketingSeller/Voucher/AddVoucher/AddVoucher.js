@@ -409,10 +409,9 @@ class AddVoucher extends Component {
                                         </thead>
                                         <tbody>
                                             {voucherType === 'voucher-product' ? (
-                                                <tr>
-                                                    {products && products.length > 0 ? (
-                                                        products.map(item => (
-                                                            <>
+                                                products && products.length > 0 ? (
+                                                    products.map(item => (
+                                                            <tr>
                                                                 <td>
                                                                     <div>{item.Name}</div>
                                                                 </td>
@@ -431,11 +430,10 @@ class AddVoucher extends Component {
                                                                         {this.state.selectedProductIds.includes(item._id) ? <FontAwesomeIcon icon={faCheckCircle} /> : <FontAwesomeIcon icon={faTimesCircle} />}
                                                                     </button></div>
                                                                 </td>
-                                                            </>
-                                                        ))
-                                                    ) : (<div>Không có sản phẩm nào</div>)}
-
                                                 </tr>
+                                                        ))
+                                                    ) : (<div>Không có sản phẩm nào</div>)
+
                                             ) : (
                                                 <tr>
                                                     <td colspan="5" className="no-product">
