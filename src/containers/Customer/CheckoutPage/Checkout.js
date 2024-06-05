@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter, Prompt } from "react-router-dom";
 import { connect } from "react-redux";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTag } from '@fortawesome/free-solid-svg-icons';
+import { faTag, faCamera, faTrash } from '@fortawesome/free-solid-svg-icons';
 import CryptoJS from 'crypto-js';
 
 import HeaderHomepage from '../../HomePage/HeaderHomepage';
@@ -10,7 +10,7 @@ import AboutUs from '../../HomePage/Section/AboutUs';
 import FooterHomepage from '../../HomePage/FooterHomepage';
 import './Checkout.scss';
 import axios from '../../../axios';
-import { formatCurrency } from '../../../method/handleMethod';
+import { formatCurrency, handleImageUpload, handleFileDelete } from '../../../method/handleMethod';
 import CustomPopup from '../../../components/CustomPopup';
 
 class Checkout extends Component {
@@ -27,6 +27,12 @@ class Checkout extends Component {
             selectedDeliveryOptions: {},
             isBlocking: true,
             showVoucherPopup: {},
+            userInfo: {},
+            recipName: '',
+            phone: '',
+            shippingAddress: '',
+            paymentMethod: '',
+            images: ''
         };
         this.currentPopupIndex = null;
     }
@@ -57,6 +63,8 @@ class Checkout extends Component {
             this.setState({ productCart: updatedProductCart });
         }
 
+        this.getUserInfo()
+
         window.addEventListener('beforeunload', this.handleBeforeUnload);
     }
 
@@ -81,37 +89,72 @@ class Checkout extends Component {
         return false;
     };
 
-    fetchAddress() {
-        // Fetch customer address from API
-        axios.get(`http://localhost:5000/api/v1/customer/address`, {
-            headers: {
-                'Authorization': localStorage.getItem('accessToken')
-            }
-        })
-            .then(res => {
-                this.setState({ address: res.data });
-            })
-            .catch(error => {
-                console.error('Error fetching address:', error);
+    handleAddImage = async (event) => {
+        const acceptedFiles = event.target.files;
+
+        try {
+            handleImageUpload(event, (imageUrls) => {
+                this.setState({
+                    images: imageUrls,
+                });
+            }, (error) => {
+                console.error('Error uploading images:', error);
             });
+        } catch (error) {
+            console.error('Error uploading images:', error);
+        }
+    };
+
+
+    handleDeleteImage = async () => {
+        const { images } = this.state;
+        try {
+            const imagePath = images[0];
+            const startIndex = imagePath.indexOf('/o/') + 3;
+            const storagePath = decodeURIComponent(imagePath.substring(startIndex));
+            await handleFileDelete(storagePath, () => {
+                this.setState({ images: '' });
+            }, 'delete-image');
+        } catch (error) {
+            console.error('Error deleting image:', error);
+        }
+    };
+
+
+    getUserInfo = async () => {
+        try {
+            await axios.get(`http://localhost:5000/api/v1/user`, {
+                headers: {
+                    'Authorization': localStorage.getItem('accessToken')
+                }
+            }).then(response => this.setState({
+                userInfo: response.user,
+                recipName: response.user.CustomerID.Fullname,
+                phone: response.user.CustomerID.Phone,
+                shippingAddress: response.user.CustomerID.Address
+            }))
+        } catch (error) {
+            console.log(error)
+        }
     }
+
     handleVoucherSelect = (customer, voucher, sellerId, productId, classifyDetail) => {
-        const { selectedVoucher } = this.state;
-    
+        const { selectedVoucher, productCart } = this.state;
+
         const currentUsageByIndex = customer.usageHistory.find(item => item.voucherId === voucher._id);
         let currentUsage = currentUsageByIndex ? currentUsageByIndex.currentUsage : 0;
-    
+
         const newVoucher = {
             customerID: customer._id,
             Voucher: voucher,
             sellerID: sellerId,
             currentUsage: currentUsage
         };
-    
+
         const index = selectedVoucher.findIndex(item => item.productId === productId && item.classifyDetail === classifyDetail);
-    
+
         const updatedSelectedVoucher = [...selectedVoucher];
-    
+
         let voucherUsedInSameSeller = false;
         updatedSelectedVoucher.forEach(item => {
             item.vouchers.forEach(v => {
@@ -121,13 +164,13 @@ class Checkout extends Component {
                 }
             });
         });
-    
+
         if (index !== -1) {
             const productVoucherIndex = updatedSelectedVoucher[index].vouchers.findIndex(v => v.Voucher._id === voucher._id);
-    
+
             if (productVoucherIndex !== -1) {
                 updatedSelectedVoucher[index].vouchers.splice(productVoucherIndex, 1);
-                newVoucher.currentUsage = currentUsage - 1; 
+                newVoucher.currentUsage = currentUsage - 1;
             } else {
                 if (currentUsage >= voucher.maxUsagePerUser) {
                     this.showPopup('You have expired to use the voucher.', 'error', this.handleFailure);
@@ -146,11 +189,11 @@ class Checkout extends Component {
                     classifyDetail: classifyDetail,
                     vouchers: [newVoucher]
                 };
-    
+
                 updatedSelectedVoucher.push(initialSelectedVoucher);
             }
         }
-    
+
         updatedSelectedVoucher.forEach(item => {
             item.vouchers.forEach(v => {
                 if (v.Voucher._id === voucher._id && v.sellerID === sellerId) {
@@ -158,10 +201,32 @@ class Checkout extends Component {
                 }
             });
         });
-    
-        this.setState({ selectedVoucher: updatedSelectedVoucher });
+
+        const updatedProductCart = productCart.map(product => {
+            if (product.ProductID._id === productId &&
+                (!classifyDetail || (product.classifyDetail.Value1 === classifyDetail.Value1 && product.classifyDetail.Value2 === classifyDetail.Value2))) {
+                const productVouchers = updatedSelectedVoucher.find(v => v.productId === productId && v.classifyDetail === classifyDetail);
+                const totalDiscount = productVouchers ? productVouchers.vouchers.reduce((total, itemVoucher) => {
+                    return total + (itemVoucher.Voucher.discountType === 'amount'
+                        ? itemVoucher.Voucher.discountValue
+                        : (product.TotalPrices * itemVoucher.Voucher.discountValue / 100));
+                }, 0) : 0;
+
+                const totalAmountPerProduct = product.TotalPrices + product.deliveryFee - totalDiscount;
+                const Voucher = productVouchers ? productVouchers.vouchers.map(itemVoucher => itemVoucher.Voucher._id) : [];
+
+                return {
+                    ...product,
+                    totalAmountPerProduct,
+                    Voucher
+                };
+            }
+            return product;
+        });
+
+        this.setState({ selectedVoucher: updatedSelectedVoucher, productCart: updatedProductCart });
     }
-    
+
 
     handleDeliveryMethodChange = (method) => {
         this.setState({ deliveryMethod: method });
@@ -190,19 +255,40 @@ class Checkout extends Component {
         }));
     };
 
+    handlePaymentMethodOptionChange = (e) => {
+        const { value } = e.target;
+        this.setState({ paymentMethod: value });
+    };
+
     handleCheckout = () => {
         // Handle the checkout process
-        const { address, productCart, selectedVoucher, deliveryMethod, selectedDeliveryOptions } = this.state;
-        // Construct checkout data and send to API
-        const checkoutData = {
-            address,
-            productCart,
-            voucher: selectedVoucher,
-            deliveryMethod,
-            deliveryOptions: selectedDeliveryOptions
-        };
-        // Call the API to complete the checkout process
-        axios.post(`http://localhost:5000/api/v1/order/checkout`, checkoutData, {
+        const { recipName, phone, shippingAddress, productCart, paymentMethod } = this.state;
+
+        const formData = {
+            recipName: recipName,
+            phone: phone,
+            shippingAddress: shippingAddress,
+            products: productCart.map(item => {
+                const productItem = {
+                    product: item.ProductID._id,
+                    classifyDetail: item.classifyDetail,
+                    quantity: item.Quantity,
+                    price: item.TotalPrices,
+                    message: item.message ? item.message : null,
+                    voucherShop: item.Voucher ? item.Voucher : null,
+                    deliveryMethod: item.deliveryMethod,
+                    deliveryFee: item.deliveryFee
+                }
+                return productItem
+            }),
+            voucherSystem: productCart.voucherSystem ? productCart.voucherSystem : null,
+            totalAmount: productCart.reduce((total, item) => {
+                return total + item.totalAmountPerProduct;
+            }, 0),
+            paymentMethod: paymentMethod
+        }
+
+        axios.post(`http://localhost:5000/api/v1/order//order-and-payment`, formData, {
             headers: {
                 'Authorization': localStorage.getItem('accessToken')
             }
@@ -234,6 +320,22 @@ class Checkout extends Component {
                 .catch(error => console.error(error));
         }
     };
+
+    handleInputChange = (e) => {
+        const { name, value } = e.target;
+        if (name === 'message') {
+            this.setState(prevState => ({
+                productCart: prevState.productCart.map(item => {
+                    return {
+                        ...item,
+                        [name]: value
+                    };
+                })
+            }));
+        } else {
+            this.setState({ [name]: value });
+        }
+    }
 
 
     handleSuccess = () => {
@@ -268,9 +370,10 @@ class Checkout extends Component {
     }
 
     render() {
-        const { popupVisible, popupMessage, popupType, onConfirm, productCart, voucherList, selectedVoucher, deliveryMethod, totalAmount, showVoucherPopup } = this.state;
+        const { popupVisible, popupMessage, popupType, onConfirm, productCart, userInfo, selectedVoucher, totalAmount, showVoucherPopup } = this.state;
 
-        console.log(selectedVoucher)
+        console.log(productCart)
+
         return (
             <div className='checkout-container'>
                 <Prompt
@@ -283,18 +386,38 @@ class Checkout extends Component {
                 <div className='checkout-body'>
                     <div className='checkout-content'>
                         {/* Delivery Address Section */}
-                        <div className='delivery-address-section'>
-                            <h3>Địa Chỉ Nhận Hàng</h3>
-                            <div>
-                                {/* <input
-                                    type="radio"
-                                    name={`deliveryOption-${item.ProductID._id}`}
-                                    value={deli.name}
-                                    checked={item.deliveryMethod === deli.name}
-                                    onChange={(e) => this.handleDeliveryOptionChange(e, item.ProductID._id, deli.fee)}
-                                /> */}
+                        {userInfo.CustomerID && (
+                            <div className='delivery-address-section'>
+                                <h3>Delivery Address</h3>
+                                <div>
+                                    <label>Recipient's name</label>
+                                    <input
+                                        type="text"
+                                        name='recipName'
+                                        value={userInfo.CustomerID.Fullname ? userInfo.CustomerID.Fullname : ''}
+                                        onChange={(e) => this.handleInputChange(e)}
+                                    />
+                                </div>
+                                <div>
+                                    <label>Recipient phone number</label>
+                                    <input
+                                        type="text"
+                                        name='phone'
+                                        value={userInfo.CustomerID.Phone ? userInfo.CustomerID.Phone : ''}
+                                        onChange={(e) => this.handleInputChange(e)}
+                                    />
+                                </div>
+                                <div>
+                                    <label>Delivery address</label>
+                                    <input
+                                        type="text"
+                                        name='shippingAddress'
+                                        value={userInfo.CustomerID.Address ? userInfo.CustomerID.Address : ''}
+                                        onChange={(e) => this.handleInputChange(e)}
+                                    />
+                                </div>
                             </div>
-                        </div>
+                        )}
 
                         {/* Product Section */}
                         <div className='product-section'>
@@ -317,7 +440,7 @@ class Checkout extends Component {
                                                     <span>Product Classification: {item.classifyDetail.Value1}, {item.classifyDetail.Value2}</span>
                                                 </div>
                                                 <div className='product-param'>
-                                                    <div className='unit-price'><span>Unit Price:</span>{formatCurrency(item.TotalPrices)}</div>
+                                                    <div className='unit-price'><span>Unit Price:</span> {formatCurrency(item.TotalPrices)}</div>
                                                     <div className='quantity'><span>Quantity:</span> {item.Quantity}</div>
                                                     <div className='total-price'><span>Total Price:</span> {formatCurrency(item.TotalPrices)}</div>
                                                 </div>
@@ -349,7 +472,7 @@ class Checkout extends Component {
                                                                     })) ||
                                                                     (voucher.discountType === 'percentage' && (item.TotalPrices - item.TotalPrices * voucher.discountValue / 100) > voucher.maxReduction) ||
                                                                     (productVouchers && productVouchers.vouchers.some(selected => selected.Voucher.typeCode === voucher.typeCode && selected.Voucher._id !== voucher._id)) ||
-                                                                    ((item.totalAmountPerProduct - item.TotalPrices * (voucher.discountType === 'amount' ? 1 : (1 - voucher.discountValue / 100))) < 0) ||
+                                                                    (item.totalAmountPerProduct < 0) ||
                                                                     (!voucher.productId.includes(item.ProductID._id));
 
                                                                 return (
@@ -385,11 +508,15 @@ class Checkout extends Component {
                                             </div>
                                             <div className='note'>
                                                 <div className='note-part'>
-                                                    <label className='note-title'>Note: </label>
-                                                    <input type='text' placeholder='Note to seller...' />
+                                                    <label className='note-title'>Note</label>
+                                                    <input key={index}
+                                                        type='text'
+                                                        placeholder='Note to seller...'
+                                                        name='message' value={this.state.message}
+                                                        onChange={(e) => this.handleInputChange(e)} />
                                                 </div>
                                                 <div className='delivery-part'>
-                                                    <span>Đơn vị vận chuyển</span>
+                                                    <span>Shipping Carrier</span>
                                                     <div className='delivery-btn'>
                                                         {item.ProductID.deliveryFee.map((deli, index) => (
                                                             <label
@@ -449,11 +576,7 @@ class Checkout extends Component {
                                                         <label>Total cost of goods: </label>
                                                     </div>
                                                     <div className='value-price'>
-                                                        <span className='total-amount-product'>{formatCurrency(productVouchers
-                                                            ? item.totalAmountPerProduct - productVouchers.vouchers.reduce((totalDiscount, voucher) => {
-                                                                return totalDiscount + (voucher.Voucher.discountType === 'amount' ? voucher.Voucher.discountValue : (item.TotalPrices * voucher.Voucher.discountValue / 100));
-                                                            }, 0)
-                                                            : item.totalAmountPerProduct
+                                                        <span className='total-amount-product'>{formatCurrency(item.totalAmountPerProduct
                                                         )}</span>
 
                                                     </div>
@@ -489,14 +612,83 @@ class Checkout extends Component {
 
                         {/* Total Amount Section */}
                         <div className='total-amount-section'>
-                            <h3>Total Amount</h3>
-                            <span>{formatCurrency(totalAmount)}</span>
+                            {productCart && productCart.length > 0 && (
+                                <>
+                                    <div className='total-amount-header'>
+                                        <h3>Total Amount</h3>
+                                        <div className='payment-method'>
+                                            <span className='payment-label'>
+                                                Payment Method
+                                            </span>
+                                            <label
+                                                className={`method-option ${this.state.paymentMethod && this.state.paymentMethod === 'Cash on Delivery' ? 'selected' : ''}`}
+                                            >
+                                                <input
+                                                    type="radio"
+                                                    name={'cash-on-delivery'}
+                                                    value='Cash on Delivery'
+                                                    onChange={(e) => this.handlePaymentMethodOptionChange(e)}
+                                                    checked={this.state.paymentMethod && this.state.paymentMethod === 'Cash on Delivery'}
+                                                />
+                                                Cash on Delivery
+                                            </label>
+                                            <label
+                                                className={`method-option ${this.state.paymentMethod && this.state.paymentMethod === 'Online payment' ? 'selected' : ''}`}
+                                            >
+                                                <input
+                                                    type="radio"
+                                                    name={'online-payment'}
+                                                    value='Online payment'
+                                                    onChange={(e) => this.handlePaymentMethodOptionChange(e)}
+                                                    checked={this.state.paymentMethod && this.state.paymentMethod === 'Online payment'}
+                                                />
+                                                Online payment
+                                            </label>
+                                            {this.state.paymentMethod === 'Online payment' && (
+                                                <div className='upload-transfer-image'>
+                                                    <label htmlFor='transfer-image-upload' className='transfer-image-upload'>
+                                                        <FontAwesomeIcon icon={faCamera} />
+                                                        <span>Upload Bank Transfer Image: </span>
+                                                        <input
+                                                            type='file'
+                                                            id='transfer-image-upload'
+                                                            name='transferImage'
+                                                            accept="image/*"
+                                                            onChange={this.handleAddImage}
+                                                        />
+                                                    </label>
+                                                    {this.state.images && (
+                                                        <div className='transfer-image-preview'>
+                                                            <img src={this.state.images} alt='Transfer Preview' />
+                                                            <div className="image-overlay">
+                                                                <FontAwesomeIcon icon={faTrash} onClick={this.handleDeleteImage}
+                                                                    style={{ fontSize: '20px', margin: '10px 25px 5px 30px', cursor: 'pointer' }} />
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                    <div className='total-price-product'>
+                                        {productCart.map(item => (
+                                            <span>{formatCurrency(item.totalAmountPerProduct)}</span>
+                                        ))}
+                                    </div>
+                                    <div className='total-amount'>
+                                        <strong>Total: {formatCurrency(productCart.reduce((total, item) => {
+                                            return total + item.totalAmountPerProduct;
+                                        }, 0))}</strong>
+                                    </div>
+                                    <div className='checkout-button'>
+                                        <button onClick={this.handleCheckout}>Order now</button>
+                                    </div>
+                                </>
+
+                            )}
                         </div>
 
                         {/* Checkout Button */}
-                        <div className='checkout-button'>
-                            <button onClick={this.handleCheckout}>Thanh Toán</button>
-                        </div>
                     </div>
                     <div className='checkout-footer'>
                         <AboutUs />
@@ -525,4 +717,3 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Checkout));
-
