@@ -293,6 +293,12 @@
                                 &:hover {
                                     background-color: #007bff;
                                 }
+
+                                &:disabled {
+                                    color: #444;
+                                    background-color: #ddd;
+                                    cursor: not-allowed;
+                                }
                             }
 
                             .buy-btn {
@@ -300,6 +306,12 @@
 
                                 &:hover {
                                     background-color: #007bff;
+                                }
+
+                                &:disabled {
+                                    color: #444;
+                                    background-color: #ddd;
+                                    cursor: not-allowed;
                                 }
                             }
                         }
@@ -555,10 +567,6 @@
 
                                     input[type='radio'] {
                                         display: none;
-
-                                        // &:checked + label + .content {
-                                        //     display: block;
-                                        // }
 
                                         &:checked+label {
                                             border: 2px solid #78a206;

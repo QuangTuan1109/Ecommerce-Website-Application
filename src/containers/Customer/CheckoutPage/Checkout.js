@@ -90,8 +90,6 @@ class Checkout extends Component {
     };
 
     handleAddImage = async (event) => {
-        const acceptedFiles = event.target.files;
-
         try {
             handleImageUpload(event, (imageUrls) => {
                 this.setState({
@@ -243,17 +241,45 @@ class Checkout extends Component {
                     : item.ProductID._id === productId;
 
                 if (isMatchingProduct) {
+                    let totalDiscount = 0;
+
+                    if (item.Voucher && item.Voucher.length > 0) {
+                        item.Voucher.forEach(voucherId => {
+                            const selectedVoucher = this.state.selectedVoucher.find(v => v.vouchers.some(voucher => voucher.Voucher._id === voucherId));
+                            if (selectedVoucher) {
+                                selectedVoucher.vouchers.forEach(voucher => {
+                                    if (voucher.Voucher._id === voucherId) {
+                                        if (voucher.Voucher.discountType === 'amount') {
+                                            totalDiscount += voucher.Voucher.discountValue;
+                                        } else {
+                                            totalDiscount += (item.TotalPrices * voucher.Voucher.discountValue / 100);
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                    }
+
+                    const totalAmountPerProduct = item.TotalPrices + fee - totalDiscount;
+
                     return {
                         ...item,
                         deliveryMethod: value,
                         deliveryFee: fee,
-                        totalAmountPerProduct: item.TotalPrices + fee
+                        totalAmountPerProduct
                     };
                 }
                 return item;
             })
+        }), this.updateTotalAmount);
+    };
+
+    updateTotalAmount = () => {
+        this.setState(prevState => ({
+            totalAmount: prevState.productCart.reduce((total, item) => total + item.totalAmountPerProduct, 0)
         }));
     };
+
 
     handlePaymentMethodOptionChange = (e) => {
         const { value } = e.target;
@@ -261,8 +287,7 @@ class Checkout extends Component {
     };
 
     handleCheckout = () => {
-        // Handle the checkout process
-        const { recipName, phone, shippingAddress, productCart, paymentMethod } = this.state;
+        const { recipName, phone, shippingAddress, productCart, paymentMethod, images } = this.state;
 
         const formData = {
             recipName: recipName,
@@ -275,17 +300,16 @@ class Checkout extends Component {
                     quantity: item.Quantity,
                     price: item.TotalPrices,
                     message: item.message ? item.message : null,
-                    voucherShop: item.Voucher ? item.Voucher : null,
+                    voucherShop: item.Voucher ? item.Voucher : [],
                     deliveryMethod: item.deliveryMethod,
                     deliveryFee: item.deliveryFee
                 }
                 return productItem
             }),
-            voucherSystem: productCart.voucherSystem ? productCart.voucherSystem : null,
-            totalAmount: productCart.reduce((total, item) => {
-                return total + item.totalAmountPerProduct;
-            }, 0),
-            paymentMethod: paymentMethod
+            voucherSystem: productCart.voucherSystem ? productCart.voucherSystem : [],
+            totalAmount: productCart.reduce((total, item) => total + item.totalAmountPerProduct, 0),
+            paymentMethod: paymentMethod,
+            bankTransferImage: images ? images : []
         }
 
         axios.post(`http://localhost:5000/api/v1/order//order-and-payment`, formData, {
@@ -321,15 +345,18 @@ class Checkout extends Component {
         }
     };
 
-    handleInputChange = (e) => {
+    handleInputChange = (index, e) => {
         const { name, value } = e.target;
         if (name === 'message') {
             this.setState(prevState => ({
-                productCart: prevState.productCart.map(item => {
-                    return {
-                        ...item,
-                        [name]: value
-                    };
+                productCart: prevState.productCart.map((item, i) => {
+                    if (i === index) {
+                        return {
+                            ...item,
+                            [name]: value
+                        };
+                    }
+                    return item;
                 })
             }));
         } else {
@@ -337,9 +364,9 @@ class Checkout extends Component {
         }
     }
 
-
     handleSuccess = () => {
         this.closePopup();
+        this.props.history.push('/purchase');
     }
 
     handleFailure = () => {
@@ -372,8 +399,6 @@ class Checkout extends Component {
     render() {
         const { popupVisible, popupMessage, popupType, onConfirm, productCart, userInfo, selectedVoucher, totalAmount, showVoucherPopup } = this.state;
 
-        console.log(productCart)
-
         return (
             <div className='checkout-container'>
                 <Prompt
@@ -394,7 +419,7 @@ class Checkout extends Component {
                                     <input
                                         type="text"
                                         name='recipName'
-                                        value={userInfo.CustomerID.Fullname ? userInfo.CustomerID.Fullname : ''}
+                                        value={this.state.recipName}
                                         onChange={(e) => this.handleInputChange(e)}
                                     />
                                 </div>
@@ -403,7 +428,7 @@ class Checkout extends Component {
                                     <input
                                         type="text"
                                         name='phone'
-                                        value={userInfo.CustomerID.Phone ? userInfo.CustomerID.Phone : ''}
+                                        value={this.state.phone}
                                         onChange={(e) => this.handleInputChange(e)}
                                     />
                                 </div>
@@ -412,7 +437,7 @@ class Checkout extends Component {
                                     <input
                                         type="text"
                                         name='shippingAddress'
-                                        value={userInfo.CustomerID.Address ? userInfo.CustomerID.Address : ''}
+                                        value={this.state.shippingAddress}
                                         onChange={(e) => this.handleInputChange(e)}
                                     />
                                 </div>
@@ -512,8 +537,8 @@ class Checkout extends Component {
                                                     <input key={index}
                                                         type='text'
                                                         placeholder='Note to seller...'
-                                                        name='message' value={this.state.message}
-                                                        onChange={(e) => this.handleInputChange(e)} />
+                                                        name='message' value={item.message}
+                                                        onChange={(e) => this.handleInputChange(index, e)} />
                                                 </div>
                                                 <div className='delivery-part'>
                                                     <span>Shipping Carrier</span>

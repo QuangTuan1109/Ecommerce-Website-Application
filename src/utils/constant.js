@@ -10,13 +10,15 @@ export const path = {
     DETAIL_PRODUCT_PAGE: '/product/detail/:productId',
     CART: '/cart',
     CHECKOUT: '/checkout',
+    ORDERPAGE: '/purchase',
     HOMEPAGESELLER: '/seller',
     CREATEPRODUCT: '/create-product',
     ALLPRODUCT: '/all-product',
     DETAILPRODUCTSELLER: '/detail-product-seller/:id',
     UPDATEPRODUCT: '/update-product/:id',
     VOUCHERLIST: '/voucher/list',
-    ADDVOUCHER: '/add-voucher'
+    ADDVOUCHER: '/add-voucher',
+    ORDERMANAGE: '/sale/order'
 };
 
 export const languages = {

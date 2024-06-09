@@ -179,6 +179,7 @@ class HeaderHomepage extends Component {
                                                         <ul>
                                                             <li><img src={user} alt={'user-icon'} /><Link to='/' className='menu-element'>My Profile</Link></li>
                                                             <li><img src={user} alt={'user-icon'} /><Link rel="noopener noreferrer" onClick={this.handleSellerChannelClick} className='menu-element'>Seller Channel</Link></li>
+                                                            <li><img src={Helps} alt={'order-icon'} /><Link to='/purchase' className='menu-element'>Order</Link></li>
                                                             <li><img src={settings} alt={'settings-icon'} /><Link to='/' className='menu-element'>Settings</Link></li>
                                                             <li>
                                                                 <img src={Theme} alt={'Theme-icon'} /><Link to='/' className='menu-element'>Theme</Link>

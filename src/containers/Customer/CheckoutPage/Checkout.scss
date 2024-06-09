@@ -378,12 +378,12 @@
 
                             .transfer-image-preview {
                                 height: 150px;
-                                width: 0;
+                                width: 17px;
                                 z-index: 999;
 
                                 img {
-                                    width: 150px;
-                                    height: 150px;
+                                    width: 165px;
+                                    height: 300px;
                                     margin-right: 10px;
                                 }
 
@@ -400,6 +400,7 @@
                     display: flex;
                     flex-direction: column;
                     text-align: right;
+                    margin-top: 160px;
                     
                     span {
                         font-weight: bold;

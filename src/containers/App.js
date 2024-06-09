@@ -24,6 +24,7 @@ import DetailProduct from './Customer/ProductsPage/DetailProduct';
 import News from './Customer/NewsPage/News'
 import Cart from './Customer/CartPage/Cart';
 import Checkout from './Customer/CheckoutPage/Checkout'
+import Orderpage from './Customer/OrderPage/OrderPage'
 import Homepage from './Seller/HomepageSeller/Homepage'
 import CreateProduct from './Seller/ProductPageSeller/CreateProduct/CreateProduct'
 import AllProduct from './Seller/ProductPageSeller/AllProduct/AllProduct'
@@ -31,6 +32,7 @@ import DetailProductSeller from './Seller/ProductPageSeller/DetailProduct/Detail
 import UpdateProduct from './Seller/ProductPageSeller/DetailProduct/UpdateProduct';
 import VoucherList from './Seller/MarketingSeller/Voucher/VoucherList/VoucherList';
 import AddVoucher from './Seller/MarketingSeller/Voucher/AddVoucher/AddVoucher';
+import Ordermanage from './Seller/OrderManage/Ordermanage';
 
 class App extends Component {
 
@@ -71,6 +73,7 @@ class App extends Component {
                                     <Route path={path.NEWS} component={userIsAuthenticated(News)}></Route>
                                     <Route path={path.CART} component={userIsAuthenticated(Cart)}></Route>
                                     <Route path={path.CHECKOUT} component={userIsAuthenticated(Checkout)}></Route>
+                                    <Route path={path.ORDERPAGE} component={userIsAuthenticated(Orderpage)}></Route>
                                     <Route path={path.HOMEPAGESELLER} component={userIsAuthenticated(Homepage)}></Route>
                                     <Route path={path.CREATEPRODUCT} component={userIsAuthenticated(CreateProduct)}></Route>
                                     <Route path={path.ALLPRODUCT} component={userIsAuthenticated(AllProduct)}></Route>
@@ -78,6 +81,7 @@ class App extends Component {
                                     <Route path={path.UPDATEPRODUCT} component={userIsAuthenticated(UpdateProduct)}></Route>
                                     <Route path={path.VOUCHERLIST} component={userIsAuthenticated(VoucherList)}></Route>
                                     <Route path={path.ADDVOUCHER} component={userIsAuthenticated(AddVoucher)}></Route>
+                                    <Route path={path.ORDERMANAGE} component={userIsAuthenticated(Ordermanage)}></Route>
                                 </Switch>
                         </div>
 

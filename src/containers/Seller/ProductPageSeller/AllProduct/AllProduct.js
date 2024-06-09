@@ -20,7 +20,7 @@ class AllProduct extends Component {
     }
 
     handleTabClick = (tabName) => {
-        this.setState({ activeTab: tabName }); // Cập nhật mục active khi được click
+        this.setState({ activeTab: tabName });
     }
 
     handleSelectChange = (event) => {

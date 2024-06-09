@@ -13,11 +13,11 @@ class AllProductContent extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            searchQuery: '', // Trạng thái lưu trữ nội dung tìm kiếm
-            showPopup: false, // Trạng thái hiển thị popup
-            selectedCategory: null, // Trạng thái lưu trữ ngành hàng đã chọn
-            currentPage: 0, // Trang hiện tại
-            productsPerPage: 10, // Số sản phẩm trên mỗi trang
+            searchQuery: '', 
+            showPopup: false, 
+            selectedCategory: null, 
+            currentPage: 0, 
+            productsPerPage: 10,
             products: [],
             loading: true,
         };
@@ -57,27 +57,22 @@ class AllProductContent extends Component {
         this.setState({ currentPage: selected });
     };
 
-
-    // Hàm xử lý thay đổi nội dung tìm kiếm
     handleSearchChange = (event) => {
         this.setState({ searchQuery: event.target.value });
     }
 
-    // Hàm xử lý hiển thị/ẩn popup
     togglePopup = () => {
         this.setState({ showPopup: !this.state.showPopup });
     }
 
-    // Hàm xử lý chọn ngành hàng
     handleCategorySelect = (category) => {
         this.setState({ selectedCategory: category });
-        this.togglePopup(); // Ẩn popup sau khi chọn
+        this.togglePopup(); 
     }
 
     render() {
         const { searchQuery, showPopup, products, currentPage, productsPerPage } = this.state;
 
-        // Tính chỉ số của sản phẩm đầu tiên và cuối cùng trên trang hiện tại
         const indexOfLastProduct = (currentPage + 1) * productsPerPage;
         const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
         const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
@@ -85,7 +80,6 @@ class AllProductContent extends Component {
         return (
             <div className="section-content">
                 <div className="section-header">
-                    {/* Ô tìm kiếm */}
                     <div className="search-box">
                         <input
                             type="text"
@@ -93,24 +87,18 @@ class AllProductContent extends Component {
                             onChange={this.handleSearchChange}
                             placeholder="Search..."
                         />
-                        {/* Các biểu tượng, nút tìm kiếm, lọc... */}
                     </div>
-                    {/* Ô click hiện popup */}
                     <div className="category-select">
                         <button onClick={this.togglePopup}>Select Category</button>
                         {showPopup && (
                             <div className="popup">
-                                {/* Nội dung của popup */}
-                                {/* Ví dụ: danh sách ngành hàng để chọn */}
                                 <ul>
                                     <li onClick={() => this.handleCategorySelect('Category1')}>Category 1</li>
                                     <li onClick={() => this.handleCategorySelect('Category2')}>Category 2</li>
-                                    {/* Thêm các mục ngành hàng khác nếu cần */}
                                 </ul>
                             </div>
                         )}
                     </div>
-                    {/* Các button áp dụng và nhập lại */}
                     <div className="action-buttons">
                         <button>Apply</button>
                         <button>Reset</button>

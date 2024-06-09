@@ -34,7 +34,7 @@ class VoucherList extends Component {
 
     render() {
         const { voucherList } = this.state
-        console.log(voucherList)
+        
         return (
             <div className='voucher-list-container'>
                 <Header />

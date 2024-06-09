@@ -12,7 +12,6 @@ import { formatCurrency } from '../../../method/handleMethod'
 import CustomPopup from '../../../components/CustomPopup';
 
 import Slider from 'react-slick'
-import { width } from '@fortawesome/free-solid-svg-icons/fa0';
 
 class DetailProduct extends Component {
     constructor(props) {
@@ -27,7 +26,8 @@ class DetailProduct extends Component {
             Quantity: 1,
             unitPrice: null,
             popupType: '',
-            onConfirm: null
+            onConfirm: null,
+            isOutOfStock: false, 
         };
     }
 
@@ -52,16 +52,17 @@ class DetailProduct extends Component {
             });
     }
 
-    handleAddToCartButton() {
+    handleAddToCartButton = () => {
         const { productId } = this.props.match.params;
+        const { Option1, Value1, Option2, Value2, Quantity, unitPrice } = this.state;
         const formData = {
-            Option1: this.state.Option1,
-            Value1: this.state.Value1,
-            Option2: this.state.Option2,
-            Value2: this.state.Value2,
-            Quantity: this.state.Quantity,
-            Price: this.state.unitPrice
-        }
+            Option1,
+            Value1,
+            Option2,
+            Value2,
+            Quantity,
+            Price: unitPrice
+        };
 
         try {
             axios.post(`http://localhost:5000/api/v1/order/${productId}/add-to-cart`, formData, {
@@ -70,7 +71,7 @@ class DetailProduct extends Component {
                 }
             })
             .then(response => {
-                this.showPopup('Successfully!', 'successful', this.handleSuccess);
+                this.showPopup('Successfully added to cart!', 'successful', this.handleSuccess);
             })
             .catch(error => {
                 this.showPopup('Failed to add to cart.', 'error', this.handleFailure);
@@ -78,29 +79,32 @@ class DetailProduct extends Component {
         } catch (error) {
             this.showPopup('Failed to add to cart.', 'error', this.handleFailure);
         }       
-    }
+    };
 
-    handleIncreaseQualityProduct() {
+
+    handleIncreaseQuantityProduct = () => {
         this.setState((prevState, props) => {
+            const newQuantity = prevState.Quantity + 1;
             return {
-                Quantity: prevState.Quantity + 1
-            }
-        })
-    }
+                Quantity: newQuantity
+            };
+        }, this.checkStock);
+    };
 
-    handleDecreaseQualityProduct() {
+    handleDecreaseQuantityProduct = () => {
         this.setState((prevState, props) => {
-            if (prevState.Quantity == 1) {
+            if (prevState.Quantity === 1) {
                 return {
-                    Quantity: prevState.Quantity = 1
-                }
+                    Quantity: 1
+                };
             } else {
+                const newQuantity = prevState.Quantity - 1;
                 return {
-                    Quantity: prevState.Quantity - 1
-                }
+                    Quantity: newQuantity
+                };
             }
-        })
-    }
+        }, this.checkStock);
+    };
 
     handleMouseEnter(image) {
         this.setState({ mainImage: image });
@@ -110,12 +114,47 @@ class DetailProduct extends Component {
         this.setState({ mainImage: this.state.product.Image[0] });
     }
 
+    checkStock = () => {
+        const { product, Value1, Value2, Quantity } = this.state;
+        
+        if (product.Classify) {
+            const selectedClassify = product.Classify.find(
+                classify => classify.Options.some(
+                    option => option.Value2 ? (option.Value1 === Value1 && option.Value2 === Value2) : option.Value1 === Value1
+                )
+            );
+
+            
+            if (selectedClassify) {
+                const selectedOption = selectedClassify.Options.find(
+                    option => option.Value2 ? (option.Value1 === Value1 && option.Value2 === Value2) : option.Value1 === Value1
+                );
+                
+                if (selectedOption && (selectedOption.Stock === 0 || selectedOption.Stock === Quantity)) {
+                    this.setState({ isOutOfStock: true });
+                } else {
+                    this.setState({ isOutOfStock: false });
+                }
+                
+            } else {
+                this.setState({ isOutOfStock: false });
+            }
+        } else {
+            if (product.Quantity && product.Quantity < Quantity) {
+                this.setState({ isOutOfStock: true });
+            } else {
+                this.setState({ isOutOfStock: false });
+            }
+        }
+    };
+    
+    
     handleOption1Change = (value, option) => {
-        this.setState({ Value1: value, Option1: option });
+        this.setState({ Value1: value, Option1: option }, this.checkStock);
     };
 
     handleOption2Change = (value, option) => {
-        this.setState({ Value2: value, Option2: option });
+        this.setState({ Value2: value, Option2: option }, this.checkStock);
     };
 
     handleSuccess = () => {
@@ -166,7 +205,7 @@ class DetailProduct extends Component {
             slidesToScroll: 1,
         };
 
-        const { product, mainImage, popupVisible, popupMessage, popupType, onConfirm } = this.state
+        const { product, mainImage, popupVisible, popupMessage, popupType, onConfirm,isOutOfStock, Quantity } = this.state
 
         return (
             <div className='detail-container'>
@@ -248,6 +287,7 @@ class DetailProduct extends Component {
                                                         value={value}
                                                         onClick={() => this.handleOption2Change(value, product.Classify[0].Options[0].Option2)}
                                                         checked={this.state.Value2 === value}
+                                                        disabled={product.Classify[0].Options.find(option => option.Value2 === value && option.Value1 === this.state.Value1)?.stock === 0}
                                                     />
                                                     {value}
                                                 </label>
@@ -271,6 +311,7 @@ class DetailProduct extends Component {
                                                                 value={option.Value1}
                                                                 onClick={() => this.handleOption1Change(option.Value1, option.Option1)}
                                                                 checked={this.state.Value1 === option.Value1}
+                                                                disabled={product.Classify[0].Options.find(opt => opt.Value1 === option.Value1 && (this.state.Value2 ? opt.Value2 === this.state.Value2 : true))?.stock === 0}
                                                             />
                                                             {option.Value1}
                                                         </label>
@@ -282,14 +323,14 @@ class DetailProduct extends Component {
                                     <div className='quantity-size-info'>
                                         <div className='quantity-part'>
                                             <label>Quantity: </label>
-                                            <input className="minus is-form" type="button" value="-" onClick={() => this.handleDecreaseQualityProduct()} />
-                                            <input aria-label="quantity" className="input-qty" name="" type="number" value={this.state.Quantity} />
-                                            <input className="plus is-form" type="button" value="+" onClick={() => this.handleIncreaseQualityProduct()} />
+                                            <input className="minus is-form" type="button" value="-" onClick={this.handleDecreaseQuantityProduct} disabled={isOutOfStock || Quantity <= 1} />
+                                            <input aria-label="quantity" className="input-qty" name="" type="number" value={Quantity} readOnly />
+                                            <input className="plus is-form" type="button" value="+" onClick={this.handleIncreaseQuantityProduct} disabled={isOutOfStock} />
                                         </div>
                                     </div>
 
                                     <div className='add-btn'>
-                                        <input className="add-to-cart-btn" onClick={() => this.handleAddToCartButton()} type="button" value="Add To Cart" />
+                                        <input className="add-to-cart-btn" onClick={this.handleAddToCartButton} disabled={isOutOfStock} type="button" value="Add To Cart" />
                                         <input className="buy-btn" type="button" value="Buy Now" />
                                     </div>
                                     <div className='social-like-part'>
