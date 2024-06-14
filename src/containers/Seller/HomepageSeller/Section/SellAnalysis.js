@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { XYPlot, LineSeries, XAxis, YAxis, VerticalGridLines, HorizontalGridLines } from 'react-vis';
 import 'react-vis/dist/style.css'; 
 import './SellAnalysis.scss';
+import axios from '../../../../axios'
 
 class SellAnalysis extends Component {
     state = {
@@ -243,6 +244,26 @@ class SellAnalysis extends Component {
         ],
         currentChartIndex: 0
     };
+
+    componentDidMount() {
+        this.fetchDataSalesHourly()
+        this.interval = setInterval(this.fetchDataSalesHourly, 1000);
+    }
+
+    fetchDataSalesHourly = async () => {
+        const token = localStorage.getItem('accessToken')
+        console.log(token)
+        try {
+            const response = await axios.post(`http://localhost:5000/api/v1/analys/analyticsSalesPerHour`, {}, {
+                headers: {
+                    'Authorization': `${token}`
+                }
+            });
+            console.log(response)
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     handleChartChange = (index) => {
         this.setState({ currentChartIndex: index });

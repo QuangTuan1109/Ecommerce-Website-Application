@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from "react-router-dom";
 import { connect } from 'react-redux';
+import CryptoJS from 'crypto-js';
+
 import './HeaderHomepage.scss';
 import avt from '../../assets/images/avatar.png';
 import logo from '../../assets/images/logo-website.png';
@@ -18,7 +20,8 @@ class HeaderHomepage extends Component {
         super(props);
         this.state = {
             value: 'Vietnamese',
-            User: null
+            User: null,
+            keywordSearch: ''
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -28,7 +31,7 @@ class HeaderHomepage extends Component {
 
     async fetchUser() {
         try {
-            const fetchUserAPI = await axios.get('http://localhost:5000/api/v1/user', {
+            const fetchUserAPI = await axios.get('http://localhost:5000/api/v1/user',  {
                 headers: {
                     'Authorization': `${localStorage.getItem('accessToken')}`
                 }
@@ -38,6 +41,37 @@ class HeaderHomepage extends Component {
             console.error("Error:", error);
         }
     }
+
+    async handelOnClickButton() {
+        const { keywordSearch } = this.state
+        try {
+            await axios.get('http://localhost:5000/api/v1/products/search', {
+                headers: {
+                    'Authorization': `${localStorage.getItem('accessToken')}`
+                },
+                params: {
+                    q: keywordSearch 
+                },
+            }).then(response => {
+                const privateKey = 'lequangtuan1109';
+    
+                const dataToEncrypt = JSON.stringify({ response });
+            
+                const encryptedData = CryptoJS.AES.encrypt(dataToEncrypt, privateKey).toString();
+            
+                localStorage.setItem('encryptedData', encryptedData);
+        
+                this.props.history.push('/product');
+            })
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+
+    handelOnchange(event) {
+        this.setState({ keywordSearch: event.target.value });
+    }
+
     componentDidMount() {
         this.fetchUser();
     }
@@ -118,8 +152,8 @@ class HeaderHomepage extends Component {
                                             <input type='text'
                                                 className='search-control'
                                                 placeholder='Searching...'
-                                                value={this.state.username}
-                                                onChange={(event) => this.handelOnchangeUsername(event)}
+                                                value={this.state.keywordSearch ? this.state.keywordSearch : ''}
+                                                onChange={(event) => this.handelOnchange(event)}
                                             />
                                         </div>
                                         <div className='search-button'>

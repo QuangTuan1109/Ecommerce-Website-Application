@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import CryptoJS from 'crypto-js';
 
 import HeaderHomepage from '../../HomePage/HeaderHomepage';
 import AboutUs from '../../HomePage/Section/AboutUs'
@@ -16,7 +17,6 @@ class Products extends Component {
         super(props);
         this.state = {
             products: [],
-            category: [],
             value: 'all prices',
             page: 1,
             hasMore: true,
@@ -27,61 +27,26 @@ class Products extends Component {
     }
 
     componentDidMount() {
-        this.fetchProductByCategory();
-        this.fetchAllSubCategory();
         window.addEventListener('scroll', this.handleScroll);
+
+        const encryptedData = localStorage.getItem('encryptedData');
+
+        if (encryptedData) {
+            try {
+                const bytes = CryptoJS.AES.decrypt(encryptedData, 'lequangtuan1109');
+                const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+
+                this.setState({ products: decryptedData.response });
+            } catch (error) {
+                console.error('Error decrypting data:', error);
+            }
+        }
     }
 
     componentWillUnmount() {
         window.removeEventListener('scroll', this.handleScroll);
     }
 
-
-    fetchProductByCategory() {
-        const { id } = this.props.match.params;
-        const { page } = this.state;
-
-        axios.get(`http://localhost:5000/api/v1/products/${id}?page=${page}&limit=20`)
-            .then(response => {
-                const newProducts = response.products;
-                const hasMore = newProducts.length > 0;
-                this.setState(prevState => ({
-                    products: [...prevState.products, ...newProducts],
-                    hasMore,
-                    page: prevState.page + 1
-                }));
-            })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-            });
-    }
-
-    fetchAllSubCategory() {
-        const { id } = this.props.match.params;
-        axios.get(`http://localhost:5000/api/v1/products/categories/subcategories/${id}`)
-            .then(response => this.setState({ category: response.data }))
-            .catch(error => {
-                console.error('Error fetching data:', error);
-            });
-    }
-
-    handleClick(categoryId) {
-        axios.get(`http://localhost:5000/api/v1/products/${categoryId}?page=1&limit=20`)
-            .then(response => {
-                if (response) {
-                    this.setState({ 
-                        products: response.products,
-                        page: 1,
-                        hasMore: true
-                    });
-                } else {
-                    this.setState({ products: [] })
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-            });
-    }
 
     handleChange(event) {
         this.setState({ value: event.target.value });
@@ -94,7 +59,9 @@ class Products extends Component {
     }
 
     render() {
-        const { products, category } = this.state;
+        const { products } = this.state;
+
+        console.log(products)
 
         return (
             <div className='product-container'>
@@ -125,13 +92,6 @@ class Products extends Component {
                                 </div>
                             </div>
                             <div className='left-result-filter'>
-                                <div className='categories-filter'>
-                                    <Link to='/' className='filter-title'><i className="fa fa-bars"></i>All Categories</Link>
-                                    <Link onClick={() => this.handleClick(this.props.match.params.id)} className='main-category'>{this.props.match.params.catName}</Link>
-                                    {category.map((cate, index) => (
-                                        <Link key={index} className='detail-category' onClick={() => this.handleClick(cate.id)}>{cate.name}</Link>
-                                    ))}
-                                </div>
                                 <div className='searching-filter'>
                                     <form className='form-filter'>
                                         <Link to='/' className='filter-title'><i className="fa fa-filter"></i>Searching Filter</Link>
