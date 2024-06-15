@@ -61,7 +61,7 @@ class HeaderHomepage extends Component {
             
                 localStorage.setItem('encryptedData', encryptedData);
         
-                this.props.history.push('/product');
+                this.props.history.push('/products-search');
             })
         } catch (error) {
             console.error("Error:", error);

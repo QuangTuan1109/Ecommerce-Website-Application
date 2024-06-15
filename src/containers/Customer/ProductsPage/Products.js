@@ -105,7 +105,7 @@ class Products extends Component {
                     <div className='product-page'>
                         <div className='product-page-title'>
                             <ul className='option'>
-                                <li><span>Welcome everyone to E-Shopping</span></li>
+                                <li><span>Welcome everyone to Shopspace</span></li>
                                 <li><span>You can find good products here.</span></li>
                                 <li><span>Wish you have a good experience.</span></li>
                             </ul>

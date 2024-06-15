@@ -247,7 +247,7 @@ class SellAnalysis extends Component {
 
     componentDidMount() {
         this.fetchDataSalesHourly()
-        this.interval = setInterval(this.fetchDataSalesHourly, 1000);
+        //this.interval = setInterval(this.fetchDataSalesHourly, 1000);
     }
 
     fetchDataSalesHourly = async () => {

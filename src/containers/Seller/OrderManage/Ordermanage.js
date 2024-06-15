@@ -185,16 +185,16 @@ class OrderManage extends Component {
             const newOrder = { ...order, products: [] };
     
             switch (tabName) {
-                case 'Chờ xác nhận':
+                case 'Wait for confirmation':
                     newOrder.products = order.products.filter(product => product.productStatus === 'Pending');
                     break;
-                case 'Chờ lấy hàng':
+                case 'Waiting for delivery':
                     newOrder.products = order.products.filter(product => product.productStatus === 'Confirmed');
                     break;
-                case 'Đang giao':
+                case 'Delivering':
                     newOrder.products = order.products.filter(product => product.productStatus === 'Shipped');
                     break;
-                case 'Đã giao':
+                case 'Delivered':
                     newOrder.products = order.products.filter(product => product.productStatus === 'Delivered');
                     break;
                 case 'Completed':
@@ -206,7 +206,7 @@ class OrderManage extends Component {
                 case 'Return/Refund':
                     newOrder.products = order.products.filter(product => product.productStatus === 'Return/Refund');
                     break;
-                case 'Giao không thành công':
+                case 'Delivery failed':
                     newOrder.products = order.products.filter(product => product.productStatus === 'Delivery failed');
                     break;
                 default:
@@ -458,7 +458,7 @@ class OrderManage extends Component {
                         <div className="tabs">
                             <div className="navbar-content">
                                 <ul className="sub-nav">
-                                    {['All', 'Chờ xác nhận', 'Chờ lấy hàng', 'Đang giao', 'Đã giao', 'Completed', 'Cancelled', 'Return/Refund', 'Giao không thành công'].map(tab => (
+                                    {['All', 'Wait for confirmation', 'Waiting for delivery', 'Delivering', 'Delivered', 'Completed', 'Cancelled', 'Return/Refund', 'Delivery failed'].map(tab => (
                                         <li key={tab} className={`sub-nav-item ${activeTab === tab ? 'active' : ''}`} onClick={() => this.handleTabClick(tab)}>
                                             <FontAwesomeIcon className="nav-icon" />
                                             {tab}
@@ -468,13 +468,11 @@ class OrderManage extends Component {
                             </div>
                         </div>
                         <div className="order-search">
-                            <input type="text" placeholder="Mã đơn hàng" />
+                            <input type="text" placeholder="Order code" />
                             <select>
-                                <option>Đơn vị vận chuyển</option>
-                                <option>Tất cả ĐVVC</option>
+                                <option>Shipping unit</option>
+                                <option>ALL ĐVVC</option>
                             </select>
-                            <button>Áp dụng</button>
-                            <button>Đặt lại</button>
                         </div>
                         {this.renderContentBasedOnTab()}
                     </div>

@@ -105,7 +105,7 @@ class Login extends Component {
                             <img src={logo} alt={'logo'}/>
                         </div>
                         <div className='col-12 intro-text'>
-                            <span>E-shopping is an e-commerce website that is loved by most of the countries in the world today.
+                            <span>Shopspace is an e-commerce website that is loved by most of the countries in the world today.
                                  In addition to the usual shopping functions, E-shopping also develops a number of other functions to increase the user experience.</span>
                         </div>
                     </div>

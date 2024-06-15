@@ -22,7 +22,7 @@
             font-family: 'Poppins' sans-serif;
             text-align: center;
             border-radius: 15px;
-            border: 1px solid #fff;
+            border: 1px solid #000;
             overflow: hidden;
             transition: all 0.4s ease-out;
             width: 300px;
@@ -40,7 +40,6 @@
                     .image {
                         width: 300px;
                         height: 350px;
-                        background: url('../../../assets/images//product.jpg');
                         background-position: center center;
                         background-repeat: no-repeat;
                         background-size: cover;
@@ -133,17 +132,18 @@
                 background-color: #000;
                 padding: 12px 12px 15px;
                 position: relative;
+                height: 170px;
 
                 .rating {
                     padding: 0;
                     margin: 0 0 8px;
                     list-style: none;
-    
+
                     li {
                         color: #78a206;
                         font-size: 14px;
                     }
-    
+
                     .far {
                         color: #808080;
                     }
@@ -154,6 +154,7 @@
                     font-weight: 600;
                     text-transform: uppercase;
                     margin: 0 0 15px;
+                    height: 85px;
 
                     .name {
                         text-decoration: none;
@@ -209,16 +210,16 @@
                 top: 50%;
             }
 
-            &:hover .product-price{
+            &:hover .product-price {
                 opacity: 0;
             }
 
-            &:hover .add-to-cart{
+            &:hover .add-to-cart {
                 opacity: 1;
                 bottom: 8px;
             }
         }
-        
+
     }
 
     .button-see-more {
@@ -246,7 +247,9 @@
         }
     }
 
-    @media screen and (max-width:1200px){
-        .product-grid{ margin: 0 0 30px; }
+    @media screen and (max-width:1200px) {
+        .product-grid {
+            margin: 0 0 30px;
+        }
     }
 }

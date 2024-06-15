@@ -43,29 +43,27 @@ class NavbarHomepage extends Component {
                     <li className="nav-item">
                         <div className="nav-item-header" onClick={() => this.toggleMenu('orderManagement')}>
                             <FontAwesomeIcon icon={openMenus['orderManagement'] ? faCaretUp : faCaretDown} className="nav-icon" />
-                            Quản Lý Đơn Hàng
+                            Order Management
                         </div>
                         {openMenus['orderManagement'] && (
                             <ul className="sub-nav">
                                 <li className="sub-nav-item">
-                                    <FontAwesomeIcon icon={faShoppingCart} className="nav-icon" />
-                                    Tất Cả Đơn Hàng
+                                    <Link to="/sale/order" className="nav-item-link">
+                                        <FontAwesomeIcon icon={faShoppingCart} className="nav-icon" />
+                                        All Orders
+                                    </Link>
                                 </li>
                                 <li className="sub-nav-item">
                                     <FontAwesomeIcon icon={faBoxOpen} className="nav-icon" />
-                                    Giao Hàng Loạt
+                                    Order Cancelling
                                 </li>
                                 <li className="sub-nav-item">
                                     <FontAwesomeIcon icon={faBoxOpen} className="nav-icon" />
-                                    Đơn Hủy
+                                    Return/Refund
                                 </li>
                                 <li className="sub-nav-item">
                                     <FontAwesomeIcon icon={faBoxOpen} className="nav-icon" />
-                                    Trả Hàng Hoàn Tiền
-                                </li>
-                                <li className="sub-nav-item">
-                                    <FontAwesomeIcon icon={faBoxOpen} className="nav-icon" />
-                                    Cài Đặt Vận chuyển
+                                    Delivery Settings
                                 </li>
                             </ul>
                         )}
@@ -73,20 +71,20 @@ class NavbarHomepage extends Component {
                     <li className="nav-item">
                         <div className="nav-item-header" onClick={() => this.toggleMenu('productManagement')}>
                             <FontAwesomeIcon icon={openMenus['productManagement'] ? faCaretUp : faCaretDown} className="nav-icon" />
-                            Quản lý sản phẩm
+                            Product Management
                         </div>
                         {openMenus['productManagement'] && (
                             <ul className="sub-nav">
                                 <li className="sub-nav-item">
                                     <Link to="/all-product" className="nav-item-link">
                                         <FontAwesomeIcon icon={faShoppingCart} className="nav-icon" />
-                                        Tất Cả Sản Phẩm
+                                        All Product
                                     </Link>
                                 </li>
                                 <li className="sub-nav-item">
                                     <Link to="/create-product" className="nav-item-link">
                                         <FontAwesomeIcon icon={faBoxOpen} className="nav-icon" />
-                                        Thêm Sản Phẩm
+                                        Create Product
                                     </Link>
                                 </li>
                             </ul>
@@ -95,22 +93,22 @@ class NavbarHomepage extends Component {
                     <li className="nav-item">
                         <div className="nav-item-header" onClick={() => this.toggleMenu('marketingChanel')}>
                             <FontAwesomeIcon icon={openMenus['marketingChanel'] ? faCaretUp : faCaretDown} className="nav-icon" />
-                            Kênh Marketing
+                            Marketing Channel
                         </div>
                         {openMenus['marketingChanel'] && (
                             <ul className="sub-nav">
                                 <li className="sub-nav-item">
                                     <FontAwesomeIcon icon={faShoppingCart} className="nav-icon" />
-                                    Kênh Marketing
+                                    Marketing Channel
                                 </li>
                                 <li className="sub-nav-item">
                                     <FontAwesomeIcon icon={faBoxOpen} className="nav-icon" />
-                                    Quảng Cáo ShopSpace
+                                    ShopSpace Ads
                                 </li>
                                 <li className="sub-nav-item">
                                     <Link to="/voucher/list" className="nav-item-link">
                                         <FontAwesomeIcon icon={faBoxOpen} className="nav-icon" />
-                                        Mã giảm giá của shop
+                                        Voucher Shop
                                     </Link>
                                 </li>
                                 <li className="sub-nav-item">
@@ -123,25 +121,25 @@ class NavbarHomepage extends Component {
                     <li className="nav-item">
                         <div className="nav-item-header" onClick={() => this.toggleMenu('finance')}>
                             <FontAwesomeIcon icon={openMenus['finance'] ? faCaretUp : faCaretDown} className="nav-icon" />
-                            Tài Chính
+                            Finance
                         </div>
                         {openMenus['finance'] && (
                             <ul className="sub-nav">
                                 <li className="sub-nav-item">
                                     <FontAwesomeIcon icon={faShoppingCart} className="nav-icon" />
-                                    Doanh Thu
+                                    Revenue
                                 </li>
                                 <li className="sub-nav-item">
                                     <FontAwesomeIcon icon={faBoxOpen} className="nav-icon" />
-                                    Số Dư ShopSpace
+                                    ShopSpace Balance
                                 </li>
                                 <li className="sub-nav-item">
                                     <FontAwesomeIcon icon={faBoxOpen} className="nav-icon" />
-                                    Tài Khoản Ngân Hàng
+                                    Bank account
                                 </li>
                                 <li className="sub-nav-item">
                                     <FontAwesomeIcon icon={faBoxOpen} className="nav-icon" />
-                                    Cài Đặt Thanh Toán
+                                    Payment Settings
                                 </li>
                             </ul>
                         )}
@@ -149,17 +147,17 @@ class NavbarHomepage extends Component {
                     <li className="nav-item">
                         <div className="nav-item-header" onClick={() => this.toggleMenu('data')}>
                             <FontAwesomeIcon icon={openMenus['data'] ? faCaretUp : faCaretDown} className="nav-icon" />
-                            Dữ Liệu
+                            Data
                         </div>
                         {openMenus['data'] && (
                             <ul className="sub-nav">
                                 <li className="sub-nav-item">
                                     <FontAwesomeIcon icon={faShoppingCart} className="nav-icon" />
-                                    Phân Tích Bán Hàng
+                                    Sales Analysis
                                 </li>
                                 <li className="sub-nav-item">
                                     <FontAwesomeIcon icon={faBoxOpen} className="nav-icon" />
-                                    Hiệu Quả Hoạt Động
+                                    Operational Efficiency
                                 </li>
                             </ul>
                         )}
@@ -167,17 +165,17 @@ class NavbarHomepage extends Component {
                     <li className="nav-item">
                         <div className="nav-item-header" onClick={() => this.toggleMenu('development')}>
                             <FontAwesomeIcon icon={openMenus['development'] ? faCaretUp : faCaretDown} className="nav-icon" />
-                            Phát Triển
+                            Development
                         </div>
                         {openMenus['development'] && (
                             <ul className="sub-nav">
                                 <li className="sub-nav-item">
                                     <FontAwesomeIcon icon={faShoppingCart} className="nav-icon" />
-                                    Nhiệm Vụ Người Bán
+                                    Seller Duties
                                 </li>
                                 <li className="sub-nav-item">
                                     <FontAwesomeIcon icon={faBoxOpen} className="nav-icon" />
-                                    Shop Yêu Thích
+                                    Favorite Shop
                                 </li>
                             </ul>
                         )}
@@ -185,17 +183,17 @@ class NavbarHomepage extends Component {
                     <li className="nav-item">
                         <div className="nav-item-header" onClick={() => this.toggleMenu('customerCare')}>
                             <FontAwesomeIcon icon={openMenus['customerCare'] ? faCaretUp : faCaretDown} className="nav-icon" />
-                            Chăm Sóc Khách Hàng
+                            Customer Care
                         </div>
                         {openMenus['customerCare'] && (
                             <ul className="sub-nav">
                                 <li className="sub-nav-item">
                                     <FontAwesomeIcon icon={faShoppingCart} className="nav-icon" />
-                                    Trợ Lý Chat
+                                    Chat Assistant
                                 </li>
                                 <li className="sub-nav-item">
                                     <FontAwesomeIcon icon={faBoxOpen} className="nav-icon" />
-                                    Hỏi Đáp
+                                    Q&A
                                 </li>
                             </ul>
                         )}
@@ -203,33 +201,29 @@ class NavbarHomepage extends Component {
                     <li className="nav-item">
                         <div className="nav-item-header" onClick={() => this.toggleMenu('shopManagement')}>
                             <FontAwesomeIcon icon={openMenus['shopManagement'] ? faCaretUp : faCaretDown} className="nav-icon" />
-                            Quản Lý Shop
+                            Shop Management
                         </div>
                         {openMenus['shopManagement'] && (
                             <ul className="sub-nav">
                                 <li className="sub-nav-item">
                                     <FontAwesomeIcon icon={faShoppingCart} className="nav-icon" />
-                                    Đánh Giá Shop
+                                    Shop Rating
                                 </li>
                                 <li className="sub-nav-item">
                                     <FontAwesomeIcon icon={faBoxOpen} className="nav-icon" />
-                                    Hồ Sơ Shop
+                                    Shop Profile
                                 </li>
                                 <li className="sub-nav-item">
                                     <FontAwesomeIcon icon={faBoxOpen} className="nav-icon" />
-                                    Trang Trí Shop
+                                    Shop Decoration
                                 </li>
                                 <li className="sub-nav-item">
                                     <FontAwesomeIcon icon={faBoxOpen} className="nav-icon" />
-                                    Danh Mục Của Shop
+                                    Shop Directory
                                 </li>
                                 <li className="sub-nav-item">
                                     <FontAwesomeIcon icon={faBoxOpen} className="nav-icon" />
-                                    Kho Hình Ảnh/Video
-                                </li>
-                                <li className="sub-nav-item">
-                                    <FontAwesomeIcon icon={faBoxOpen} className="nav-icon" />
-                                    Báo Cáo Của Tôi
+                                    My Report
                                 </li>
                             </ul>
                         )}
@@ -237,25 +231,21 @@ class NavbarHomepage extends Component {
                     <li className="nav-item">
                         <div className="nav-item-header" onClick={() => this.toggleMenu('shopSetup')}>
                             <FontAwesomeIcon icon={openMenus['shopSetup'] ? faCaretUp : faCaretDown} className="nav-icon" />
-                            Thiết Lập shop
+                            Setup Shop
                         </div>
                         {openMenus['shopSetup'] && (
                             <ul className="sub-nav">
                                 <li className="sub-nav-item">
                                     <FontAwesomeIcon icon={faShoppingCart} className="nav-icon" />
-                                    Địa chỉ
+                                    Address
                                 </li>
                                 <li className="sub-nav-item">
                                     <FontAwesomeIcon icon={faBoxOpen} className="nav-icon" />
-                                    Thiết Lập Shop
+                                    Setup Shop
                                 </li>
                                 <li className="sub-nav-item">
                                     <FontAwesomeIcon icon={faBoxOpen} className="nav-icon" />
-                                    Tài Khoản
-                                </li>
-                                <li className="sub-nav-item">
-                                    <FontAwesomeIcon icon={faBoxOpen} className="nav-icon" />
-                                    Nền Tảng Đối Tác
+                                    Account
                                 </li>
                             </ul>
                         )}
@@ -263,13 +253,13 @@ class NavbarHomepage extends Component {
                     <li className="nav-item">
                         <div className="nav-item-header" onClick={() => this.toggleMenu('help')}>
                             <FontAwesomeIcon icon={openMenus['help'] ? faCaretUp : faCaretDown} className="nav-icon" />
-                            Trợ Giúp
+                            Help
                         </div>
                         {openMenus['help'] && (
                             <ul className="sub-nav">
                                 <li className="sub-nav-item">
                                     <FontAwesomeIcon icon={faShoppingCart} className="nav-icon" />
-                                    Hỗ Trợ Người Bán
+                                    Seller Support
                                 </li>
                             </ul>
                         )}
