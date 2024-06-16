@@ -20,10 +20,9 @@
     }
 
     .current-date {
-      font-size: 18px; /* Font size lớn hơn */
-      font-weight: bold; /* In đậm */
-      color: #f00; /* Màu đỏ */
-      /* Các kiểu hiển thị khác (nếu cần) */
+      font-size: 18px;
+      font-weight: bold;
+      color: #f00; /* Red color for current date */
     }
   }
 
@@ -82,11 +81,11 @@
       }
 
       div:nth-child(1):before {
-        background-color: #1f77b4; /* Màu xanh dương đậm */
+        background-color: #1f77b4; /* Dark blue color */
       }
 
       div:nth-child(2):before {
-        background-color: #d62728; /* Màu đỏ */
+        background-color: #d62728; /* Red color */
       }
     }
 
@@ -111,7 +110,6 @@
       }
     }
     
-
     .data {
       flex: 1;
       display: flex;
@@ -132,6 +130,18 @@
 
           span {
             font-weight: bold;
+          }
+        }
+
+        &.positive {
+          .value {
+            color: green; /* Adjust color for positive values */
+          }
+        }
+
+        &.negative {
+          .value {
+            color: red; /* Adjust color for negative values */
           }
         }
       }

@@ -9,6 +9,14 @@
     .left {
       display: flex;
       align-items: center;
+
+      .logo {
+        img {
+          width: 220px;
+          margin: -95px 0 -95px 0;
+          cursor: pointer;
+      }
+      }
     }
   
     .right {

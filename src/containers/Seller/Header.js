@@ -1,6 +1,7 @@
 import React, { Component, useState } from 'react';
 import { Link } from "react-router-dom";
 import { connect } from 'react-redux';
+import logo from '../../assets/images/logo-website.png';
 import axios from '../../axios';
 import './Header.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -51,7 +52,11 @@ class Header extends Component {
         return (
             <header className="header">
                 <div className="left">
-                    <div className="logo">Logo</div>
+                    <div className="logo">
+                        <Link to="/seller">
+                            <img src={logo} alt={'logo'} />
+                        </Link>
+                    </div>
                 </div>
                 {User && (
                     <div className="right">
