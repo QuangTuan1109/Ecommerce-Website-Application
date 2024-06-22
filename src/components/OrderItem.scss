@@ -1,0 +1,101 @@
+.order-item {
+    margin-top: 20px;
+    padding: 10px;
+    border-bottom: 1px solid #000;
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    .general-order-information {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+
+        .delivery-information,
+        .order-information {
+            flex: 1;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            margin-right: 20px;
+
+            h3 {
+                margin-top: 0;
+            }
+
+            label {
+                display: flex;
+                margin-bottom: 10px;
+
+                .label-name {
+                    width: 50%;
+
+                    span {
+                        font-weight: bold;
+                    }
+                }
+
+                .label-content {
+                    width: 50%;
+                    overflow-wrap: break-word; 
+                }
+            }
+        }
+
+        .order-information {
+            margin-right: 0;
+        }
+    }
+
+    .product-information {
+        h3 {
+            margin-bottom: 20px;
+        }
+
+        .product-table {
+            width: 100%;
+            overflow-x: auto;
+        }
+    }
+
+    .action-btn {
+        text-align: right;
+
+        .cancel-order-button,
+        .confirm-order-button,
+        .cancel-request-order-button,
+        .return-refund-order-button  {
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            margin-left: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .cancel-order-button, 
+        .return-refund-order-button{
+            background-color: #ff5c5c;
+
+            &:hover {
+                background-color: #ff3333;
+            }
+        }
+
+        .confirm-order-button {
+            background-color: #4caf50;
+
+            &:hover {
+                background-color: #78a206;
+            }
+        }
+
+        .cancel-request-order-button {
+            color: #444;
+            background-color: #ddd;
+            cursor: not-allowed;
+        }
+    }
+}

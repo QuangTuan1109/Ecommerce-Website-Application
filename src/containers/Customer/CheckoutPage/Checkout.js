@@ -345,7 +345,7 @@ class Checkout extends Component {
         }
     };
 
-    handleInputChange = (index, e) => {
+    handleInputChange = (e, index) => {
         const { name, value } = e.target;
         if (name === 'message') {
             this.setState(prevState => ({
@@ -538,7 +538,7 @@ class Checkout extends Component {
                                                         type='text'
                                                         placeholder='Note to seller...'
                                                         name='message' value={item.message}
-                                                        onChange={(e) => this.handleInputChange(index, e)} />
+                                                        onChange={(e) => this.handleInputChange(e, index)} />
                                                 </div>
                                                 <div className='delivery-part'>
                                                     <span>Shipping Carrier</span>

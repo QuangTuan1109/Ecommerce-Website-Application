@@ -1,88 +1,96 @@
 .homepage-container {
     height: 100vh;
     background: #DCDCDC;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
 
-    .homepage-body {
-        height: 80%;
-        overflow: auto;
+    .homepage-header {
+        width: 100%;
     }
 
-    // .slick-prev {
-    //     left: -10px !important;
-    //     z-index: 1000 !important;
-    //     height: 48px !important;
-    //     width: 30px !important;
-    //     background: #000 !important;
-    //     border: 2px solid #000 !important;
-    //     opacity: 0.4;
-    
-    //     &:hover {
-    //         background: #2c2c2c !important;
-    //     }
-    // }
-    
-    // .slick-prev::before, .slick-next::before {
-    //     font-family: 'Font Awesome' !important;
-    //     color: white !important;
-    // }
-    
-    // .slick-next {
-    //     right: -2px !important;
-    //     z-index: 1000 !important;
-    //     height: 48px !important;
-    //     width: 30px !important;
-    //     background: #000 !important;
-    //     border: 2px solid #000 !important;
-    //     opacity: 0.4;
-    
-    //     &:hover {
-    //         background: #2c2c2c !important;
-    //     }
-    // }
+    .homepage-body {
+        width: 100%;
+        box-sizing: border-box;
+        overflow-y: auto; /* Cho phép lướt dọc khi cần */
+    }
 
-    // .section-container {
-    //     margin: 0 100px;
-    //     display: flex;
-    //     flex-direction: column;
+    .chatbot-popup {
+        position: fixed;
+        top: 66%;
+        left: 87%;
+        transform: translate(-50%, -50%);
+        width: 400px;
+        max-width: calc(100% - 40px); /* Giới hạn chiều rộng tối đa */
+        //background-color: #fff;
+        //box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        padding: 20px;
+        z-index: 1001; /* Đảm bảo hiển thị trên các phần tử khác */
+        display: none; /* Mặc định ẩn popup */
+    }
 
-    //     .section-header {
-    //         height: 60px;
-    //         margin-bottom: 30px;
-    //         padding-top: 30px;
+    .chatbot-popup.active {
+        display: block; /* Hiển thị popup khi có class active */
+    }
 
-    //         .title-content-section {
-    //             font-size: 22px;
-    //             font-weight: 600;
-    //         }
+    .chatbot-popup-content {
+        height: 500px; /* Chiều cao của nội dung popup */
+        overflow-y: auto; /* Cho phép lướt dọc nội dung trong popup */
+    }
 
-    //     }
+    .chatbot-popup-close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+        color: #777;
+        font-size: 17px;
+    }
 
-    //     .section-body{
-    //         .section-customize {
-    //             .bg-image {
-    //                 transition: 1s ease;
-    //                 margin-top: 20px;
-    //                 width: 435px;
-    //                 height: 300px;
-    //                 background: url('../../../assets/introduction/promotions 2.gif');
-    //                 background-position: center center;
-    //                 background-repeat: no-repeat;
-    //                 background-size: cover;
-    //                 background-color: #eee;
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+            box-shadow: 0 0 0 rgba(0, 0, 0, 0.1);
+        }
+        50% {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        100% {
+            transform: scale(1);
+            box-shadow: 0 0 0 rgba(0, 0, 0, 0.1);
+        }
+    }
     
-    //                 &:hover {
-    //                     -webkit-transform: scale(0.9);
-    //                     -ms-transform: scale(0.9);
-    //                     transform: scale(0.9);
-    //                     transition: 1s ease;
-    //                 }
-    //             }
-    //         }
+    .chatbot-icon-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #444;
+        color: #fff;
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        z-index: 1001;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s, box-shadow 0.3s;
+        animation: pulse 2s infinite;
     
-    //         .title-promotions {
-    //             font-size: 17px;
-    //             text-align: center;
-    //         }
-    //     }
-    //      }
+        &:hover {
+            background-color: #000;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5), 0 0 40px rgba(0, 0, 0, 0.5), 0 0 60px rgba(0, 0, 0, 0.5);
+        }
+    
+        .chatbot-icon {
+            font-size: 24px;
+        }
+    }
+    
 }

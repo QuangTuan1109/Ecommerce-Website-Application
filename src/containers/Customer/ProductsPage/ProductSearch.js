@@ -7,12 +7,11 @@ import HeaderHomepage from '../../HomePage/HeaderHomepage';
 import AboutUs from '../../HomePage/Section/AboutUs'
 import FooterHomepage from '../../HomePage/FooterHomepage';
 import './Products.scss';
-import axios from '../../../axios'
+import CardComponent from '../../../components/CardComponent';
+import withProductFetching from '../../../hoc/withProductFetching';
 
-import { formatCurrency } from '../../../method/handleMethod'
 
-
-class Products extends Component {
+class ProductSearch extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -181,35 +180,7 @@ class Products extends Component {
                             </div>
                             <div className='show-products-card'>
                                 {products.map((product, index) => (
-                                    <div key={index} className='product-card'>
-                                        <div className='product-image'>
-                                            <Link to={`/product/detail/${product._id}`} className='image-link-product'>
-                                                <img src={product.Image[0]} alt={product.Name} className='image' />
-                                            </Link>
-                                            {product.DiscountValue !== 0 && (
-                                                <span className='product-discount-label'>-{product.DiscountValue}</span>
-                                            )}
-                                            <ul className='product-link'>
-                                                <li><Link to='/' data-tip='Add to wishlist' className='detail-component'><i className="fas fa-heart"></i></Link></li>
-                                                <li><Link to='/' data-tip='View store' className='detail-component'><i className="fa fa-random"></i></Link></li>
-                                                <li><Link to={`/product/detail/${product._id}`} data-tip='View detail' className='detail-component'><i className="fa fa-search"></i></Link></li>
-                                            </ul>
-                                        </div>
-                                        <div className='product-content'>
-                                            <ul className='rating'>
-                                                {[...Array(5)].map((star, i) => (
-                                                    <li key={i} className={i < product.Rating ? 'fas fa-star' : 'far fa-star'}></li>
-                                                ))}
-                                            </ul>
-                                            <h3 className='product-name'><Link to='/' className='name'>{product.Name}</Link></h3>
-                                            {product.Price ? (
-                                                <div className='product-price'>{formatCurrency(product.Price)}</div>
-                                            ) : (
-                                                <div className='product-price'>{product.PriceRange}</div>
-                                            )}
-                                            <Link to='/' className='add-to-cart'>Add to cart</Link>
-                                        </div>
-                                    </div>
+                                    <CardComponent key={index} item={product} />
                                 ))}
                             </div>
                         </div>
@@ -233,4 +204,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Products);
+export default connect(mapStateToProps, mapDispatchToProps)(withProductFetching(ProductSearch));

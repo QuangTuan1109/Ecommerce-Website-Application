@@ -1,0 +1,74 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .return-order-button {
+        background-color: #ff5c5c;
+        color: #fff;
+        border: none;
+        padding: 8px 16px;
+        margin-left: 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+            background-color: #ff3333;
+        }
+    }
+
+    .cancel-order-button,
+    .confirm-order-button,
+    .cancel-request-order-button,
+    .return-refund-order-button  {
+        color: #fff;
+        border: none;
+        padding: 8px 16px;
+        margin-left: 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .cancel-order-button, 
+    .return-refund-order-button{
+        background-color: #ff5c5c;
+
+        &:hover {
+            background-color: #ff3333;
+        }
+    }
+
+    .confirm-order-button {
+        background-color: #4caf50;
+
+        &:hover {
+            background-color: #78a206;
+        }
+    }
+
+    .cancel-request-order-button {
+        color: #444;
+        background-color: #ddd;
+        cursor: not-allowed;
+    }
+}

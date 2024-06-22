@@ -184,7 +184,7 @@ class AddVoucher extends Component {
                                 <div className='basic-form'>
                                     <div className='basic-content'>
                                         <div className='label-content'>
-                                            <span>Loại mã</span>
+                                            <span>Type code</span>
                                         </div>
                                         <div className='input-content'>
                                             <input type='text' value={voucherType} readOnly />
@@ -192,12 +192,12 @@ class AddVoucher extends Component {
                                     </div>
                                     <div className='basic-content'>
                                         <div className='label-content'>
-                                            <span>Tên chương trình giảm giá</span>
+                                            <span>Name of discount program</span>
                                         </div>
                                         <div className='input-content'>
                                             <input
                                                 type='text'
-                                                placeholder='Nhập tên voucher'
+                                                placeholder='Input voucher name'
                                                 name='voucherName'
                                                 value={this.state.voucherName}
                                                 onChange={this.handleInputChange}
@@ -206,12 +206,12 @@ class AddVoucher extends Component {
                                     </div>
                                     <div className='basic-content'>
                                         <div className='label-content'>
-                                            <span>Mã Voucher</span>
+                                            <span>Voucher code</span>
                                         </div>
                                         <div className='input-content'>
                                             <input
                                                 type='text'
-                                                placeholder='Nhập mã voucher'
+                                                placeholder='Input voucher code'
                                                 name='voucherCode'
                                                 value={this.state.voucherCode}
                                                 onChange={this.handleInputChange}
@@ -220,7 +220,7 @@ class AddVoucher extends Component {
                                     </div>
                                     <div className='basic-content'>
                                         <div className='label-content'>
-                                            <span>Thời gian sử dụng mã</span>
+                                            <span>Code usage time</span>
                                         </div>
                                         <div className='input-content time-inputs'>
                                             <input
@@ -241,12 +241,12 @@ class AddVoucher extends Component {
                                     {voucherType === 'voucher-new-customer' && (
                                         <div className='basic-content'>
                                             <div className='label-content'>
-                                                <span>Mục tiêu: </span>
+                                                <span>Purpose: </span>
                                             </div>
                                             <div className='input-content'>
                                                 <input
                                                     type='text'
-                                                    value={'Người mua mới'}
+                                                    value={'New buyers'}
                                                     readOnly
                                                 />
                                             </div>
@@ -255,21 +255,21 @@ class AddVoucher extends Component {
                                     {voucherType === 'voucher-old-customer' && (
                                         <div className='basic-content'>
                                             <div className='label-content'>
-                                                <span>Mục tiêu: </span>
+                                                <span>Purpose: </span>
                                             </div>
                                             <div className='input-content'>
                                                 <input
                                                     type='text'
-                                                    value={'Người mua có đơn mua lại'}
+                                                    value={'The buyer has a repurchase order'}
                                                     readOnly
                                                 />
-                                                <span>Đã mua hàng <input
+                                                <span>Purchased <input
                                                     type='number'
                                                     className='input-select'
                                                     name='numOfPurchases'
                                                     value={this.state.numOfPurchases}
                                                     onChange={this.handleInputChange}
-                                                /> lần </span>
+                                                /> times </span>
                                             </div>
                                         </div>
                                     )}
@@ -277,29 +277,29 @@ class AddVoucher extends Component {
                             </div>
                             <div className='voucher-setup-infor'>
                                 <div className='title-component'>
-                                    <h3>Thiết lập mã giảm giá</h3>
+                                    <h3>Set up discount code</h3>
                                 </div>
                                 <div className='basic-form'>
                                     <div className='basic-content'>
                                         <div className='label-content'>
-                                            <span>Loại giảm giá | Mức giảm</span>
+                                            <span>Discount Type | Reduced level</span>
                                         </div>
                                         <div className='input-content'>
                                             <select value={discountType} onChange={this.handleDiscountTypeChange}>
-                                                <option value='amount'>Theo số tiền</option>
-                                                <option value='percentage'>Theo phần trăm</option>
+                                                <option value='amount'>The amount</option>
+                                                <option value='percentage'>The percent</option>
                                             </select>
                                         </div>
                                     </div>
                                     {discountType === 'amount' && (
                                         <div className='basic-content'>
                                             <div className='label-content'>
-                                                <span>Giá trị giảm</span>
+                                                <span>Discount value</span>
                                             </div>
                                             <div className='input-content'>
                                                 <input
                                                     type='number'
-                                                    placeholder='Nhập số tiền'
+                                                    placeholder='Input the amount'
                                                     name='discountValue'
                                                     value={this.state.discountValue}
                                                     onChange={this.handleInputChange}
@@ -311,12 +311,12 @@ class AddVoucher extends Component {
                                         <>
                                             <div className='basic-content'>
                                                 <div className='label-content'>
-                                                    <span>Nhập giá trị lớn hơn 1%</span>
+                                                    <span>Input a value greater than 1%</span>
                                                 </div>
                                                 <div className='input-content'>
                                                     <input
                                                         type='number'
-                                                        placeholder='Nhập % giảm'
+                                                        placeholder='Input % reduction'
                                                         name='discountValue'
                                                         value={this.state.discountValue}
                                                         onChange={this.handleInputChange}
@@ -325,12 +325,12 @@ class AddVoucher extends Component {
                                             </div>
                                             <div className='basic-content'>
                                                 <div className='label-content'>
-                                                    <span>Mức giảm tối đa</span>
+                                                    <span>Maximum reduction</span>
                                                 </div>
                                                 <div className='input-content'>
                                                     <input
                                                         type='number'
-                                                        placeholder='Nhập mức giảm tối đa'
+                                                        placeholder='Input maximum reduction'
                                                         name='maxReduction'
                                                         value={this.state.maxReduction}
                                                         onChange={this.handleInputChange}
@@ -341,12 +341,12 @@ class AddVoucher extends Component {
                                     )}
                                     <div className='basic-content'>
                                         <div className='label-content'>
-                                            <span>Giá trị đơn hàng tối thiểu</span>
+                                            <span>Minimum order value</span>
                                         </div>
                                         <div className='input-content'>
                                             <input
                                                 type='number'
-                                                placeholder='Nhập giá trị đơn hàng tối thiểu'
+                                                placeholder='Input minimum order value'
                                                 name='minOrderAmount'
                                                 value={this.state.minOrderAmount}
                                                 onChange={this.handleInputChange}
@@ -355,12 +355,12 @@ class AddVoucher extends Component {
                                     </div>
                                     <div className='basic-content'>
                                         <div className='label-content'>
-                                            <span>Tổng lượt sử dụng tối đa</span>
+                                            <span>Maximum total usage</span>
                                         </div>
                                         <div className='input-content'>
                                             <input
                                                 type='number'
-                                                placeholder='Nhập tổng lượt sử dụng tối đa'
+                                                placeholder='Input maximum total usage'
                                                 name='maxTotalUsage'
                                                 value={this.state.maxTotalUsage}
                                                 onChange={this.handleInputChange} />
@@ -368,12 +368,12 @@ class AddVoucher extends Component {
                                     </div>
                                     <div className='basic-content'>
                                         <div className='label-content'>
-                                            <span>Lượt sử dụng tối đa/Người mua</span>
+                                            <span>Maximum Usage/Buyer</span>
                                         </div>
                                         <div className='input-content'>
                                             <input
                                                 type='number'
-                                                placeholder='Nhập lượt sử dụng tối đa/Người mua'
+                                                placeholder='Input maximum Usage/Buyer'
                                                 name='maxUsagePerUser'
                                                 value={this.state.maxUsagePerUser}
                                                 onChange={this.handleInputChange} />
@@ -383,28 +383,28 @@ class AddVoucher extends Component {
                             </div>
                             <div className='product-apply'>
                                 <div className='title-component'>
-                                    <h3>Sản phẩm được áp dụng</h3>
+                                    <h3>Product is applicable</h3>
                                 </div>
                                 {voucherType === 'voucher-product' ? (
                                     <div className="filter-section">
-                                        <label for="category">Ngành hàng:</label>
+                                        <label for="category">Categories:</label>
                                         <select id="category">
-                                            <option value="all">Tất cả ngành hàng</option>
+                                            <option value="all">All categories</option>
                                             {/* other options */}
                                         </select>
-                                        <label for="search">Tên sản phẩm:</label>
-                                        <input type="text" id="search" placeholder="Tên sản phẩm" />
+                                        <label for="search">Product name:</label>
+                                        <input type="text" id="search" placeholder="Product name" />
                                     </div>
                                 ) : null}
                                 <div className="product-list">
                                     <table>
                                         <thead>
                                             <tr>
-                                                <th>Sản Phẩm</th>
-                                                <th>Ngành hàng</th>
-                                                <th>Giá</th>
-                                                <th>Kho hàng</th>
-                                                <th>Thao tác</th>
+                                                <th>Product</th>
+                                                <th>Category</th>
+                                                <th>Price</th>
+                                                <th>Stock</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -432,13 +432,13 @@ class AddVoucher extends Component {
                                                                 </td>
                                                 </tr>
                                                         ))
-                                                    ) : (<div>Không có sản phẩm nào</div>)
+                                                    ) : (<div>No products</div>)
 
                                             ) : (
                                                 <tr>
                                                     <td colspan="5" className="no-product">
                                                         <div className="no-product-icon"></div>
-                                                        Tất cả sản phẩm được áp dụng
+                                                        All products apply
                                                     </td>
                                                 </tr>
                                             )}
