@@ -14,7 +14,7 @@
     .homepage-body {
         width: 100%;
         box-sizing: border-box;
-        overflow-y: auto; /* Cho phép lướt dọc khi cần */
+        overflow-y: auto;
     }
 
     .chatbot-popup {
@@ -23,22 +23,20 @@
         left: 87%;
         transform: translate(-50%, -50%);
         width: 400px;
-        max-width: calc(100% - 40px); /* Giới hạn chiều rộng tối đa */
-        //background-color: #fff;
-        //box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        max-width: calc(100% - 40px);
         border-radius: 8px;
         padding: 20px;
-        z-index: 1001; /* Đảm bảo hiển thị trên các phần tử khác */
-        display: none; /* Mặc định ẩn popup */
+        z-index: 1001;
+        display: none;
     }
 
     .chatbot-popup.active {
-        display: block; /* Hiển thị popup khi có class active */
+        display: block;
     }
 
     .chatbot-popup-content {
-        height: 500px; /* Chiều cao của nội dung popup */
-        overflow-y: auto; /* Cho phép lướt dọc nội dung trong popup */
+        height: 500px;
+        overflow-y: auto;
     }
 
     .chatbot-popup-close {

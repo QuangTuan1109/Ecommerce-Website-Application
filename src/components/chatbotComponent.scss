@@ -15,20 +15,23 @@
     border: 2px solid #444;
 
     .chat-window {
-        height: 72%;
+        height: 75%;
 
         .chat-header {
             background: #444;
             padding: 15px;
             color: #fff;
             text-align: center;
-            font-size: 1.1em;
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
+
+            h2 {
+                font-size: 17px;
+            }
     
             img {
                 position: absolute;
