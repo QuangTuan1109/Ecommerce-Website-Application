@@ -29,7 +29,7 @@
 
         .product-discount-label {
             color: #fff;
-            background: #78a206;
+            background: #20B2AA;
             font-size: 14px;
             font-weight: 400;
             text-transform: uppercase;
@@ -70,7 +70,7 @@
 
                     &:hover {
                         color: #fff;
-                        background: #78a206;
+                        background: #20B2AA;
                         box-shadow: 1px 1px 30px 0 rgba(0, 0, 0, 0.2);
                     }
 
@@ -120,7 +120,7 @@
             list-style: none;
 
             li {
-                color: #78a206;
+                color: #20B2AA;
                 font-size: 14px;
             }
 
@@ -142,13 +142,13 @@
                 transition: all 0.3s ease 0s;
 
                 &:hover {
-                    color: #78a206;
+                    color: #20B2AA;
                 }
             }
         }
 
         .product-price {
-            color: #78a206;
+            color: #20B2AA;
             font-size: 17px;
             font-weight: 600;
             display: block;
@@ -163,7 +163,7 @@
 
         .add-to-cart {
             color: #fff;
-            background-color: #78a206;
+            background-color: #20B2AA;
             font-size: 16px;
             font-weight: 500;
             text-transform: uppercase;
@@ -180,7 +180,7 @@
             transition: all 0.4s ease-out;
 
             &:hover {
-                background-color: #2f2f2f;
+                background-color: #3CB371;
             }
         }
     }

@@ -160,7 +160,7 @@ class Cart extends Component {
     render() {
         const { productCart, selectProductCart, totalPayment, popupVisible, popupMessage, popupType, onConfirm } = this.state;
 
-        console.log(selectProductCart)
+        console.log(productCart)
         return (
             <div className='cart-container'>
                 <div className='cart-header'>

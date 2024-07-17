@@ -50,10 +50,10 @@ class HomePage extends Component {
                 <div className='homepage-body'>
                     <Introduction settings={settings} />
                     <Categories settings={settings} />
-                    <FeaturedProducts />
+                    {/* <FeaturedProducts /> */}
                     <Recommended />
-                    <TopSearch />
-                    <News />
+                    {/* <TopSearch />
+                    <News /> */}
                     <AboutUs />
                     <FooterHomepage />
                 </div>

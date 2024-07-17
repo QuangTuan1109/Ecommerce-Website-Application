@@ -12,7 +12,7 @@
         overflow-y: auto;
 
         .detail-page-container {
-            background-color: #DCDCDC;
+            background-color: #FFFFFF;
             padding: 20px 300px 50px 300px;
 
             .route-product {
@@ -107,7 +107,7 @@
                 }
 
                 .product-information-component2 {
-                    background-color: rgba(255, 255, 255, 0.8);
+                    background-color: #FFFFFF;
                     padding: 10px;
 
                     label {
@@ -136,12 +136,12 @@
                                 list-style: none;
 
                                 li {
-                                    color: #78a206;
+                                    color: #20B2AA;
                                     font-size: 14px;
                                 }
 
                                 .far {
-                                    color: #808080;
+                                    color: #20B2AA;
                                 }
                             }
                         }
@@ -150,7 +150,7 @@
                     .main-infor {
 
                         .price-infor {
-                            background-color: #808080;
+                            background-color: #E0FFFF;
 
                             span {
                                 font-size: 30px;
@@ -255,7 +255,7 @@
                                 font-size: 14px;
                                 font-weight: 500;
                                 color: #fff;
-                                background-color: #78a206;
+                                background-color: #20B2AA;
                                 border: none;
                                 cursor: pointer;
                                 display: inline-flex;
@@ -263,11 +263,11 @@
                                 justify-content: center;
 
                                 &:hover {
-                                    background-color: #000;
+                                    background-color: #3CB371;
                                 }
 
                                 &.checked {
-                                    background-color: #000;
+                                    background-color: #3CB371;
                                 }
                             }
                         }
@@ -288,10 +288,10 @@
 
                             .add-to-cart-btn {
                                 margin-right: 10px;
-                                background-color: #78a206;
+                                background-color: #20B2AA;
 
                                 &:hover {
-                                    background-color: #007bff;
+                                    background-color: #3CB371;
                                 }
 
                                 &:disabled {
@@ -302,10 +302,10 @@
                             }
 
                             .buy-btn {
-                                background-color: #000;
+                                background-color: #20B2AA;
 
                                 &:hover {
-                                    background-color: #007bff;
+                                    background-color: #3CB371;
                                 }
 
                                 &:disabled {
@@ -372,7 +372,7 @@
                 display: grid;
                 grid-template-columns: 320px auto;
                 gap: 10px;
-                background-color: #DCDCDC;
+                background-color: #FFFFFF;
                 margin-top: 20px;
 
                 .seller-infor {
@@ -406,13 +406,13 @@
                             margin: 0 20px;
 
                             .contact-btn-link {
-                                border: 2px solid #000;
+                                border: 2px solid #20B2AA;
                                 border-radius: 10px;
                                 line-height: 35px;
                                 text-align: center;
                                 width: 125px;
-                                color: #78a206;
-                                background-color: #181818;
+                                color: #FFFFFF;
+                                background-color: #20B2AA;
                                 text-decoration: none;
                                 font-size: 15px;
                             }
@@ -432,7 +432,7 @@
                     justify-content: space-between;
 
                     h5 {
-                        color: #78a206;
+                        color: #20B2AA;
                         margin: 20px;
 
                         span {
@@ -459,25 +459,26 @@
                         }
 
                         &:checked+label {
-                            background: #ececec;
-                            border: 2px solid #78a206;
+                            background: #3CB371;
+                            border: 2px solid #3CB371;
                             border-bottom: none;
-                            color: #000;
+                            color: #FFFFFF;
                         }
                     }
 
                     .tabs-button {
                         padding: 25px;
-                        background: #181818;
-                        color: #78a206;
+                        background: #20B2AA;
+                        color: #FFFFFF;
                         font-weight: bold;
                     }
 
                     .content {
+                        border: 2px solid #3CB371;
                         margin: 0px;
                         width: 100%;
                         padding: 20px;
-                        background: #ececec;
+                        background: #F0F0F0;
                         order: 1;
                         display: none;
 

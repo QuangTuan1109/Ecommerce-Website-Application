@@ -15,6 +15,7 @@
             background-color: #fff;
             border-radius: 4px;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            height: fit-content;
 
             .header-content {
                 padding: 20px;
@@ -90,7 +91,7 @@
                         }
                 
                         &.active {
-                            background-color: #007bff;
+                            background-color: #3CB371;
                             color: #fff;
                         }
                     }

@@ -28,7 +28,7 @@ const withProductFetching = (WrappedComponent) => {
             const { id } = this.props.match.params;
             const { page } = this.state;
 
-            axios.get(`http://localhost:5000/api/v1/products/${id}?page=${page}&limit=20`)
+            axios.get(`http://localhost:5000/api/v1/products/${id}?page=${page}&limit=1000`)
                 .then(response => {
                     const newProducts = response.products;
                     const hasMore = newProducts.length > 0;

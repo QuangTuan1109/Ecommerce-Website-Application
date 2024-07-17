@@ -6,7 +6,7 @@
         overflow-y: auto;
 
         .product-page {
-            background-color: #DCDCDC;
+            background-color: #FFFFFF;
             padding: 0 50px;
 
             .product-page-title {
@@ -15,7 +15,7 @@
                 justify-content: center;
                 width: 100%;
                 height: 30vh;
-                background: #808080;
+                background: #E0FFFF;
 
                 .option {
                     margin-left: 15px;
@@ -43,7 +43,7 @@
                                 left: 0;
                                 width: 100%;
                                 height: 110%;
-                                background: #808080;
+                                background: #E0FFFF;
                                 border-left: 2px solid #181818;
                                 animation: typing 3s steps(10) infinite;
                             }
@@ -87,7 +87,7 @@
                     
                             .button {
                                 color: #fff;
-                                background-color: #000;
+                                background-color: #20B2AA;
                                 font-size: 12px;
                                 font-weight: 500;
                                 text-decoration: none;
@@ -98,7 +98,7 @@
                                 transition: background-color 0.3s ease;
                     
                                 &:hover {
-                                    background-color: #78a206;
+                                    background-color: #3CB371;
                                 }
                             }
                         }
@@ -116,7 +116,6 @@
                             }
                         }
                     }
-                    
 
                     .paging-part {
                         display: flex;
@@ -276,30 +275,43 @@
                     padding: 10px;
                 }
 
-                .footer-paging {
-                    grid-area: footer;
+                .pagination {
                     display: flex;
-                    flex-direction: row;
                     justify-content: center;
-                    margin-bottom: 50px;
-
-                    .btn-paging {
-                        text-align: center;
-                        display: flex;
-                        margin: 0 20px;
-
-                        .button {
-                            color: #000;
-                            font-size: 20px;
-                            font-weight: 500;
+                    list-style-type: none;
+                    padding: 0;
+                    margin: 20px 0;
+                    
+                    li {
+                        display: inline-block;
+                        margin-right: 5px;
+                    
+                        a {
+                            color: #333;
+                            padding: 8px 12px;
+                            border: 1px solid #ccc;
                             text-decoration: none;
-                            line-height: 30px;
-                            width: 100px;
-                            height: 30px;
-                            border-radius: 3px;
-
+                            cursor: pointer;
+                    
                             &:hover {
-                                background-color: #78a206;
+                                background-color: #3CB371;
+                                color: #fff;
+                                border-color: #3CB371;
+                            }
+                        }
+                    
+                        &.active {
+                            a {
+                                background-color: #20B2AA;
+                                color: #fff;
+                                border-color: #20B2AA;
+                            }
+                        }
+                    
+                        &.disabled {
+                            a {
+                                pointer-events: none;
+                                opacity: 0.6;
                             }
                         }
                     }

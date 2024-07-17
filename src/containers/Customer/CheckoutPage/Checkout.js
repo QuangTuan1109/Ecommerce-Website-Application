@@ -615,26 +615,6 @@ class Checkout extends Component {
                                 <div>No products in the cart</div>
                             )}
                         </div>
-
-                        {/* Voucher Section */}
-                        <div className='voucher-section'>
-                            <h3>Chọn Voucher</h3>
-                            {/* {voucherList.length > 0 ? (
-                                voucherList.map((voucher, index) => (
-                                    <button
-                                        key={index}
-                                        disabled={!this.checkVoucherCondition(voucher)}
-                                        onClick={() => this.handleVoucherSelect(voucher)}
-                                        className={selectedVoucher && selectedVoucher.id === voucher.id ? 'selected' : ''}
-                                    >
-                                        {voucher.name} - {voucher.discount}
-                                    </button>
-                                ))
-                            ) : (
-                                <div>No vouchers available</div>
-                            )} */}
-                        </div>
-
                         {/* Total Amount Section */}
                         <div className='total-amount-section'>
                             {productCart && productCart.length > 0 && (
@@ -654,6 +634,7 @@ class Checkout extends Component {
                                                     value='Cash on Delivery'
                                                     onChange={(e) => this.handlePaymentMethodOptionChange(e)}
                                                     checked={this.state.paymentMethod && this.state.paymentMethod === 'Cash on Delivery'}
+                                                    defaultChecked
                                                 />
                                                 Cash on Delivery
                                             </label>

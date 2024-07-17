@@ -33,40 +33,40 @@
                     
                     .left-header-content {
                         .navbar-content {
-                            display: flex; // Hiển thị các mục nằm ngang
-                            justify-content: space-between; // Các mục được căn đều ra hai bên
-                            border-bottom: 1px solid #ccc; // Đường viền dưới cho navbar-content
+                            display: flex; 
+                            justify-content: space-between; 
+                            border-bottom: 1px solid #ccc; 
                         
                             .sub-nav {
-                                display: flex; // Hiển thị các mục nằm ngang
-                                list-style: none; // Loại bỏ dấu hiệu danh sách
-                                padding: 0; // Loại bỏ padding mặc định của danh sách
+                                display: flex; 
+                                list-style: none; 
+                                padding: 0;
                         
                                 .sub-nav-item {
                                     padding: 10px;
                                     position: relative;
                         
                                     &:hover {
-                                        color: #007bff; // Màu chữ khi hover
+                                        color: #3CB371; 
                                         cursor: pointer;
                                     }
                         
                                     &.active {
-                                        color: #007bff; // Màu chữ cho mục active
-                                        font-weight: bold; // In đậm chữ cho mục active
+                                        color: #20B2AA;
+                                        font-weight: bold;
                         
                                         &:after {
-                                            content: ''; // Thêm nội dung ảo để tạo đường gạch chân
-                                            position: absolute; // Vị trí tuyệt đối
-                                            left: 0; // Bắt đầu từ bên trái
-                                            bottom: 0; // Đặt ở phía dưới của mục
-                                            width: 100%; // Chiều rộng bằng chiều rộng của mục
-                                            border-bottom: 2px solid #007bff; // Gạch chân dưới cho mục active
+                                            content: '';
+                                            position: absolute;
+                                            left: 0;
+                                            bottom: 0;
+                                            width: 100%;
+                                            border-bottom: 2px solid #20B2AA;
                                         }
                                     }
                         
                                     .nav-icon {
-                                        margin-right: 5px; // Khoảng cách giữa biểu tượng và văn bản
+                                        margin-right: 5px;
                                     }
                                 }
                             }
@@ -87,7 +87,7 @@
                             cursor: pointer;
                             display: flex;
                             align-items: center;
-                            background-color: #4caf50;
+                            background-color: #20B2AA;
                             color: #ffffff;
                             padding: 0px 8px;
                             border-radius: 3px;

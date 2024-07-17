@@ -8,7 +8,6 @@ import AboutUs from '../../HomePage/Section/AboutUs'
 import FooterHomepage from '../../HomePage/FooterHomepage';
 import './Products.scss';
 import CardComponent from '../../../components/CardComponent';
-import withProductFetching from '../../../hoc/withProductFetching';
 
 
 class ProductSearch extends Component {
@@ -28,7 +27,7 @@ class ProductSearch extends Component {
     componentDidMount() {
         window.addEventListener('scroll', this.handleScroll);
 
-        const encryptedData = localStorage.getItem('encryptedData');
+        const encryptedData = localStorage.getItem('searchResults');
 
         if (encryptedData) {
             try {
@@ -204,4 +203,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withProductFetching(ProductSearch));
+export default connect(mapStateToProps, mapDispatchToProps)(ProductSearch);

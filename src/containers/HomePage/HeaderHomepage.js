@@ -43,26 +43,37 @@ class HeaderHomepage extends Component {
     }
 
     async handelOnClickButton() {
-        const { keywordSearch } = this.state
+        const { keywordSearch } = this.state;
+
         try {
-            await axios.get('http://localhost:5000/api/v1/products/search', {
+            // Xóa kết quả tìm kiếm cũ trong localStorage nếu đang ở trong trang product-search
+            if (this.props.location.pathname === '/products-search') {
+                localStorage.removeItem('searchResults');
+            }
+    
+            // Gọi API để lấy kết quả tìm kiếm mới
+            const response = await axios.get('http://localhost:5000/api/v1/products/search', {
                 headers: {
                     'Authorization': `${localStorage.getItem('accessToken')}`
                 },
                 params: {
                     q: keywordSearch 
                 },
-            }).then(response => {
-                const privateKey = 'lequangtuan1109';
+            });
     
-                const dataToEncrypt = JSON.stringify({ response });
-            
-                const encryptedData = CryptoJS.AES.encrypt(dataToEncrypt, privateKey).toString();
-            
-                localStorage.setItem('encryptedData', encryptedData);
-        
+            // Lưu kết quả tìm kiếm mới vào localStorage
+            const privateKey = 'lequangtuan1109';
+            const dataToEncrypt = JSON.stringify({response});
+            const encryptedData = CryptoJS.AES.encrypt(dataToEncrypt, privateKey).toString();
+            localStorage.setItem('searchResults', encryptedData);
+    
+            // Chỉ chuyển hướng nếu không phải ở trong trang product-search
+            if (this.props.location.pathname !== '/products-search') {
                 this.props.history.push('/products-search');
-            })
+            } else {
+                window.location.reload();
+            }
+    
         } catch (error) {
             console.error("Error:", error);
         }
@@ -238,25 +249,25 @@ class HeaderHomepage extends Component {
                                     <div><Link to='/news' className='content-nav'><b>New Arrivals</b></Link></div>
                                 </div>
                                 <div className='child-content'>
-                                    <div><Link to='/' className='content-nav'><b>New Arrivals</b></Link></div>
+                                    <div><Link to='/' className='content-nav'><b>Product Categories</b></Link></div>
                                 </div>
                                 <div className='child-content'>
-                                    <div><Link to='/' className='content-nav'><b>New Arrivals</b></Link></div>
+                                    <div><Link to='/' className='content-nav'><b>Promotions</b></Link></div>
                                 </div>
                                 <div className='child-content'>
-                                    <div><Link to='/' className='content-nav'><b>New Arrivals</b></Link></div>
+                                    <div><Link to='/' className='content-nav'><b>Best Sellers</b></Link></div>
                                 </div>
                                 <div className='child-content'>
-                                    <div><Link to='/' className='content-nav'><b>New Arrivals</b></Link></div>
+                                    <div><Link to='/' className='content-nav'><b>My Orders</b></Link></div>
                                 </div>
                                 <div className='child-content'>
-                                    <div><Link to='/' className='content-nav'><b>New Arrivals</b></Link></div>
+                                    <div><Link to='/' className='content-nav'><b>Product Reviews</b></Link></div>
                                 </div>
                                 <div className='child-content'>
-                                    <div><Link to='/' className='content-nav'><b>New Arrivals</b></Link></div>
+                                    <div><Link to='/' className='content-nav'><b>Blog</b></Link></div>
                                 </div>
                                 <div className='child-content'>
-                                    <div><Link to='/' className='content-nav'><b>New Arrivals</b></Link></div>
+                                    <div><Link to='/' className='content-nav'><b>Contact</b></Link></div>
                                 </div>
                             </div>
                         </div>

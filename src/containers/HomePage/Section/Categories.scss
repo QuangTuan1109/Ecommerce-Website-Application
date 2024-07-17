@@ -1,7 +1,7 @@
 .section-categories-slider {
     margin: 50px;
     height: 260px;
-    background: #181818;
+    background: #E0FFFF;
 
     .section-container {
         margin: 0 50px;
@@ -14,7 +14,7 @@
             padding-top: 10px;
     
             .title-content-section {
-                color: #78a206;
+                color: #333333;
                 font-size: 30px;
                 font-weight: 500;
             }
@@ -81,10 +81,10 @@
 
                     .title-link {
                         text-decoration: none;
-                        color: #fff;
+                        color: #333333;
                         
                         &:hover {
-                            color: #78a206;
+                            color: #008080;
                         }
                     }
                 }

@@ -10,6 +10,8 @@ class OrderItem extends Component {
             handleConfirmOrder, handleReturnRefundClick, handleSelectProduct, handleConfirmReturn, handleCancelReturn, columns,
             remainingTimes, formatRemainingTime, handleConfirmProduct, handleShippedProduct, handleApproveReturn, handleRejectReturn } = this.props;
 
+            console.log(handleCancelOrder);
+
         return (
             <div key={order._id} className="order-item">
                 <div className='general-order-information'>
@@ -46,12 +48,12 @@ class OrderItem extends Component {
                     {((order.orderStatus === 'Pending' ||
                         (order.cancelRequest === false && order.orderStatus === 'Confirmed')) && !remainingTimes) && (
                             <button className="cancel-order-button" onClick={() => handleCancelOrder(order._id)}>Cancel Order</button>
-                        )}
+                    )}
                     {(order.cancelRequest === true &&
                         order.orderStatus === 'Confirmed') && (
                             <button className="cancel-request-order-button" disabled>Request pending</button>
                         )}
-                    {((order.orderStatus === 'Delivered' || (!remainingTimes && (order.orderStatus === 'Return/Refund' || order.orderStatus === 'Partial Return/Refund') && order.products.some(product => product.productStatus === 'Return/Refund' && product.returnOrderStatus === 'Delivered'))) && !showReturnColumns[order._id]) && (
+                    {(!remainingTimes && (order.orderStatus === 'Delivered' || ((order.orderStatus === 'Return/Refund' || order.orderStatus === 'Partial Return/Refund') && order.products.some(product => product.productStatus === 'Return/Refund' && product.returnOrderStatus === 'Delivered'))) && !showReturnColumns[order._id]) && (
                         <>
                             <button className="return-refund-order-button" onClick={() => handleReturnRefundClick(order._id)}>Return/Refund</button>
                             <button className="confirm-order-button" onClick={() => handleConfirmOrder(order._id)}>Confirm Order</button>
@@ -62,7 +64,7 @@ class OrderItem extends Component {
                             <button className="confirm-order-button" onClick={() => handleConfirmOrder(order._id)}>Confirm Order</button>
                         </>
                     )}
-                    {(order.orderStatus === 'Delivered' && showReturnColumns[order._id]) && (
+                    {!remainingTimes && (order.orderStatus === 'Delivered' && showReturnColumns[order._id]) && (
                         <>
                             <button className="cancel-order-button" onClick={() => handleCancelReturn()}>Cancel Return</button>
                             <button className="confirm-order-button" onClick={() => handleConfirmReturn(order)}>Confirm Return</button>
@@ -78,6 +80,20 @@ class OrderItem extends Component {
         );
     }
 }
+
+OrderItem.defaultProps = {
+    handleCancelOrder: () => {},
+    handleConfirmOrder: () => {},
+    handleReturnRefundClick: () => {},
+    handleSelectProduct: () => {},
+    handleConfirmReturn: () => {},
+    handleCancelReturn: () => {},
+    formatRemainingTime: () => {},
+    handleConfirmProduct: () => {},
+    handleShippedProduct: () => {},
+    handleApproveReturn: () => {},
+    handleRejectReturn: () => {}
+};
 
 const mapStateToProps = state => {
     return {

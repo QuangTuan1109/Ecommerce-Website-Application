@@ -29,7 +29,7 @@ class CardComponent extends Component {
                         <img src={item.Image[0]} alt={item.Name} className='image' />
                     </Link>
                     {item.DiscountValue !== 0 && (
-                        <span className='product-discount-label'>{item.DiscountValue}</span>
+                        <span className='product-discount-label'>- {item.DiscountValue}</span>
                     )}
                     <ul className='product-link'>
                         <li><Link to='/' data-tip='Add to wishlist' className='detail-component'><i className="fas fa-heart"></i></Link></li>

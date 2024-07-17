@@ -381,7 +381,7 @@ class DetailProduct extends Component {
                         )}
                         <div className='product-detail'>
                             <div className='block-tabs'>
-                                <input type='radio' id='description' name='mytabs' />
+                                <input type='radio' id='description' name='mytabs' defaultChecked/>
                                 <label className='tabs-button' for='description'>Description</label>
                                 <div className='content'>
                                     <div className='detail-product'>
@@ -520,15 +520,7 @@ class DetailProduct extends Component {
                             </div>
                         </div>
                         <div className='related-product'>
-                            <div className='title-related'>
-                                <span>Related products</span>
-                            </div>
-                            <div className='grid-recommended-section'>
-                                
-                            </div>
-                            <div className='button-see-more'>
-                                <Link to='/' className='button'>See more</Link>
-                            </div>
+                            
                         </div>
                     </div>
                     {popupVisible && (

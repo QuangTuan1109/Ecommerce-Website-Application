@@ -1,13 +1,13 @@
 .recommend-section {
     margin: 50px;
     padding: 40px;
-    background-color: #181818;
+    background-color: #F0F0F0;
 
     .title-recommended {
         text-align: center;
         font-size: 30px;
         font-weight: 500;
-        color: #78a206;
+        color: #333333;
     }
 
     .grid-recommended-section {
@@ -28,7 +28,7 @@
 
         .button {
             color: #000;
-            background-color: #78a206;
+            background-color: #20B2AA;
             font-size: 16px;
             text-decoration: none;
             text-transform: uppercase;
@@ -39,7 +39,7 @@
             position: absolute;
 
             &:hover {
-                background-color: #2f2f2f;
+                background-color: #3CB371;
             }
         }
     }

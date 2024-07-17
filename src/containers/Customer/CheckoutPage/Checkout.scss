@@ -11,7 +11,7 @@
             .delivery-address-section {
                 margin: 0px 100px;
                 padding: 20px;
-                background-color: #ccc;
+                background-color: #F0F0F0;
                 
                 label {
                     font-size: 15px;
@@ -22,7 +22,7 @@
             .product-section {
                 margin: 15px 100px;
                 padding: 20px;
-                background-color: #ccc;
+                background-color: #F0F0F0;
 
                 .product-cart-item {
                     padding: 10px;
@@ -83,7 +83,6 @@
                               color: #333;
                             }
                           }
-                          
                     
                         .voucher-btn {
                             background: none;
@@ -93,7 +92,7 @@
                             cursor: pointer;
                     
                             span {
-                                color: #78a206;
+                                color: #20B2AA;
                                 font-size: 15px;
                                 &:hover {
                                     color: #750c0c
@@ -168,7 +167,7 @@
                                 }
                                 
                                 .voucher-select-btn {
-                                    background-color: #28a745;
+                                    background-color: #20B2AA;
                                     color: white;
                                     border: none;
                                     padding: 5px 10px;
@@ -246,9 +245,9 @@
                                     }
                             
                                     &.selected {
-                                        background-color: #28a745;
+                                        background-color: #20B2AA;
                                         color: #fff;
-                                        border-color: #28a745;
+                                        border-color: #20B2AA;
                                     }
                                 }
                             }
@@ -288,7 +287,7 @@
 
                         span {
                             font-weight: bold;
-                            color: #78a206;
+                            color: #20B2AA;
                         }
                     }
                 }
@@ -335,9 +334,9 @@
                             }
                     
                             &.selected {
-                                background-color: #28a745;
+                                background-color: #20B2AA;
                                 color: #fff;
-                                border-color: #28a745;
+                                border-color: #20B2AA;
                             }
                         }
 
@@ -404,7 +403,7 @@
                     
                     span {
                         font-weight: bold;
-                        color: #78a206;
+                        color: #20B2AA;
                         font-size: 17px;
                     }
                 }
@@ -422,7 +421,7 @@
                     text-align: right;
 
                     button {
-                            background-color: #78a206;
+                            background-color: #20B2AA;
                             border: none;
                             width: 150px;
                             height: 40px;
@@ -433,7 +432,7 @@
                             cursor: pointer;
                             font-size: 15px;
                             &:hover {
-                                background-color: #750c0c
+                                background-color: #3CB371
                             }
                         }
                 }

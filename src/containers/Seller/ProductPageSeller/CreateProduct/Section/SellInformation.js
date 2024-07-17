@@ -756,7 +756,7 @@ class SellInformation extends Component {
                         </div>
                     </div>
                 )}
-                <div className="discount">
+                {/* <div className="discount">
                     <label style={{ display: showDiscount ? 'none' : 'flex' }} className="title-sell">Wholesale</label>
                     <div className="add-discount" style={{ display: showDiscount ? 'none' : 'flex' }} onClick={this.toggleDiscount}>
                         <span className="icon">+</span>
@@ -836,7 +836,7 @@ class SellInformation extends Component {
                             </div>
                         )}
                     </div>
-                </div>
+                </div> */}
             </div>
         );
     }

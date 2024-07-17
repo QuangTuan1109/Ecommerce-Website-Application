@@ -11,7 +11,7 @@
             display: flex;
             flex-direction: column;
             padding: 0 50px;
-            background: #DCDCDC;
+            background: #FFFFFF;
     
             .home-header-part1 {
                 display: flex;
@@ -51,7 +51,7 @@
                     select {
                         margin-bottom: 10px;
                         background: transparent;
-                        background-color: #DCDCDC;
+                        background-color: #FFFFFF;
                         margin-right: 30px;
                         border: none;
                         outline: none;
@@ -108,7 +108,7 @@
                         margin-top: 20px;
                         height: 50px;
                         width: 100px;
-                        background-color: #000;
+                        background-color: #20B2AA;
                         border-radius: 10px;
                         font-weight: bold;
     
@@ -128,7 +128,7 @@
             padding: 20px;
             display: flex;
             align-items: center;
-            background: #000;
+            background: #20B2AA;
     
             b {
                 color: white;
@@ -159,13 +159,13 @@
                         .component-link {
                             margin-right: 50px;
                             text-decoration: none;
-                            color: #000;
+                            color: #20B2AA;
     
                             .fas {
                                 font-size: 30px;
                                 
                                 &:hover {
-                                    color: #78a206;
+                                    color: #3CB371;
                                 }
                             }
                         }
@@ -187,13 +187,13 @@
                             .notification-icon {
                                 position: relative;
                                 cursor: pointer;
-                                color: #000;
+                                color: #20B2AA;
         
                                 .fas {
                                     font-size: 30px;
                                     
                                     &:hover {
-                                        color: #78a206;
+                                        color: #3CB371;
                                     }
                                 }
         
@@ -253,7 +253,7 @@
                             
                                     .button {
                                         color: #fff;
-                                        background-color: #78a206;
+                                        background-color: #20B2AA;
                                         font-size: 16px;
                                         text-decoration: none;
                                         text-transform: uppercase;
@@ -262,7 +262,7 @@
                                         height: 40px;
                             
                                         &:hover {
-                                            background-color: #2f2f2f;
+                                            background-color: #3CB371;
                                         }
                                     }
                                 }
@@ -469,7 +469,7 @@
                         .component-link {
                             margin-right: 50px;
                             text-decoration: none;
-                            color: #000;
+                            color: #20B2AA;
     
                             .fas {
                                 font-size: 30px;

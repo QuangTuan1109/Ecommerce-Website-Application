@@ -1,23 +1,42 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import ReactPaginate from 'react-paginate';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import HeaderHomepage from '../../HomePage/HeaderHomepage';
 import AboutUs from '../../HomePage/Section/AboutUs';
 import FooterHomepage from '../../HomePage/FooterHomepage';
 import './Products.scss';
 import CardComponent from '../../../components/CardComponent';
-import { connect } from 'react-redux';
 import withProductFetching from '../../../hoc/withProductFetching';
 
 class Products extends Component {
-    componentDidMount() {
-        window.addEventListener('scroll', this.handleScroll);
+    constructor(props) {
+        super(props);
+        this.state = {
+            currentPage: 0,
+            productsPerPage: 16 // Số sản phẩm trên mỗi trang
+        };
     }
+
+    handlePageChange = ({ selected }) => {
+        this.setState({
+            currentPage: selected
+        });
+    };
 
     render() {
         const { products, category, value, handleClick } = this.props;
+        const { currentPage, productsPerPage } = this.state;
+
+        // Logic để tính chỉ số bắt đầu và kết thúc của sản phẩm trên mỗi trang
+        const indexOfLastProduct = (currentPage + 1) * productsPerPage;
+        const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+        const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
 
         return (
-            <div className='product-container'>
+            <div key={currentPage} className='product-container'> {/* Đặt key cho component */}
                 <div className='product-header'>
                     <HeaderHomepage />
                 </div>
@@ -55,10 +74,22 @@ class Products extends Component {
                                 </div>
                             </div>
                             <div className='show-products-card'>
-                                {products.map((product, index) => (
+                                {currentProducts.map((product, index) => (
                                     <CardComponent key={index} item={product} />
                                 ))}
                             </div>
+                            <ReactPaginate
+                                pageCount={Math.ceil(products.length / productsPerPage)}
+                                pageRangeDisplayed={5}
+                                marginPagesDisplayed={2}
+                                previousLabel={<FontAwesomeIcon icon={faAngleLeft} />}
+                                nextLabel={<FontAwesomeIcon icon={faAngleRight} />}
+                                breakLabel={'...'}
+                                onPageChange={this.handlePageChange}
+                                containerClassName={'pagination'}
+                                activeClassName={'active'}
+                                forcePage={currentPage}
+                            />
                         </div>
                     </div>
                     <AboutUs />
