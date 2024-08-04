@@ -3,14 +3,42 @@ import { connect } from 'react-redux';
 import './OrderItem.scss'
 import OrderTable from './OrderTable';
 import OrderInformation from './OrderInformation';
-
+import axios from '../axios'
 class OrderItem extends Component {
+    handlePaymentClick = async () => {
+        try {
+            const accessToken = localStorage.getItem('accessToken');
+            const { order } = this.props;
+            const totalAmount = order.totalAmount;
+
+            const response = await axios.post('http://localhost:5000/api/v1/payment/momo', 
+                {
+                    amount: totalAmount,
+                    orderId: order._id
+                }, 
+                {
+                    headers: {
+                        'Authorization': `${accessToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+
+            if (response.payUrl) {
+                window.open(response.payUrl, '_blank');
+            } else {
+                console.error('Payment URL not provided in the response');
+            }
+
+
+        } catch (error) {
+            console.error('Payment API call failed:', error);
+        }
+    };
     render() {
         const { order, infomations, showReturnColumns, returnProductIds, handleInputChange, handleCancelOrder,
             handleConfirmOrder, handleReturnRefundClick, handleSelectProduct, handleConfirmReturn, handleCancelReturn, columns,
             remainingTimes, formatRemainingTime, handleConfirmProduct, handleShippedProduct, handleApproveReturn, handleRejectReturn } = this.props;
-
-            console.log(handleCancelOrder);
 
         return (
             <div key={order._id} className="order-item">
@@ -23,7 +51,7 @@ class OrderItem extends Component {
                     </div>
                     <div className='order-information'>
                         <h3>Order information</h3>
-                        <OrderInformation orders={order} infomations={infomations}/>
+                        <OrderInformation orders={order} infomations={infomations} />
                     </div>
                 </div>
                 <div className='product-information'>
@@ -39,16 +67,31 @@ class OrderItem extends Component {
                             handleApproveReturn={handleApproveReturn}
                             handleRejectReturn={handleRejectReturn}
                             showReturnColumns={showReturnColumns}
-                            returnProductIds={returnProductIds} 
+                            returnProductIds={returnProductIds}
                             handleInputChange={handleInputChange}
-                            handleSelectProduct={handleSelectProduct}/>
+                            handleSelectProduct={handleSelectProduct} />
                     </div>
                 </div>
                 <div className='action-btn'>
-                    {((order.orderStatus === 'Pending' ||
-                        (order.cancelRequest === false && order.orderStatus === 'Confirmed')) && !remainingTimes) && (
-                            <button className="cancel-order-button" onClick={() => handleCancelOrder(order._id)}>Cancel Order</button>
-                    )}
+                    {((order.paymentMethod === 'Online payment' && order.paymentStatus === 'Unpaid' && order.orderStatus === 'Pending') && !remainingTimes) && (
+                            <>
+                                <div className='payment-info'>
+                                    <div className='payment-section' onClick={this.handlePaymentClick}>
+                                        <div className='payment-logo' />
+                                        <div className='payment-details'>
+                                            <label className='payment-title'>Payment by MoMo</label>
+                                            <span className='payment-subtitle'>Via MoMo banking app</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </>
+                        )}
+                         {(((order.orderStatus === 'Pending' ||
+                        (order.cancelRequest === false && order.orderStatus === 'Confirmed')) && !remainingTimes) ) && (
+                            <>
+                                <button className="cancel-order-button" onClick={() => handleCancelOrder(order._id)}>Cancel Order</button>
+                            </>
+                        )}
                     {(order.cancelRequest === true &&
                         order.orderStatus === 'Confirmed') && (
                             <button className="cancel-request-order-button" disabled>Request pending</button>
@@ -82,17 +125,17 @@ class OrderItem extends Component {
 }
 
 OrderItem.defaultProps = {
-    handleCancelOrder: () => {},
-    handleConfirmOrder: () => {},
-    handleReturnRefundClick: () => {},
-    handleSelectProduct: () => {},
-    handleConfirmReturn: () => {},
-    handleCancelReturn: () => {},
-    formatRemainingTime: () => {},
-    handleConfirmProduct: () => {},
-    handleShippedProduct: () => {},
-    handleApproveReturn: () => {},
-    handleRejectReturn: () => {}
+    handleCancelOrder: () => { },
+    handleConfirmOrder: () => { },
+    handleReturnRefundClick: () => { },
+    handleSelectProduct: () => { },
+    handleConfirmReturn: () => { },
+    handleCancelReturn: () => { },
+    formatRemainingTime: () => { },
+    handleConfirmProduct: () => { },
+    handleShippedProduct: () => { },
+    handleApproveReturn: () => { },
+    handleRejectReturn: () => { }
 };
 
 const mapStateToProps = state => {

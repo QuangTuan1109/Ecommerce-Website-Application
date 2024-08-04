@@ -396,8 +396,39 @@ class Checkout extends Component {
         });
     }
 
+    handlePaymentClick = async () => {
+        try {
+            const accessToken = localStorage.getItem('accessToken');
+            const { productCart } = this.state;
+            const totalAmount = productCart.reduce((total, item) => total + item.totalAmountPerProduct, 0);
+
+            const response = await axios.post('http://localhost:5000/api/v1/payment/momo', 
+                {
+                    amount: totalAmount,
+                }, 
+                {
+                    headers: {
+                        'Authorization': `${accessToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+
+            if (response.payUrl) {
+                window.open(response.payUrl, '_blank');
+            } else {
+                console.error('Payment URL not provided in the response');
+            }
+
+
+        } catch (error) {
+            // Xử lý lỗi
+            console.error('Payment API call failed:', error);
+        }
+    };
+
     render() {
-        const { popupVisible, popupMessage, popupType, onConfirm, productCart, userInfo, selectedVoucher, totalAmount, showVoucherPopup } = this.state;
+        const { popupVisible, popupMessage, popupType, onConfirm, productCart, userInfo, selectedVoucher, showVoucherPopup } = this.state;
 
         return (
             <div className='checkout-container'>
@@ -650,30 +681,6 @@ class Checkout extends Component {
                                                 />
                                                 Online payment
                                             </label>
-                                            {this.state.paymentMethod === 'Online payment' && (
-                                                <div className='upload-transfer-image'>
-                                                    <label htmlFor='transfer-image-upload' className='transfer-image-upload'>
-                                                        <FontAwesomeIcon icon={faCamera} />
-                                                        <span>Upload Bank Transfer Image: </span>
-                                                        <input
-                                                            type='file'
-                                                            id='transfer-image-upload'
-                                                            name='transferImage'
-                                                            accept="image/*"
-                                                            onChange={this.handleAddImage}
-                                                        />
-                                                    </label>
-                                                    {this.state.images && (
-                                                        <div className='transfer-image-preview'>
-                                                            <img src={this.state.images} alt='Transfer Preview' />
-                                                            <div className="image-overlay">
-                                                                <FontAwesomeIcon icon={faTrash} onClick={this.handleDeleteImage}
-                                                                    style={{ fontSize: '20px', margin: '10px 25px 5px 30px', cursor: 'pointer' }} />
-                                                            </div>
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            )}
                                         </div>
                                     </div>
                                     <div className='total-price-product'>

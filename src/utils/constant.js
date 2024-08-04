@@ -19,6 +19,7 @@ export const path = {
     UPDATEPRODUCT: '/update-product/:id',
     VOUCHERLIST: '/voucher/list',
     ADDVOUCHER: '/add-voucher',
+    DETAILVOUCHER: '/detail-voucher/:voucherId',
     ORDERMANAGE: '/sale/order'
 };
 

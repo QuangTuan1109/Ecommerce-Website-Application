@@ -28,7 +28,7 @@ class OrderInformation extends Component {
                 });
                 return <label><div className='label-name'><span>Total order: </span></div><div className='label-content'> {formatCurrency(totalOrderAmount)}</div></label>
             case 'paymentOrder':
-                return <label><div className='label-name'><span>Payment order: </span></div><div className='label-content'> {order.bankTransferImage.length !== 0 || order.orderStatus === 'Completed' || order.orderStatus === 'Delivered' || order.orderStatus === 'Return/Refund' ? 'Paid' : 'Unpaid'}</div></label>
+                return <label><div className='label-name'><span>Payment order: </span></div><div className='label-content'> {order.paymentStatus}</div></label>
             case 'paymentMethod':
                 return <label><div className='label-name'><span>Payment method: </span></div><div className='label-content'> {order.paymentMethod}</div></label>;
             case 'ordertatus':

@@ -7,15 +7,15 @@ class MarketingChannel extends Component {
         super(props);
         this.selectedDateRef = React.createRef();
         this.state = {
-            selectedTab: 'Lịch',
+            selectedTab: 'Calendar',
             today: new Date(),
             selectedDate: null,
             discountPrograms: [
-                { name: 'Chương Trình Giảm Giá 1', voucher: 'ABC123', date: '2024-04-16', registrationDeadline: '2024-03-14' },
-                { name: 'Chương Trình Giảm Giá 2', voucher: 'DEF456', date: '2024-04-17', registrationDeadline: '2024-03-18' },
-                { name: 'Chương Trình Giảm Giá 3', voucher: 'GHI789', date: '2024-04-17', registrationDeadline: '2024-04-16' },
-                { name: 'Chương Trình Giảm Giá 2', voucher: 'DEF456', date: '2024-04-17', registrationDeadline: '2024-03-18' },
-                { name: 'Chương Trình Giảm Giá 3', voucher: 'GHI789', date: '2024-04-17', registrationDeadline: '2024-04-16' },
+                { name: 'Discount Program 1', voucher: 'ABC123', date: '2024-04-16', registrationDeadline: '2024-03-14' },
+                { name: 'Discount Program 2', voucher: 'DEF456', date: '2024-04-17', registrationDeadline: '2024-03-18' },
+                { name: 'Discount Program 3', voucher: 'GHI789', date: '2024-04-17', registrationDeadline: '2024-04-16' },
+                { name: 'Discount Program 2', voucher: 'DEF456', date: '2024-04-17', registrationDeadline: '2024-03-18' },
+                { name: 'Discount Program 3', voucher: 'GHI789', date: '2024-04-17', registrationDeadline: '2024-04-16' },
             ],
             highlightedDate: null,
             visibleDays: 7,
@@ -142,18 +142,18 @@ class MarketingChannel extends Component {
     };
 
     renderCalendar = () => {
-        const { today, selectedDate, discountPrograms, currentMonth, currentYear, daysInMonth, programsByDate, highlightedDate } = this.state;
+        const { today, selectedDate, currentMonth, currentYear, daysInMonth, programsByDate, highlightedDate } = this.state;
         const programsForSelectedDate = programsByDate[selectedDate] || [];
 
         return (
             <div className="calendar">
                 <div className="calendar-header-container">
-                <div className="calendar-header">
-                    <button onClick={this.goToPreviousMonth}>&lt;</button>
-                    <div>{`${currentMonth + 1}/${currentYear}`}</div>
-                    <button onClick={this.goToNextMonth}>&gt;</button>
-                </div>
-                <img className="calendar-image" src={Calender} alt="Calendar" />
+                    <div className="calendar-header">
+                        <button onClick={this.goToPreviousMonth}>&lt;</button>
+                        <div>{`${currentMonth + 1}/${currentYear}`}</div>
+                        <button onClick={this.goToNextMonth}>&gt;</button>
+                    </div>
+                    <img className="calendar-image" src={Calender} alt="Calendar" />
                 </div>
                 <div className="left-pane">
                     <div className="date-list">
@@ -181,15 +181,15 @@ class MarketingChannel extends Component {
                                     <div key={index} className="discount-program">
                                         <div className="program-info">
                                             <h4>{program.name}</h4>
-                                            <p>Mã voucher: {program.voucher}</p>
-                                            <p>Thời gian diễn ra: {program.date}</p>
-                                            <p>Thời gian đăng ký: {program.registrationDeadline}</p>
+                                            <p>Voucher code: {program.voucher}</p>
+                                            <p>Event date: {program.date}</p>
+                                            <p>Registration deadline: {program.registrationDeadline}</p>
                                         </div>
                                         <div className="button-container">
                                             {new Date(program.registrationDeadline) >= today ? (
-                                                <button>Đăng ký</button>
+                                                <button>Register</button>
                                             ) : (
-                                                <button>Chi tiết</button>
+                                                <button>Details</button>
                                             )}
                                         </div>
                                     </div>
@@ -197,41 +197,42 @@ class MarketingChannel extends Component {
                             </div>
                         ) : (
                             <div className="no-program">
-                                Không có chương trình nào trong ngày {selectedDate}
+                                No programs available on {selectedDate}
                             </div>
                         )}
                     </div>
                 </div>
+
 
             </div>
         );
     };
 
     render() {
-        const { selectedTab, discountPrograms } = this.state;
+        const { selectedTab } = this.state;
 
         return (
             <div className="marketing-section">
-                <div className="main-title">Kênh Marketing</div>
-                <div className="sub-title">Công cụ Marketing & Đăng ký chương trình Khuyến Mãi</div>
+                <div className="main-title">Marketing Channel</div>
+                <div className="sub-title">Marketing Tools & Promotion Program Registration</div>
                 <div className="tab-header">
                     <div
-                        className={`tab ${selectedTab === 'Lịch' ? 'active' : ''}`}
-                        onClick={() => this.handleTabClick('Lịch')}
+                        className={`tab ${selectedTab === 'Calendar' ? 'active' : ''}`}
+                        onClick={() => this.handleTabClick('Calendar')}
                     >
-                        Lịch
+                        Calendar
                     </div>
                     <div
-                        className={`tab ${selectedTab === 'Chương Trình Giảm Giá Sản Phẩm' ? 'active' : ''}`}
-                        onClick={() => this.handleTabClick('Chương Trình Giảm Giá Sản Phẩm')}
+                        className={`tab ${selectedTab === 'Product Discount Program' ? 'active' : ''}`}
+                        onClick={() => this.handleTabClick('Product Discount Program')}
                     >
-                        Chương Trình Giảm Giá Sản Phẩm
+                        Product Discount Program
                     </div>
                     <div
-                        className={`tab ${selectedTab === 'Chương Trình Mã Giảm Giá' ? 'active' : ''}`}
-                        onClick={() => this.handleTabClick('Chương Trình Mã Giảm Giá')}
+                        className={`tab ${selectedTab === 'Discount Code Program' ? 'active' : ''}`}
+                        onClick={() => this.handleTabClick('Discount Code Program')}
                     >
-                        Chương Trình Mã Giảm Giá
+                        Discount Code Program
                     </div>
                     <div
                         className={`tab ${selectedTab === 'Live' ? 'active' : ''}`}
@@ -241,16 +242,16 @@ class MarketingChannel extends Component {
                     </div>
                 </div>
                 <div className="tab-content">
-                    {selectedTab === 'Lịch' && <div>{this.renderCalendar()}</div>}
-                    {selectedTab === 'Chương Trình Giảm Giá Sản Phẩm' && (
+                    {selectedTab === 'Calendar' && <div>{this.renderCalendar()}</div>}
+                    {selectedTab === 'Product Discount Program' && (
                         <div className="content">
-                            <h2>Chương Trình Giảm Giá Sản Phẩm</h2>
+                            <h2>Product Discount Program</h2>
                             {/* Add content for this tab here */}
                         </div>
                     )}
-                    {selectedTab === 'Chương Trình Mã Giảm Giá' && (
+                    {selectedTab === 'Discount Code Program' && (
                         <div className="content">
-                            <h2>Chương Trình Mã Giảm Giá</h2>
+                            <h2>Discount Code Program</h2>
                             {/* Add content for this tab here */}
                         </div>
                     )}

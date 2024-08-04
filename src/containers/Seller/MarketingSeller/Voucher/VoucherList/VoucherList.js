@@ -144,7 +144,7 @@ class VoucherList extends Component {
                                                     <td>{item.discountType === 'amount' ? formatCurrency(item.discountValue) : `${item.discountValue}%`}</td>
                                                     <td>{item.maxTotalUsage}</td>
                                                     <td>{moment(item.validFrom).format('DD/MM/YYYY - HH:mm:ss')} - {moment(item.validTo).format('DD/MM/YYYY - HH:mm:ss')}</td>
-                                                    <td>Delete</td>
+                                                    <td><Link to={`/detail-voucher/${item._id}`} className="action-link">Detail</Link></td>
                                                 </tr>
                                             ))
                                         ) : (

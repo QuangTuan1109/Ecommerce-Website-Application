@@ -175,7 +175,8 @@
         }
 
         .cancel-btn,
-        .save-btn {
+        .save-btn,
+        .delete-btn {
             padding: 10px 20px;
             border: none;
             border-radius: 5px;
@@ -190,6 +191,14 @@
 
         .cancel-btn {
             background-color: #ff5c5c;
+
+            &:hover {
+                background-color: #ff3333;
+            }
+        }
+
+        .delete-btn {
+            background-color: #ee0a0a;
 
             &:hover {
                 background-color: #ff3333;

@@ -339,58 +339,6 @@
                                 border-color: #20B2AA;
                             }
                         }
-
-                        .upload-transfer-image {
-                            display: flex;
-                            flex-direction: row-reverse;
-                            align-items: center;
-                            margin-bottom: 20px;
-
-                            .transfer-image-upload {
-                                border: 2px dashed #ccc;
-                                width: 150px;
-                                height: 150px;
-                                padding: 20px;
-                                display: flex;
-                                justify-content: center;
-                                align-items: center;
-                                cursor: pointer;
-                                transition: border-color 0.3s ease;
-                        
-                                svg {
-                                    margin-right: 10px;
-                                    font-size: 1.5rem;
-                                }
-                        
-                                span {
-                                    font-size: 1rem;
-                                }
-                        
-                                input[type="file"] {
-                                    display: none;
-                                }
-                        
-                                &:hover {
-                                    border-color: #999;
-                                }
-                            }
-
-                            .transfer-image-preview {
-                                height: 150px;
-                                width: 17px;
-                                z-index: 999;
-
-                                img {
-                                    width: 165px;
-                                    height: 300px;
-                                    margin-right: 10px;
-                                }
-
-                                .image-overlay {
-                                    top: 10px
-                                }
-                            }
-                        }
                     }
 
                 }
@@ -399,7 +347,6 @@
                     display: flex;
                     flex-direction: column;
                     text-align: right;
-                    margin-top: 160px;
                     
                     span {
                         font-weight: bold;
